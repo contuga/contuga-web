@@ -36,6 +36,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # Third party apps
+    'pipeline',
 
     # Django Apps
     'django.contrib.admin',
