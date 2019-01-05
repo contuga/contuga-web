@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 22:34+0200\n"
+"POT-Creation-Date: 2019-01-13 22:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,20 @@ msgstr "Създаден на"
 msgid "Updated at"
 msgstr "Обновен на"
 
-#: templates/base/includes/header.html:19
-msgid "New record"
-msgstr "Нов запис"
+#: templates/base/includes/header.html:18
+msgid "Transactions"
+msgstr "Трансакции"
+
+#: templates/base/includes/header.html:22
+#: templates/base/includes/header.html:35
+msgid "View all"
+msgstr "Виж всички"
+
+#: templates/base/includes/header.html:25
+#: templates/base/includes/header.html:38
+msgid "Add new"
+msgstr "Добави нова"
+
+#: templates/base/includes/header.html:31
+msgid "Categories"
+msgstr "Категории"
