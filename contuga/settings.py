@@ -90,6 +90,7 @@ INSTALLED_APPS = [
     # Project apps
     'contuga',
     'contuga.contrib.categories.apps.CategoriesConfig',
+    'contuga.contrib.transactions.apps.TransactionsConfig',
 ]
 
 MIDDLEWARE = [

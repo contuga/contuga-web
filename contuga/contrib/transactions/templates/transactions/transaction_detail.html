@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>{% trans "Transaction details" %}</h1>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th scope="row">{% trans "Amount" %}</th>
+            <td>{{ transaction.amount }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{% trans "Type" %}</th>
+            <td>{{ transaction.get_kind_display }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{% trans "Category" %}</th>
+            <td>{{ transaction.category.name }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{% trans "Created at" %}</th>
+            <td>{{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{% trans "Updated at" %}</th>
+            <td>{{ transaction.updated_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+{% endblock %}
