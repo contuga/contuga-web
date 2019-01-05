@@ -9,6 +9,7 @@ flake8 = "*"
 [packages]
 django = "==1.11.*"
 django-pipeline = "==1.6.*"
+django-sekizai = "==0.10.*"
 
 [requires]
 python_version = "3.6"
