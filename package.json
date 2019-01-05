@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/contuga/contuga-web/issues"
   },
-  "homepage": "https://github.com/contuga/contuga-web#readme"
+  "homepage": "https://github.com/contuga/contuga-web#readme",
+  "dependencies": {
+    "bootstrap": "^4.2.1"
+  }
 }
