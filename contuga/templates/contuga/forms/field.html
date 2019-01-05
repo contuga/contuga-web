@@ -1,0 +1,28 @@
+{% if field %}
+  {% if field.is_hidden %}
+    {{ field }}
+  {% else %}
+    {% load widget_tweaks %}
+    <div class="form-group">
+      {% block label %}
+        <label for="{{ field.auto_id }}" class="{% if field.errors %} text-danger {% endif %}">
+          {{ label|default:field.label }}{% if field.field.required or required %} &#42;{% endif %}
+        </label>
+      {% endblock %}
+
+      {% block input %}
+        {% with classes=class|default:''|add:' form-control' %}
+          {{ field|add_class:classes }}
+        {% endwith %}
+      {% endblock %}
+
+      {% block errors %}
+        {% if field.errors %}
+          <small class="text-danger">
+            {{ field.errors|striptags }}
+          </small>
+        {% endif %}
+      {% endblock %}
+    </div>
+  {% endif %}
+{% endif %}
