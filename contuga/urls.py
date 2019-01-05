@@ -13,10 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 
 urlpatterns = i18n_patterns(
+    url(r'^categories/',
+        include('contuga.contrib.categories.urls',
+                namespace='categories')),
     url(r'^admin/', admin.site.urls),
 )
