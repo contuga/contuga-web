@@ -21,5 +21,8 @@ urlpatterns = i18n_patterns(
     url(r'^categories/',
         include('contuga.contrib.categories.urls',
                 namespace='categories')),
+    url(r'^transactions/',
+        include('contuga.contrib.transactions.urls',
+                namespace='transactions')),
     url(r'^admin/', admin.site.urls),
 )

@@ -1,0 +1,99 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Transactions" %}{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>{% trans "Transactions" %}</h1>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">{% trans "Amount" %}</th>
+              <th scope="col" class="d-none d-md-table-cell">
+                {% trans "Type" %}
+              </th>
+              <th scope="col">{% trans "Category" %}</th>
+              <th scope="col">{% trans "Created at" %}</th>
+              <th scope="col" class="d-none d-md-table-cell">
+                {% trans "Description" %}
+              </th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaction in object_list %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>
+                <a href="{{ transaction.get_absolute_url }}"
+                  class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
+                  {{ transaction.amount }}
+                </a>
+              </td>
+              <td class="d-none d-md-table-cell">
+                {{ transaction.get_kind_display }}
+              </td>
+              <td>
+                {{ transaction.category.name }}
+              </td>
+              <td>
+                {{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}
+              </td>
+              <td class="d-none d-md-table-cell">
+                {{ transaction.description }}
+              </td>
+              <td>
+                <a href="{% url 'transactions:update' transaction.pk %}">
+                  <i class="fa fa-pencil"></i>
+                </a>
+              </td>
+              <td>
+                <a href="{% url 'transactions:delete' transaction.pk %}">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if is_paginated %}
+      <nav>
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+              {% trans "Previous" %}
+            </a>
+          </li>
+          {% endif %}
+
+          {% for page in paginator.page_range %}
+          <li class="page-item {% if page == page_obj.number %} active {% endif %}">
+            <a class="page-link" href="?page={{ page }}">
+              {{ page }}
+            </a>
+          </li>
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+              {% trans "Next" %}
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+
+    </div>
+  </div>
+</main>
+{% endblock %}
