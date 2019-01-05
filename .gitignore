@@ -1,0 +1,9 @@
+db.sqlite3
+local_settings.py
+.vscode
+.sass-cache
+*.pyc
+*.mo
+media/
+static/
+node_modules/
