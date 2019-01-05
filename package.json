@@ -1,0 +1,19 @@
+{
+  "name": "contuga",
+  "version": "0.1.0",
+  "description": "Simple web-based expense manager application.",
+  "main": "static/js/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/contuga/contuga-web.git"
+  },
+  "author": "Hristo Gatsinski <gatsinski@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/contuga/contuga-web/issues"
+  },
+  "homepage": "https://github.com/contuga/contuga-web#readme"
+}
