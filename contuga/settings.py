@@ -74,6 +74,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Third party apps
     'pipeline',
+    'sekizai',
 
     # Django Apps
     'django.contrib.admin',
@@ -112,6 +113,9 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # Third party context processors
+                'sekizai.context_processors.sekizai',
             ],
         },
     },
