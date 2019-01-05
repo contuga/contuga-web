@@ -1,0 +1,23 @@
+{% load sekizai_tags pipeline i18n %}
+<html>
+  <head>
+    <title>Contuga - {% block title %}{% trans "Simple web-based expense manager" %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% stylesheet 'main' %}
+    {% block css %} {% endblock css %}
+    {% render_block "css" %}
+  </head>
+  <body>
+    {% include "base/includes/header.html" %}
+
+    <main>
+      {% block content %}{% endblock content %}
+    </main>
+
+    {% include "base/includes/footer.html" %}
+
+    {% javascript 'main' %}
+    {% block js %} {% endblock js %}
+    {% render_block "js" %}
+  </body>
+</html>
