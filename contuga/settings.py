@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     # Third party apps
     'pipeline',
     'sekizai',
+    'widget_tweaks',
 
     # Django Apps
     'django.contrib.admin',

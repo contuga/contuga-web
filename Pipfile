@@ -10,6 +10,7 @@ flake8 = "*"
 django = "==1.11.*"
 django-pipeline = "==1.6.*"
 django-sekizai = "==0.10.*"
+django-widget-tweaks = "==1.4.*"
 
 [requires]
 python_version = "3.6"
