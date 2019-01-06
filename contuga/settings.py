@@ -43,6 +43,7 @@ PIPELINE = {
         'main': {
             'source_filenames': (
                 'bootstrap/scss/bootstrap.scss',
+                'font-awesome/scss/font-awesome.scss',
                 'scss/main.scss',
             ),
             'output_filename': 'css/main.css',
