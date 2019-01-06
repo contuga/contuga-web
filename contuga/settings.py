@@ -54,6 +54,7 @@ PIPELINE = {
             'source_filenames': (
                 'jquery/dist/jquery.js',
                 'bootstrap/dist/js/bootstrap.bundle.js',
+                'chart.js/dist/Chart.bundle.js',
                 'js/main.js',
             ),
             'output_filename': 'js/main.js',
