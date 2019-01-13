@@ -1,20 +1,20 @@
-from django.conf.urls import url
+from django.conf.urls import re_path
 from . import views
 
 urlpatterns = [
-    url(r'^$',
-        views.CategoryListView.as_view(),
-        name='list'),
-    url(r'^(?P<pk>\d+)/$',
-        views.CategoryDetailView.as_view(),
-        name='detail'),
-    url(r'^new/$',
-        views.CategoryCreateView.as_view(),
-        name='create'),
-    url(r'^(?P<pk>\d+)/update/$',
-        views.CategoryUpdateView.as_view(),
-        name='update'),
-    url(r'^(?P<pk>\d+)/delete/$',
-        views.CategoryDeleteView.as_view(),
-        name='delete'),
+    re_path(r'^$',
+            views.CategoryListView.as_view(),
+            name='list'),
+    re_path(r'^(?P<pk>\d+)/$',
+            views.CategoryDetailView.as_view(),
+            name='detail'),
+    re_path(r'^new/$',
+            views.CategoryCreateView.as_view(),
+            name='create'),
+    re_path(r'^(?P<pk>\d+)/update/$',
+            views.CategoryUpdateView.as_view(),
+            name='update'),
+    re_path(r'^(?P<pk>\d+)/delete/$',
+            views.CategoryDeleteView.as_view(),
+            name='delete'),
 ]

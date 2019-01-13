@@ -7,7 +7,7 @@ verify_ssl = true
 flake8 = "*"
 
 [packages]
-django = "==1.11.*"
+django = "==2.1.*"
 django-pipeline = "==1.6.*"
 django-sekizai = "==0.10.*"
 django-widget-tweaks = "==1.4.*"

@@ -36,8 +36,6 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Transactions',
                 'ordering': ['-created_at'],
             },
-            managers=[
-                ('object', django.db.models.manager.Manager()),
-            ],
+            managers=[],
         ),
     ]
