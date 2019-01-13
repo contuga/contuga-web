@@ -25,4 +25,7 @@ urlpatterns = i18n_patterns(
          include(('contuga.contrib.transactions.urls',
                   'transactions'))),
     path('admin/', admin.site.urls),
+    path('',
+         include(('contuga.contrib.analytics.urls',
+                  'analytics'))),
 )
