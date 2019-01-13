@@ -1,0 +1,64 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>{% trans "Analytics" %}</h1>
+
+      <div class="row">
+        <div class="col-md-5 col-lg-4">
+          <canvas id="numberOfTransactions" width="300" height="200"></canvas>
+        </div>
+        <div class="col-md-5 col-lg-4">
+          <canvas id="amountOfTransactions" width="300" height="200"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block js %}
+  <script type="text/javascript">
+    var label = '{% trans "Number of transactions by type" %}';
+    var labels = ['{% trans "Expenditures" %}', '{% trans "Incomes" %}'];
+    var data = ['{{ expenditures_count }}', '{{ income_count }}'];
+    var backgroundColor = ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)',];
+    var borderColor = ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)'];
+    createBarChart('numberOfTransactions', label, labels, data, backgroundColor, borderColor);
+
+    label = '{% trans "Volume by type" %}';
+    data = ['{{ expenditures_sum }}', '{{ income_sum }}'];
+    createBarChart('amountOfTransactions', label, labels, data, backgroundColor, borderColor);
+
+    function createBarChart(element, label, labels, data, backgroundColor, borderColor) {
+      var canvas = document.getElementById(element).getContext('2d');
+      var myChart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: label,
+            data: data,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+    }
+  </script>
+
+{% endblock js %}
