@@ -1,12 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core import validators
 
 from . import constants, managers
 from contuga.models import TimestampModel
 from contuga.contrib.categories.models import Category
+
+UserModel = get_user_model()
 
 
 class Transaction(TimestampModel):
@@ -18,7 +20,7 @@ class Transaction(TimestampModel):
                                  max_digits=12,
                                  decimal_places=2,
                                  validators=[validators.MinValueValidator(0)])
-    author = models.ForeignKey(User,
+    author = models.ForeignKey(UserModel,
                                related_name='transactions',
                                on_delete=models.CASCADE)
     category = models.ForeignKey(Category,
