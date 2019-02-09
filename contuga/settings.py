@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     'contuga.contrib.transactions.apps.TransactionsConfig',
     'contuga.contrib.analytics.apps.AnalyticsConfig',
 
+    'contuga.contrib.users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +143,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'users.User'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
