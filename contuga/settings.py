@@ -44,6 +44,7 @@ PIPELINE = {
             'source_filenames': (
                 'bootstrap/scss/bootstrap.scss',
                 'font-awesome/scss/font-awesome.scss',
+                'datatables.net-bs4/css/dataTables.bootstrap4.css',
                 'scss/main.scss',
             ),
             'output_filename': 'css/main.css',
@@ -55,6 +56,8 @@ PIPELINE = {
                 'jquery/dist/jquery.js',
                 'bootstrap/dist/js/bootstrap.bundle.js',
                 'chart.js/dist/Chart.bundle.js',
+                'datatables.net/js/jquery.dataTables.js',
+                'datatables.net-bs4/js/dataTables.bootstrap4.js',
                 'js/main.js',
             ),
             'output_filename': 'js/main.js',

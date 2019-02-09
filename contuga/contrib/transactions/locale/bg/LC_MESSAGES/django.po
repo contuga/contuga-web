@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 22:36+0200\n"
+"POT-Creation-Date: 2019-02-09 23:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,25 +26,25 @@ msgstr "Приход"
 msgid "Expenditure"
 msgstr "Разход"
 
-#: models.py:12 templates/transactions/transaction_detail.html:16
+#: models.py:14 templates/transactions/transaction_detail.html:16
 #: templates/transactions/transaction_list.html:15
 msgid "Type"
 msgstr "Тип"
 
-#: models.py:16 templates/transactions/transaction_detail.html:12
+#: models.py:18 templates/transactions/transaction_detail.html:12
 #: templates/transactions/transaction_list.html:14
 msgid "Amount"
 msgstr "Сума"
 
-#: models.py:23 templates/transactions/transaction_list.html:18
+#: models.py:25 templates/transactions/transaction_list.html:18
 msgid "Description"
 msgstr "Описание"
 
-#: models.py:31
+#: models.py:33
 msgid "Transaction"
 msgstr "Трансакция"
 
-#: models.py:32 templates/transactions/transaction_list.html:8
+#: models.py:34 templates/transactions/transaction_list.html:8
 msgid "Transactions"
 msgstr "Трансакции"
 
@@ -78,10 +78,68 @@ msgstr "Обновен на"
 msgid "Save"
 msgstr "Запиши"
 
-#: templates/transactions/transaction_list.html:52
+#: templates/transactions/transaction_list.html:53
+#: templates/transactions/transaction_list.html:155
 msgid "Previous"
 msgstr "Предишна"
 
-#: templates/transactions/transaction_list.html:64
+#: templates/transactions/transaction_list.html:65
+#: templates/transactions/transaction_list.html:154
 msgid "Next"
 msgstr "Следваща"
+
+#: templates/transactions/transaction_list.html:139
+msgid "All"
+msgstr "Всички"
+
+#: templates/transactions/transaction_list.html:142
+msgid "No data available in table"
+msgstr "В таблицата няма данни"
+
+#: templates/transactions/transaction_list.html:143
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Показване на резултати от _START_ до _END_ от общо _TOTAL_"
+
+#: templates/transactions/transaction_list.html:144
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "Показване на резултати от 0 до 0 от общо 0"
+
+#: templates/transactions/transaction_list.html:145
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(филтрирани от общо _MAX_ резултата)"
+
+#: templates/transactions/transaction_list.html:146
+msgid "Show _MENU_ entries"
+msgstr "Показване на _MENU_ резултата"
+
+#: templates/transactions/transaction_list.html:147
+msgid "Loading"
+msgstr "Зареждане"
+
+#: templates/transactions/transaction_list.html:148
+msgid "Processing"
+msgstr "Обработване"
+
+#: templates/transactions/transaction_list.html:149
+msgid "Search"
+msgstr "Търсене"
+
+#: templates/transactions/transaction_list.html:150
+msgid "No matching records found"
+msgstr "Няма намерени резултати"
+
+#: templates/transactions/transaction_list.html:152
+msgid "First"
+msgstr "Първи"
+
+#: templates/transactions/transaction_list.html:153
+msgid "Last"
+msgstr "Последен"
+
+#: templates/transactions/transaction_list.html:158
+msgid "activate to sort column ascending"
+msgstr "избери, за да сортираш във възходящ ред"
+
+#: templates/transactions/transaction_list.html:159
+msgid "activate to sort column descending"
+msgstr "избери, за да сортираш във низходящ ред"

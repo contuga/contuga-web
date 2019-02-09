@@ -38,7 +38,6 @@ class TransactionListView(OnlyAuthoredByCurrentUserMixin,
                           mixins.LoginRequiredMixin,
                           generic.ListView):
     model = models.Transaction
-    paginate_by = 10
 
 
 class TransactionDetailView(OnlyAuthoredByCurrentUserMixin,
