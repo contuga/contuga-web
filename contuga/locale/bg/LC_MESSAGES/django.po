@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-22 14:50+0000\n"
+"POT-Creation-Date: 2019-12-22 14:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,62 @@ msgstr "150 символа или по-малко. Букви, цифри и @/.
 msgid "A user with that username already exists."
 msgstr "Потребител с това потребителско име вече съществува."
 
+#: contuga/contrib/users/templates/users/activation_complete.html:8
+msgid "Your activation was successful"
+msgstr "Активацията беше успешна."
+
+#: contuga/contrib/users/templates/users/activation_email_body.txt:3
+msgid "Please, follow the link below to finish your registration."
+msgstr "Моля, последвайте връзката по-долу, за да завършите регистрацията."
+
+#: contuga/contrib/users/templates/users/activation_email_subject.txt:3
+msgid "Registration confirmation"
+msgstr "Потвърждение на регистрацията"
+
+#: contuga/contrib/users/templates/users/login.html:12
+#: contuga/templates/base/includes/header.html:63
+msgid "Login"
+msgstr "Вход"
+
+#: contuga/contrib/users/templates/users/registration_complete.html:8
+msgid ""
+"Your registration is successful. An activation email was send to your account"
+msgstr ""
+"Вашата регистрация е успешна. Изпратен е Email за активация."
+
+#: contuga/contrib/users/templates/users/registration_disallowed.html:8
+msgid "Registration is currently disallowed"
+msgstr "В момента регистрацията е забранена."
+
+#: contuga/contrib/users/templates/users/registration_form.html:15
+#: contuga/templates/base/includes/header.html:66
+msgid "Register"
+msgstr "Регистрация"
+
+#: contuga/contrib/users/templates/users/user_detail.html:12
+msgid "Email"
+msgstr ""
+
+#: contuga/contrib/users/templates/users/user_detail.html:17
+msgid "Name"
+msgstr "Име"
+
+#: contuga/contrib/users/templates/users/user_detail.html:22
+msgid "Total transactions"
+msgstr "Трансакции"
+
+#: contuga/contrib/users/templates/users/user_detail.html:26
+msgid "Total categories"
+msgstr "Категории"
+
+#: contuga/contrib/users/views.py:29
+msgid ""
+"Redirection loop for authenticated user detected. Check that your "
+"LOGIN_REDIRECT_URL doesn't point to registration page."
+msgstr ""
+"Открит е цикъл на препращане. Проверете дали "
+"LOGIN_REDIRECT_URL не води към регистрационната форма."
+
 #: models.py:8
 msgid "Created at"
 msgstr "Създаден на"
@@ -67,3 +123,15 @@ msgstr "Добави нова"
 #: templates/base/includes/header.html:31
 msgid "Categories"
 msgstr "Категории"
+
+#: contuga/templates/base/includes/header.html:51
+msgid "Profile"
+msgstr "Профил"
+
+#: contuga/templates/base/includes/header.html:54
+msgid "Logout"
+msgstr "Изход"
+
+#: contuga/templates/base/includes/header.html:59
+msgid "User"
+msgstr "Потребител"

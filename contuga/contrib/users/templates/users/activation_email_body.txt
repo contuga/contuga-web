@@ -1,0 +1,5 @@
+{% load i18n %}
+
+{% trans "Please, follow the link below to finish your registration." %}
+
+{{ activation_url }}
