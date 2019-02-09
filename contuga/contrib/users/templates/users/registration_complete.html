@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Successful registration" %}{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12 col-md-8">
+      {% trans "Your registration is successful. An activation link has been sent to your email." %}
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'pipeline',
     'sekizai',
     'widget_tweaks',
+    'django_registration',
 
     # Django Apps
     'django.contrib.admin',
@@ -99,7 +100,6 @@ INSTALLED_APPS = [
     'contuga.contrib.categories.apps.CategoriesConfig',
     'contuga.contrib.transactions.apps.TransactionsConfig',
     'contuga.contrib.analytics.apps.AnalyticsConfig',
-
     'contuga.contrib.users.apps.UsersConfig',
 ]
 
@@ -150,6 +150,7 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'users.User'
+ACCOUNT_ACTIVATION_DAYS = 7
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -199,3 +200,9 @@ FORMAT_MODULE_PATH = [
 ]
 USE_THOUSAND_SEPARATOR = True
 NUMBER_GROUPING = 3
+
+# Authentication
+# https://docs.djangoproject.com/en/1.11/topics/auth/default/
+# https://django-registration.readthedocs.io/en/3.0.1/
+LOGIN_URL = '/users/login/'
+LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = '/'
