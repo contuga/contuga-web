@@ -18,7 +18,6 @@ class TransactionCreateView(mixins.LoginRequiredMixin, generic.CreateView):
 
 class TransactionListView(mixins.LoginRequiredMixin, generic.ListView):
     model = models.Transaction
-    paginate_by = 10
 
 
 class TransactionDetailView(mixins.LoginRequiredMixin, generic.DetailView):
