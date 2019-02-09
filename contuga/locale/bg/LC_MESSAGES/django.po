@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 22:47+0200\n"
+"POT-Creation-Date: 2019-12-22 14:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: contuga/contrib/users/managers.py:9
+msgid "Email is required"
+msgstr "Електронната поща е задължителна"
+
+#: contuga/contrib/users/managers.py:20
+msgid "Superuser must have is_staff=True."
+msgstr "Суперпотребителите трябва да имат is_staff=True."
+
+#: contuga/contrib/users/managers.py:22
+msgid "Superuser must have is_superuser=True."
+msgstr "Суперпотребителите трябва да имат is_superuser=True."
+
+#: contuga/contrib/users/models.py:18
+msgid "Username"
+msgstr "Потребителско име"
+
+#: contuga/contrib/users/models.py:23
+msgid "150 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr "150 символа или по-малко. Букви, цифри и @/./+/-/_."
+
+#: contuga/contrib/users/models.py:27
+msgid "A user with that username already exists."
+msgstr "Потребител с това потребителско име вече съществува."
 
 #: models.py:8
 msgid "Created at"
