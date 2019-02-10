@@ -31,7 +31,7 @@
                 </a>
               </td>
               <td>{{ transaction.get_kind_display }}</td>
-              <td>{{ transaction.category.name }}</td>
+              <td><a href="{{ transaction.category.get_absolute_url }}">{{ transaction.category.name }}</a></td>
               <td>{{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
               <td class="d-none d-md-table-cell">{{ transaction.description }}</td>
               <td>
