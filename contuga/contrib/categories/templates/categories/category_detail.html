@@ -4,7 +4,7 @@
 {% block content %}
 <main class="container">
   <div class="row">
-    <div class="col-12">
+    <div class="col-10">
       <h1>{% trans "Category details" %}</h1>
       <table class="table">
         <tbody>
@@ -26,6 +26,12 @@
           </tr>
         </tbody>
       </table>
+      <a class="btn btn-primary" href="{% url 'categories:update' category.pk %}" role="button">
+        <i class="fa fa-pencil"></i> {% trans "Edit" %}
+      </a>
+      <a class="btn btn-danger" href="{% url 'categories:delete' category.pk %}" role="button">
+        <i class="fa fa-trash"></i> {% trans "Delete" %}
+      </a>
     </div>
   </div>
 </main>
