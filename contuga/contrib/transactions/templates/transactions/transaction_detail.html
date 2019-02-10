@@ -30,6 +30,12 @@
           </tr>
         </tbody>
       </table>
+      <a class="btn btn-primary" href="{% url 'transactions:update' transaction.pk %}" role="button">
+        <i class="fa fa-pencil"></i> {% trans "Edit" %}
+      </a>
+      <a class="btn btn-danger" href="{% url 'transactions:delete' transaction.pk %}" role="button">
+        <i class="fa fa-trash"></i> {% trans "Delete" %}
+      </a>
     </div>
   </div>
 </main>
