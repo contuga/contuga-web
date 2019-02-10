@@ -57,6 +57,14 @@ msgstr "Създаден на"
 msgid "Updated at"
 msgstr "Обновен на"
 
+#: contuga/contrib/categories/templates/categories/category_detail.html:30
+msgid "Edit"
+msgstr "Редактирай"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:33
+msgid "Delete"
+msgstr "Изтрий"
+
 #: templates/categories/category_form.html:13
 msgid "Save"
 msgstr "Запиши"
