@@ -74,6 +74,14 @@ msgstr "Създаден на"
 msgid "Updated at"
 msgstr "Обновен на"
 
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:38
+msgid "Edit"
+msgstr "Редактирай"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:41
+msgid "Delete"
+msgstr "Изтрий"
+
 #: templates/transactions/transaction_form.html:20
 msgid "Save"
 msgstr "Запиши"
