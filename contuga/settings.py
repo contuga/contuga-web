@@ -210,3 +210,8 @@ NUMBER_GROUPING = 3
 # https://django-registration.readthedocs.io/en/3.0.1/
 LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = '/'
+
+try:
+    from .local_settings import *  # NOQA
+except ImportError:
+    pass
