@@ -15,4 +15,4 @@ django-widget-tweaks = "==1.4.*"
 django-registration = "==3.0.*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
