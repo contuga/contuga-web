@@ -36,9 +36,9 @@ PIPELINE = {
     'STYLESHEETS': {
         'main': {
             'source_filenames': (
-                'bootstrap/scss/bootstrap.scss',
-                'font-awesome/scss/font-awesome.scss',
-                'datatables.net-bs4/css/dataTables.bootstrap4.css',
+                'bootstrap/dist/css/bootstrap.min.css',
+                'font-awesome/css/font-awesome.min.css',
+                'datatables.net-bs4/css/dataTables.bootstrap4.min.css',
                 'scss/main.scss',
                 'transactions/scss/main.scss',
             ),
@@ -48,11 +48,11 @@ PIPELINE = {
     'JAVASCRIPT': {
         'main': {
             'source_filenames': (
-                'jquery/dist/jquery.js',
-                'bootstrap/dist/js/bootstrap.bundle.js',
-                'chart.js/dist/Chart.bundle.js',
-                'datatables.net/js/jquery.dataTables.js',
-                'datatables.net-bs4/js/dataTables.bootstrap4.js',
+                'jquery/dist/jquery.min.js',
+                'bootstrap/dist/js/bootstrap.bundle.min.js',
+                'chart.js/dist/Chart.bundle.min.js',
+                'datatables.net/js/jquery.dataTables.min.js',
+                'datatables.net-bs4/js/dataTables.bootstrap4.min.js',
                 'js/main.js',
             ),
             'output_filename': 'js/main.js',
