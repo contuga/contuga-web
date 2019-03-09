@@ -50,3 +50,10 @@ class Transaction(TimestampModel):
     @property
     def is_expenditure(self):
         return self.kind == constants.EXPENDITURE
+
+    @property
+    def type_icon_class(self):
+        if self.is_expenditure:
+            return 'text-danger fa fa-arrow-circle-down'
+        else:
+            return 'text-success fa fa-arrow-circle-up'
