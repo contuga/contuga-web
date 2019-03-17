@@ -5,7 +5,7 @@ from . import constants
 
 class TransactionManager(models.Manager):
     def income(self):
-        return self.filter(kind=constants.INCOME)
+        return self.filter(type=constants.INCOME)
 
     def expenditures(self):
-        return self.filter(kind=constants.EXPENDITURE)
+        return self.filter(type=constants.EXPENDITURE)

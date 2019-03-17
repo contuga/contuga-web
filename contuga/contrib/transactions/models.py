@@ -12,10 +12,10 @@ UserModel = get_user_model()
 
 
 class Transaction(TimestampModel):
-    kind = models.CharField(_('Type'),
+    type = models.CharField(_('Type'),
                             max_length=254,
                             default=constants.EXPENDITURE,
-                            choices=constants.TRANSACTION_KIND_CHOICES)
+                            choices=constants.TRANSACTION_TYPE_CHOICES)
     amount = models.DecimalField(_('Amount'),
                                  max_digits=12,
                                  decimal_places=2,
@@ -38,18 +38,18 @@ class Transaction(TimestampModel):
         verbose_name_plural = _('Transactions')
 
     def __str__(self):
-        return f'{self.get_kind_display()} - {self.amount}'
+        return f'{self.get_type_display()} - {self.amount}'
 
     def get_absolute_url(self):
         return reverse('transactions:detail', kwargs={'pk': self.pk})
 
     @property
     def is_income(self):
-        return self.kind == constants.INCOME
+        return self.type == constants.INCOME
 
     @property
     def is_expenditure(self):
-        return self.kind == constants.EXPENDITURE
+        return self.type == constants.EXPENDITURE
 
     @property
     def type_icon_class(self):
