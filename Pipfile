@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 flake8 = "*"
 ipdb = "*"
+autopep8 = "*"
 
 [packages]
 django = "==2.1.*"
