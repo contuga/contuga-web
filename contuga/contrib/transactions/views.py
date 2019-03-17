@@ -26,7 +26,7 @@ class TransactionCreateView(BaseTransactionFormViewMixin,
                             mixins.LoginRequiredMixin,
                             generic.CreateView):
     model = models.Transaction
-    fields = ('kind', 'amount', 'category', 'description')
+    fields = ('type', 'amount', 'category', 'description')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -51,7 +51,7 @@ class TransactionUpdateView(BaseTransactionFormViewMixin,
                             mixins.LoginRequiredMixin,
                             generic.UpdateView):
     model = models.Transaction
-    fields = ('kind', 'amount', 'category', 'description')
+    fields = ('type', 'amount', 'category', 'description')
     template_name = 'transactions/transaction_update_form.html'
 
 
