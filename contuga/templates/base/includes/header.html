@@ -27,6 +27,19 @@
           </div>
         </li>
         <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+              {% trans 'Accounts' %}
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'accounts:list' %}">
+                {% trans 'View all' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'accounts:create' %}">
+                {% trans 'Add new' %}
+              </a>
+            </div>
+          </li>
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
             {% trans 'Categories' %}
           </a>

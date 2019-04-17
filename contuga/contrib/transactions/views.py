@@ -19,6 +19,11 @@ class BaseTransactionFormViewMixin:
         description_field = form.fields["description"]
         description_field.widget = forms.Textarea()
 
+        account_field = form.fields['account']
+        account_field.queryset = account_field.queryset.filter(
+            owner=self.request.user
+        )
+
         return form
 
 
@@ -26,7 +31,7 @@ class TransactionCreateView(BaseTransactionFormViewMixin,
                             mixins.LoginRequiredMixin,
                             generic.CreateView):
     model = models.Transaction
-    fields = ('type', 'amount', 'category', 'description')
+    fields = ('type', 'amount', 'account', 'category', 'description')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -51,7 +56,7 @@ class TransactionUpdateView(BaseTransactionFormViewMixin,
                             mixins.LoginRequiredMixin,
                             generic.UpdateView):
     model = models.Transaction
-    fields = ('type', 'amount', 'category', 'description')
+    fields = ('type', 'amount', 'account', 'category', 'description')
     template_name = 'transactions/transaction_update_form.html'
 
 

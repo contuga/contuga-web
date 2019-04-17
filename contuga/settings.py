@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'contuga.contrib.transactions.apps.TransactionsConfig',
     'contuga.contrib.analytics.apps.AnalyticsConfig',
     'contuga.contrib.users.apps.UsersConfig',
+    'contuga.contrib.accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
