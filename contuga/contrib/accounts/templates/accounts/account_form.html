@@ -1,0 +1,20 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Add account" %}{% endblock %}
+
+{% block content %}
+<main class="container pt-4">
+  <div class="row">
+    <div class="col-12 col-md-6 col-xl-4">
+      <form method="POST">
+        {% csrf_token %}
+        {% include 'contuga/forms/field.html' with field=form.name %}
+        {% include 'contuga/forms/field.html' with field=form.currency %}
+        {% include 'contuga/forms/field.html' with field=form.description %}
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
