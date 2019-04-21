@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'sekizai',
     'widget_tweaks',
     'django_registration',
+    'django_extensions',
 
     # Django Apps
     'django.contrib.admin',
