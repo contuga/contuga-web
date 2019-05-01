@@ -13,6 +13,7 @@
         {% include 'contuga/forms/field.html' with field=form.email %}
         {% include 'contuga/forms/field.html' with field=form.password1 %}
         {% include 'contuga/forms/field.html' with field=form.password2 %}
+        {{ form.captcha }}
         <button type="submit" class="btn btn-primary">
           {% trans "Register" %}
         </button>

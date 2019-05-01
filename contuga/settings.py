@@ -93,6 +93,7 @@ INSTALLED_APPS = [
     'django_registration',
     'django_extensions',
     'anymail',
+    'captcha',
 
     # Django Apps
     'django.contrib.admin',
