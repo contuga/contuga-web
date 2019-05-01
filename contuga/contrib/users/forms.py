@@ -1,6 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from django_registration.forms import RegistrationForm
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV3
 
 from . import models
 
@@ -18,5 +20,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class RegistrationForm(RegistrationForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
+
     class Meta(RegistrationForm.Meta):
         model = models.User
