@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_registration',
     'django_extensions',
+    'anymail',
 
     # Django Apps
     'django.contrib.admin',
@@ -157,7 +158,7 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'users.User'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
 ACCOUNT_ACTIVATION_DAYS = 7
 
 # Password validation

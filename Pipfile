@@ -15,6 +15,7 @@ django-sekizai = "==0.10.*"
 django-widget-tweaks = "==1.4.*"
 django-registration = "==3.0.*"
 django-extensions = "*"
+django-anymail = {extras = ["mailjet"],version = "==6.*"}
 
 [requires]
 python_version = "3.7"
