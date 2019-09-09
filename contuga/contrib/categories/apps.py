@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class CategoriesConfig(AppConfig):
-    name = 'contuga.contrib.categories'
+    name = "contuga.contrib.categories"

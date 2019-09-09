@@ -9,28 +9,21 @@ from .managers import UserManager
 class User(AbstractUser):
     username_validator = UnicodeUsernameValidator()
 
-    email = models.EmailField(
-        verbose_name='Email',
-        max_length=255,
-        unique=True,
-    )
+    email = models.EmailField(verbose_name="Email", max_length=255, unique=True)
     username = models.CharField(
-        _('Username'),
+        _("Username"),
         max_length=150,
         unique=True,
         blank=True,
         null=True,
-        help_text=_('150 characters or fewer. '
-                    'Letters, digits and @/./+/-/_ only.'),
+        help_text=_("150 characters or fewer. " "Letters, digits and @/./+/-/_ only."),
         validators=[username_validator],
-        error_messages={
-            'unique': _('A user with that username already exists.'),
-        },
+        error_messages={"unique": _("A user with that username already exists.")},
     )
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     class Meta:
