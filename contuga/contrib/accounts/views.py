@@ -7,10 +7,9 @@ from contuga.mixins import OnlyOwnedByCurrentUserMixin
 from . import models
 
 
-class AccountCreateView(mixins.LoginRequiredMixin,
-                        generic.CreateView):
+class AccountCreateView(mixins.LoginRequiredMixin, generic.CreateView):
     model = models.Account
-    fields = ('name', 'currency', 'description')
+    fields = ("name", "currency", "description")
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -18,24 +17,24 @@ class AccountCreateView(mixins.LoginRequiredMixin,
         return HttpResponseRedirect(self.get_success_url())
 
 
-class AccountListView(OnlyOwnedByCurrentUserMixin,
-                      mixins.LoginRequiredMixin,
-                      generic.ListView):
+class AccountListView(
+    OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.ListView
+):
     model = models.Account
 
 
-class AccountDetailView(OnlyOwnedByCurrentUserMixin,
-                        mixins.LoginRequiredMixin,
-                        generic.DetailView):
+class AccountDetailView(
+    OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.DetailView
+):
     model = models.Account
 
 
-class AccountUpdateView(OnlyOwnedByCurrentUserMixin,
-                        mixins.LoginRequiredMixin,
-                        generic.UpdateView):
+class AccountUpdateView(
+    OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.UpdateView
+):
     model = models.Account
-    fields = ('name', 'description')
-    template_name = 'accounts/account_update_form.html'
+    fields = ("name", "description")
+    template_name = "accounts/account_update_form.html"
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -43,8 +42,8 @@ class AccountUpdateView(OnlyOwnedByCurrentUserMixin,
         return HttpResponseRedirect(self.get_success_url())
 
 
-class AccountDeleteView(OnlyOwnedByCurrentUserMixin,
-                        mixins.LoginRequiredMixin,
-                        generic.DeleteView):
+class AccountDeleteView(
+    OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.DeleteView
+):
     model = models.Account
-    success_url = reverse_lazy('accounts:list')
+    success_url = reverse_lazy("accounts:list")

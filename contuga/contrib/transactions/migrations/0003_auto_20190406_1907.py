@@ -7,20 +7,31 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0001_initial'),
-        ('transactions', '0002_auto_20190317_1936'),
+        ("accounts", "0001_initial"),
+        ("transactions", "0002_auto_20190317_1936"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='transaction',
-            name='account',
-            field=models.ForeignKey(default='', on_delete=django.db.models.deletion.CASCADE, related_name='transactions', to='accounts.Account'),
+            model_name="transaction",
+            name="account",
+            field=models.ForeignKey(
+                default="",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="transactions",
+                to="accounts.Account",
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='transaction',
-            name='category',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='transactions', to='categories.Category'),
+            model_name="transaction",
+            name="category",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="transactions",
+                to="categories.Category",
+            ),
         ),
     ]
