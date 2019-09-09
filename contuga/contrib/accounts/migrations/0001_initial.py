@@ -9,26 +9,64 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
 
     operations = [
         migrations.CreateModel(
-            name='Account',
+            name="Account",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created at')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Updated at')),
-                ('name', models.CharField(max_length=254, verbose_name='Name')),
-                ('currency', models.CharField(choices=[('BGN', 'Bulgarian lev'), ('EUR', 'Euro'), ('USD', 'US Dollars'), ('GBP', 'British pound'), ('CHF', 'Swiss franc'), ('RUB', 'Russian ruble')], max_length=3, verbose_name='Currency')),
-                ('description', models.CharField(blank=True, max_length=1000, verbose_name='Description')),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='accounts', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Created at"),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, verbose_name="Updated at"),
+                ),
+                ("name", models.CharField(max_length=254, verbose_name="Name")),
+                (
+                    "currency",
+                    models.CharField(
+                        choices=[
+                            ("BGN", "Bulgarian lev"),
+                            ("EUR", "Euro"),
+                            ("USD", "US Dollars"),
+                            ("GBP", "British pound"),
+                            ("CHF", "Swiss franc"),
+                            ("RUB", "Russian ruble"),
+                        ],
+                        max_length=3,
+                        verbose_name="Currency",
+                    ),
+                ),
+                (
+                    "description",
+                    models.CharField(
+                        blank=True, max_length=1000, verbose_name="Description"
+                    ),
+                ),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="accounts",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Account',
-                'verbose_name_plural': 'Accounts',
-                'ordering': ['created_at'],
+                "verbose_name": "Account",
+                "verbose_name_plural": "Accounts",
+                "ordering": ["created_at"],
             },
-        ),
+        )
     ]

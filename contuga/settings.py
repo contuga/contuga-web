@@ -18,64 +18,60 @@ BASE_DIR = os.path.dirname(PROJECT_PATH)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media files
 # https://docs.djangoproject.com/en/1.11/topics/files/
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'node_modules'),
-)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "node_modules"),)
 
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "pipeline.finders.PipelineFinder",
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
 
 PIPELINE = {
-    'STYLESHEETS': {
-        'main': {
-            'source_filenames': (
-                'bootstrap/scss/bootstrap.scss',
-                'font-awesome/scss/font-awesome.scss',
-                'datatables.net-bs4/css/dataTables.bootstrap4.css',
-                'scss/main.scss',
+    "STYLESHEETS": {
+        "main": {
+            "source_filenames": (
+                "bootstrap/scss/bootstrap.scss",
+                "font-awesome/scss/font-awesome.scss",
+                "datatables.net-bs4/css/dataTables.bootstrap4.css",
+                "scss/main.scss",
             ),
-            'output_filename': 'css/main.css',
-        },
-    },
-    'JAVASCRIPT': {
-        'main': {
-            'source_filenames': (
-                'jquery/dist/jquery.js',
-                'bootstrap/dist/js/bootstrap.bundle.js',
-                'chart.js/dist/Chart.bundle.js',
-                'datatables.net/js/jquery.dataTables.js',
-                'datatables.net-bs4/js/dataTables.bootstrap4.js',
-                'js/main.js',
-            ),
-            'output_filename': 'js/main.js',
+            "output_filename": "css/main.css",
         }
     },
-    'COMPILERS': (
-        'pipeline.compilers.sass.SASSCompiler',
-    ),
-    'SASS_BINARY': '/usr/bin/env sassc',
+    "JAVASCRIPT": {
+        "main": {
+            "source_filenames": (
+                "jquery/dist/jquery.js",
+                "bootstrap/dist/js/bootstrap.bundle.js",
+                "chart.js/dist/Chart.bundle.js",
+                "datatables.net/js/jquery.dataTables.js",
+                "datatables.net-bs4/js/dataTables.bootstrap4.js",
+                "js/main.js",
+            ),
+            "output_filename": "js/main.js",
+        }
+    },
+    "COMPILERS": ("pipeline.compilers.sass.SASSCompiler",),
+    "SASS_BINARY": "/usr/bin/env sassc",
     # Yuglify breaks the background image of `.navbar-toggler-icon`
-    'CSS_COMPRESSOR': 'pipeline.compressors.cssmin.CSSMinCompressor'
+    "CSS_COMPRESSOR": "pipeline.compressors.cssmin.CSSMinCompressor",
 }
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'SECRET_KEY'
+SECRET_KEY = "SECRET_KEY"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -87,78 +83,75 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # Third party apps
-    'pipeline',
-    'sekizai',
-    'widget_tweaks',
-    'django_registration',
-    'django_extensions',
-    'anymail',
-    'captcha',
-
+    "pipeline",
+    "sekizai",
+    "widget_tweaks",
+    "django_registration",
+    "django_extensions",
+    "anymail",
+    "captcha",
     # Django Apps
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     # Project apps
-    'contuga',
-    'contuga.contrib.categories.apps.CategoriesConfig',
-    'contuga.contrib.transactions.apps.TransactionsConfig',
-    'contuga.contrib.analytics.apps.AnalyticsConfig',
-    'contuga.contrib.users.apps.UsersConfig',
-    'contuga.contrib.accounts.apps.AccountsConfig',
+    "contuga",
+    "contuga.contrib.categories.apps.CategoriesConfig",
+    "contuga.contrib.transactions.apps.TransactionsConfig",
+    "contuga.contrib.analytics.apps.AnalyticsConfig",
+    "contuga.contrib.users.apps.UsersConfig",
+    "contuga.contrib.accounts.apps.AccountsConfig",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'contuga.urls'
+ROOT_URLCONF = "contuga.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.template.context_processors.i18n',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.template.context_processors.i18n",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 # Third party context processors
-                'sekizai.context_processors.sekizai',
-            ],
+                "sekizai.context_processors.sekizai",
+            ]
         },
-    },
+    }
 ]
 
-WSGI_APPLICATION = 'contuga.wsgi.application'
+WSGI_APPLICATION = "contuga.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
 ACCOUNT_ACTIVATION_DAYS = 7
 
@@ -167,35 +160,24 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = "en"
 
-LANGUAGES = [
-    ('en', 'English'),
-    ('bg', 'Български'),
-]
+LANGUAGES = [("en", "English"), ("bg", "Български")]
 
-LOCALE_PATHS = (
-    os.path.join(PROJECT_PATH, 'locale/'),
-)
+LOCALE_PATHS = (os.path.join(PROJECT_PATH, "locale/"),)
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -205,17 +187,15 @@ USE_TZ = True
 
 # Formatting
 # https://docs.djangoproject.com/en/1.11/topics/i18n/formatting/
-FORMAT_MODULE_PATH = [
-    'contuga.formats',
-]
+FORMAT_MODULE_PATH = ["contuga.formats"]
 USE_THOUSAND_SEPARATOR = True
 NUMBER_GROUPING = 3
 
 # Authentication
 # https://docs.djangoproject.com/en/1.11/topics/auth/default/
 # https://django-registration.readthedocs.io/en/3.0.1/
-LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = "/users/login/"
+LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = "/"
 
 try:
     from .local_settings import *  # NOQA

@@ -18,20 +18,12 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 
 urlpatterns = i18n_patterns(
-    path('categories/',
-         include(('contuga.contrib.categories.urls',
-                  'categories'))),
-    path('transactions/',
-         include(('contuga.contrib.transactions.urls',
-                  'transactions'))),
-    path('accounts/',
-         include(('contuga.contrib.accounts.urls',
-                  'accounts'))),
-    path('users/',
-         include(('contuga.contrib.users.urls',
-                  'users'))),
-    path('admin/', admin.site.urls),
-    path('',
-         include(('contuga.contrib.analytics.urls',
-                  'analytics'))),
+    path("categories/", include(("contuga.contrib.categories.urls", "categories"))),
+    path(
+        "transactions/", include(("contuga.contrib.transactions.urls", "transactions"))
+    ),
+    path("accounts/", include(("contuga.contrib.accounts.urls", "accounts"))),
+    path("users/", include(("contuga.contrib.users.urls", "users"))),
+    path("admin/", admin.site.urls),
+    path("", include(("contuga.contrib.analytics.urls", "analytics"))),
 )

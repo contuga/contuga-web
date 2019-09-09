@@ -9,7 +9,7 @@ from . import models
 
 class CategoryCreateView(mixins.LoginRequiredMixin, generic.CreateView):
     model = models.Category
-    fields = ('name', 'description')
+    fields = ("name", "description")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -17,25 +17,25 @@ class CategoryCreateView(mixins.LoginRequiredMixin, generic.CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class CategoryListView(OnlyAuthoredByCurrentUserMixin,
-                       mixins.LoginRequiredMixin,
-                       generic.ListView):
+class CategoryListView(
+    OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.ListView
+):
     model = models.Category
     paginate_by = 10
 
 
-class CategoryDetailView(OnlyAuthoredByCurrentUserMixin,
-                         mixins.LoginRequiredMixin,
-                         generic.DetailView):
+class CategoryDetailView(
+    OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.DetailView
+):
     model = models.Category
 
 
-class CategoryUpdateView(OnlyAuthoredByCurrentUserMixin,
-                         mixins.LoginRequiredMixin,
-                         generic.UpdateView):
+class CategoryUpdateView(
+    OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.UpdateView
+):
     model = models.Category
-    fields = ('name', 'description')
-    template_name = 'categories/category_update_form.html'
+    fields = ("name", "description")
+    template_name = "categories/category_update_form.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -43,8 +43,8 @@ class CategoryUpdateView(OnlyAuthoredByCurrentUserMixin,
         return HttpResponseRedirect(self.get_success_url())
 
 
-class CategoryDeleteView(OnlyAuthoredByCurrentUserMixin,
-                         mixins.LoginRequiredMixin,
-                         generic.DeleteView):
+class CategoryDeleteView(
+    OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.DeleteView
+):
     model = models.Category
-    success_url = reverse_lazy('categories:list')
+    success_url = reverse_lazy("categories:list")
