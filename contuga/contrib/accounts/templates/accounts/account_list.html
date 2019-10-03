@@ -35,7 +35,7 @@
                 {{ account.get_currency_display }}
               </td>
               <td class="{% if account.is_balance_negative %} text-danger {% else %} text-success {% endif %}">
-                {{ account.balance }}
+                {{ account.balance|floatformat:2 }}
               </td>
               <td>
                 <a href="{% url 'accounts:update' account.pk %}">
