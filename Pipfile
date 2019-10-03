@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 flake8 = "*"
 ipdb = "*"
-autopep8 = "*"
 black = "==19.3b0"
 pre-commit = "*"
 
