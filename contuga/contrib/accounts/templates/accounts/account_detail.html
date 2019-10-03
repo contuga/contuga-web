@@ -20,7 +20,7 @@
           </tr>
           <tr>
             <th scope="row">{% trans "Balance" %}</th>
-            <td>{{ account.balance }}</td>
+            <td>{{ account.balance|floatformat:2 }}</td>
           </tr>
           <tr>
             <th scope="row">{% trans "Description" %}</th>

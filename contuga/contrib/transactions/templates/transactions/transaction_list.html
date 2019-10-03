@@ -32,7 +32,7 @@
               <td>
                 <a href="{{ transaction.get_absolute_url }}"
                   class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
-                  {{ transaction.amount }}
+                  {{ transaction.amount|floatformat:2 }}
                 </a>
               </td>
               <td>
