@@ -12,7 +12,7 @@
         <tbody>
           <tr>
             <th scope="row">{% trans "Amount" %}</th>
-            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.amount|floatformat:2 }}</td>
           </tr>
           <tr>
             <th scope="row">{% trans "Type" %}</th>
