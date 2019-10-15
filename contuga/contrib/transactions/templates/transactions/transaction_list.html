@@ -14,9 +14,9 @@
             <tr>
               <th scope="col" class="d-none d-md-table-cell">#</th>
               <th scope="col">{% trans "Amount" %}</th>
-              <th scope="col">{% trans "Type" %}</th>
+              <th scope="col" id="typeColumn">{% trans "Type" %}</th>
               <th scope="col">{% trans "Account" %}</th>
-              <th scope="col">{% trans "Category" %}</th>
+              <th scope="col" id="categoryColumn">{% trans "Category" %}</th>
               <th scope="col">{% trans "Created at" %}</th>
               <th scope="col" class="d-none d-md-table-cell">
                 {% trans "Description" %}
@@ -36,7 +36,11 @@
                 </a>
               </td>
               <td>
-                <i class="{{ transaction.type_icon_class }}"></i>
+                <i class="{{ transaction.type_icon_class }}">
+                  <span class="d-none">
+                      {% if transaction.is_expenditure %} expenditure {% else %} income {% endif %}
+                  </span>
+                </i>
               </td>
               <td>
                 <a href="{{ transaction.account.get_absolute_url }}">
@@ -67,6 +71,18 @@
             </tr>
             {% endfor %}
           </tbody>
+          <tfoot>
+            <tr>
+              <th scope="col" class="d-none d-md-table-cell"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col" class="d-none d-md-table-cell"></th>
+              <th></th>
+              <th></th>
+            </tr>
+        </tfoot>
         </table>
       </div>
       {% if is_paginated %}
@@ -108,6 +124,7 @@
 {{ block.super }}
 <script type="text/javascript">
   $(document).ready(function () {
+
     var t = $('#transactions').DataTable({
       columnDefs: [{
         "searchable": false,
@@ -140,6 +157,37 @@
           'sortAscending': ': {% trans "activate to sort column ascending" %}',
           'sortDescending': ': {% trans "activate to sort column descending" %}'
         }
+      },
+      initComplete: function () {
+        var column = this.api().column($('#categoryColumn'));
+        var select = $('<select class="custom-select custom-select-sm"><option value="">{% trans "All" %}</option></select>')
+          .appendTo( $(column.footer()).empty() )
+          .on('change', function () {
+            var val = $.fn.dataTable.util.escapeRegex(
+              $(this).val()
+            );
+
+            column.search(val, true, false ).draw();
+          });
+
+        column.data().unique().sort().each(function (content, j) {
+          // Removes HTML tags and trims whitespace leaving just the content.
+          content = content.replace(/(\s*<([^>]+)>\s*)/ig,"")
+          select.append(`<option value="${content}">${content}</option>`);
+        });
+
+        var typeColumn = this.api().column($('#typeColumn'));
+        var select = $(`
+          <select class="custom-select custom-select-sm">
+            <option value="">&#xf0ab; &#xf0aa;</option>
+            <option value="expenditure">&#xf0ab;</option>
+            <option value="income">&#xf0aa;</option>
+          </select>
+          `)
+          .appendTo($(typeColumn.footer()).empty())
+          .on('change', function () {
+            typeColumn.search($(this).val()).draw();
+          });
       }
     });
     t.on('order.dt search.dt', function () {
