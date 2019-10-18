@@ -28,3 +28,6 @@ server = "python manage.py runserver"
 migrate = "python manage.py migrate"
 test = "python manage.py test"
 shell = "python manage.py shell_plus --print-sql"
+
+[pipenv]
+allow_prereleases = true
