@@ -40,6 +40,7 @@ PIPELINE = {
     "STYLESHEETS": {
         "main": {
             "source_filenames": (
+                "scss/_variables.scss",
                 "bootstrap/scss/bootstrap.scss",
                 "font-awesome/scss/font-awesome.scss",
                 "datatables.net-bs4/css/dataTables.bootstrap4.css",
