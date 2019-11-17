@@ -13,72 +13,18 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_PATH)
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media files
 # https://docs.djangoproject.com/en/1.11/topics/files/
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "node_modules"),)
-
-STATICFILES_FINDERS = (
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "pipeline.finders.PipelineFinder",
-)
-
-STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
-
-PIPELINE = {
-    "STYLESHEETS": {
-        "main": {
-            "source_filenames": (
-                "scss/_variables.scss",
-                "bootstrap/scss/bootstrap.scss",
-                "font-awesome/scss/font-awesome.scss",
-                "datatables.net-bs4/css/dataTables.bootstrap4.css",
-                "scss/main.scss",
-            ),
-            "output_filename": "css/main.css",
-        }
-    },
-    "JAVASCRIPT": {
-        "main": {
-            "source_filenames": (
-                "jquery/dist/jquery.js",
-                "bootstrap/dist/js/bootstrap.bundle.js",
-                "chart.js/dist/Chart.bundle.js",
-                "datatables.net/js/jquery.dataTables.js",
-                "datatables.net-bs4/js/dataTables.bootstrap4.js",
-                "js/main.js",
-            ),
-            "output_filename": "js/main.js",
-        }
-    },
-    "COMPILERS": ("pipeline.compilers.sass.SASSCompiler",),
-    "SASS_BINARY": "/usr/bin/env sassc",
-    # Yuglify breaks the background image of `.navbar-toggler-icon`
-    "CSS_COMPRESSOR": "pipeline.compressors.cssmin.CSSMinCompressor",
-}
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "SECRET_KEY"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -153,7 +99,6 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = "users.User"
-EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
 ACCOUNT_ACTIVATION_DAYS = 7
 
 # Password validation
@@ -168,40 +113,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
-
-LANGUAGE_CODE = "en"
-
-LANGUAGES = [("en", "English"), ("bg", "Български")]
-
-LOCALE_PATHS = (os.path.join(PROJECT_PATH, "locale/"),)
-
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-# Formatting
-# https://docs.djangoproject.com/en/1.11/topics/i18n/formatting/
-FORMAT_MODULE_PATH = ["contuga.formats"]
-USE_THOUSAND_SEPARATOR = True
-NUMBER_GROUPING = 3
-
 # Authentication
 # https://docs.djangoproject.com/en/1.11/topics/auth/default/
 # https://django-registration.readthedocs.io/en/3.0.1/
 LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = "/"
 
-RECAPTCHA_PRIVATE_KEY = "RECAPTCHA_PRIVATE_KEY"
-RECAPTCHA_PUBLIC_KEY = "RECAPTCHA_PUBLIC_KEY"
-
-try:
-    from .local_settings import *  # NOQA
-except ImportError:
-    pass
+TIME_ZONE = "Europe/Sofia"
+USE_TZ = True
