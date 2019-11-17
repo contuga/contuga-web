@@ -1,3 +1,7 @@
+@import '../bootstrap/scss/_functions';
+@import '../bootstrap/scss/mixins/breakpoints';
+@import '../scss/variables.scss';
+
 /* dataTables CSS modification & positioning */
 .dataTables_wrapper {
   thead {
@@ -51,5 +55,11 @@
     background: none;
     width: auto;
     padding-right: 0;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .dropdown-item {
+    padding: 0.5rem 1.5rem;
   }
 }
