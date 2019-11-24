@@ -63,6 +63,9 @@
             <a class="dropdown-item" href="{% url 'users:profile' user.pk %}">
               {% trans 'Profile' %}
             </a>
+            <a class="dropdown-item" href="{% url 'users:password_change' %}">
+              {% trans 'Change password' %}
+            </a>
             <a class="dropdown-item" href="{% url 'users:logout' %}">
               {% trans 'Logout' %}
             </a>
@@ -77,6 +80,9 @@
             </a>
             <a class="dropdown-item" href="{% url 'users:registration' %}">
               {% trans 'Register' %}
+            </a>
+            <a class="dropdown-item" href="{% url 'users:password_reset' %}">
+              {% trans 'Reset password' %}
             </a>
           </div>
           {% endif %}
