@@ -1,4 +1,4 @@
-from django.urls import re_path, include
+from django.urls import re_path
 from django.views.generic import base as base_views
 
 from . import views
@@ -33,5 +33,30 @@ urlpatterns = [
         name="activation_complete",
     ),
     re_path(r"^(?P<pk>\d+)/$", views.UserDetailView.as_view(), name="profile"),
-    re_path(r"^", include("django.contrib.auth.urls")),
+    re_path(
+        "^password_change/$", views.PasswordChangeView.as_view(), name="password_change"
+    ),
+    re_path(
+        "^password_change/done/$",
+        views.PasswordChangeDoneView.as_view(),
+        name="password_change_done",
+    ),
+    re_path(
+        "password_reset/$", views.PasswordResetView.as_view(), name="password_reset"
+    ),
+    re_path(
+        "^password_reset/done/$",
+        views.PasswordResetDoneView.as_view(),
+        name="password_reset_done",
+    ),
+    re_path(
+        "^reset/(?P<uidb64>[0-9A-Za-z_-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
+        views.PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    re_path(
+        "^reset/done/$",
+        views.PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
 ]
