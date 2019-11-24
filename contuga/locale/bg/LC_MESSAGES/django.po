@@ -135,3 +135,7 @@ msgstr "Изход"
 #: contuga/templates/base/includes/header.html:59
 msgid "User"
 msgstr "Потребител"
+
+#: contuga/templates/base/includes/header.html:85
+msgid "Reset password"
+msgstr "Забравена парола"
