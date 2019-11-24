@@ -8,6 +8,7 @@ flake8 = "*"
 ipdb = "*"
 black = "==19.3b0"
 pre-commit = "*"
+wily = "*"
 
 [packages]
 django = "==2.1.*"
