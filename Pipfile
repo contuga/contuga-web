@@ -9,6 +9,7 @@ ipdb = "*"
 black = "==19.3b0"
 pre-commit = "*"
 wily = "*"
+bandit = "*"
 
 [packages]
 django = "==2.1.*"
