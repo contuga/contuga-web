@@ -27,7 +27,7 @@ class Account(TimestampModel):
         verbose_name_plural = _("Accounts")
 
     def __str__(self):
-        return f"{self.name} - {self.owner}"
+        return f"{self.name}"
 
     def get_absolute_url(self):
         return reverse("accounts:detail", kwargs={"pk": self.pk})
