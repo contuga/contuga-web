@@ -5,7 +5,8 @@ from django.contrib.auth import mixins
 from django.urls import reverse_lazy
 
 from contuga.mixins import OnlyAuthoredByCurrentUserMixin
-from . import models
+from contuga import views
+from . import models, filters
 
 
 class BaseTransactionFormViewMixin:
@@ -38,9 +39,11 @@ class TransactionCreateView(
 
 
 class TransactionListView(
-    OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.ListView
+    OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, views.FilteredListView
 ):
     model = models.Transaction
+    filterset_class = filters.TransactionFilterSet
+    paginate_by = 50
 
 
 class TransactionDetailView(
