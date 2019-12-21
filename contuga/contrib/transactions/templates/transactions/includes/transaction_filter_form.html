@@ -1,0 +1,60 @@
+{% load i18n widget_tweaks %}
+
+<div class="row">
+  <div class="col-12">
+    <form id="filterForm" method="GET">
+      <div class="row">
+        <div class="col-12 col-md-2">
+          {% include 'contuga/forms/field.html' with field=filterset.form.type %}
+        </div>
+        <div class="col-12 col-md-2">
+          {% include 'contuga/forms/field.html' with field=filterset.form.account %}
+        </div>
+        <div class="col-12 col-md-2">
+          {% include 'contuga/forms/field.html' with field=filterset.form.category %}
+        </div>
+        <div class="col-12 col-md-3">
+          {% include 'contuga/forms/field.html' with field=filterset.form.created_at|attr:'autocomplete:off' %}
+        </div>
+        <div class="col-12 col-md-3">
+          {% include 'contuga/forms/field.html' with field=filterset.form.updated_at|attr:'autocomplete:off' %}
+        </div>
+        <div class="col-12 col-md-3">
+          {% include 'contuga/forms/field.html' with field=filterset.form.description %}
+        </div>
+        <div class="col-12 col-md-3">
+          {% include 'contuga/forms/field.html' with field=filterset.form.ordering %}
+        </div>
+        {% with field=filterset.form.amount amount=filterset.form.amount.0.data.subwidgets.0 select=filterset.form.amount.0.data.subwidgets.1 %}
+          <div class="col-12 col-md-4">
+            <div class="form-group">
+              <label for="{{ field.auto_id }}" class="{% if field.errors %} text-danger {% endif %}">
+                {{ field.label }}{% if field.field.required or required %} &#42;{% endif %}
+              </label>
+              <div class="input-group">
+                <input type="{{ amount.type }}" name="{{ amount.name }}" class="form-control" id="{{ amount.attrs.id }}" value="{{ amount.value }}"/>
+                <select name="{{ select.name }}" id="{{ select.attrs.id }}" class="selectpicker form-control">
+                  {% for option in select.optgroups %}
+                    <option value="{{ option.1.0.value }}" {% if option.1.0.selected %} selected {% endif %}>{% trans option.1.0.label %}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              {% if field.errors %}
+                <small class="text-danger">
+                  {{ field.errors|striptags }}
+                </small>
+              {% endif %}
+            </div>
+          </div>
+        {% endwith %}
+        <div class="col-12 col-md-2 d-flex align-items-end mb-3">
+          <button type="submit" class="btn btn-primary">
+            {% trans "Apply" %}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
