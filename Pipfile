@@ -21,6 +21,7 @@ django-extensions = "*"
 django-anymail = {extras = ["mailjet"],version = "==6.*"}
 django-recaptcha = "==2.0.*"
 django-split-settings = "==1.0.*"
+django-filter = "==2.2.*"
 
 [requires]
 python_version = "3.7"
