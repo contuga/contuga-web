@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "django_registration",
     "django_extensions",
+    "django_filters",
     "anymail",
     "captcha",
     # Django Apps
