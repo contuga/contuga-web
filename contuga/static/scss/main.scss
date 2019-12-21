@@ -2,62 +2,6 @@
 @import '../bootstrap/scss/mixins/breakpoints';
 @import '../scss/variables.scss';
 
-/* dataTables CSS modification & positioning */
-.dataTables_wrapper {
-  thead {
-    th {
-      position: relative;
-      background-image: none !important;
-
-      &.sorting {
-        &:before,
-        &:after,
-        &_asc:before,
-        &_asc:after,
-        &_desc:before,
-        &_desc:after,
-        &_asc_disabled:before,
-        &_asc_disabled:after,
-        &_desc_disabled:before,
-        &_desc_disabled:after {
-          right: 0 !important;
-          content: "" !important;
-        }
-      }
-
-      &.sorting:after,
-      &.sorting_asc:after,
-      &.sorting_desc:after {
-        position: absolute !important;
-        top: 8px !important;
-        right: 8px !important;
-        display: block !important;
-        font-family: FontAwesome !important;
-      }
-
-      &.sorting:after {
-        content: "\f0dc" !important;
-        color: #000 !important;
-        font-size: 1em !important;
-      }
-
-      &.sorting_asc:after {
-        content: "\f0de" !important;
-      }
-
-      &.sorting_desc:after {
-        content: "\f0dd" !important;
-      }
-    }
-  }
-  .custom-select {
-    font-family: FontAwesome !important;
-    background: none;
-    width: auto;
-    padding-right: 0;
-  }
-}
-
 @include media-breakpoint-down(sm) {
   .dropdown-item {
     padding: 0.5rem 1.5rem;
