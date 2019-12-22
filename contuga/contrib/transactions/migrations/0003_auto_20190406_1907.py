@@ -20,6 +20,7 @@ class Migration(migrations.Migration):
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="transactions",
                 to="accounts.Account",
+                verbose_name="Account",
             ),
             preserve_default=False,
         ),
@@ -32,6 +33,7 @@ class Migration(migrations.Migration):
                 on_delete=django.db.models.deletion.SET_NULL,
                 related_name="transactions",
                 to="categories.Category",
+                verbose_name="Category",
             ),
         ),
     ]
