@@ -31,11 +31,15 @@ class Transaction(TimestampModel):
         Category,
         related_name="transactions",
         on_delete=models.SET_NULL,
+        verbose_name=_("Category"),
         blank=True,
         null=True,
     )
     account = models.ForeignKey(
-        "accounts.Account", related_name="transactions", on_delete=models.CASCADE
+        "accounts.Account",
+        related_name="transactions",
+        on_delete=models.CASCADE,
+        verbose_name=_("Account"),
     )
     description = models.CharField(_("Description"), max_length=1000, blank=True)
 
