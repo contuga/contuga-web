@@ -7,3 +7,11 @@
     padding: 0.5rem 1.5rem;
   }
 }
+
+.btn-filter {
+  margin-top: 0.5rem;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
