@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django_filters",
     "anymail",
     "captcha",
+    "import_export",
     # Django Apps
     "django.contrib.admin",
     "django.contrib.auth",
