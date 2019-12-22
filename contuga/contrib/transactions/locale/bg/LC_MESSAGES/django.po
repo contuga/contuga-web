@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-09 23:26+0200\n"
+"POT-Creation-Date: 2019-12-24 18:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,64 +18,124 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: constants.py:7
+#: contuga/contrib/transactions/constants.py:6
 msgid "Income"
 msgstr "Приход"
 
-#: constants.py:8
+#: contuga/contrib/transactions/constants.py:6
 msgid "Expenditure"
 msgstr "Разход"
 
-#: models.py:14 templates/transactions/transaction_detail.html:16
-#: templates/transactions/transaction_list.html:15
-msgid "Type"
-msgstr "Тип"
+#: contuga/contrib/transactions/filters.py:30
+msgid "Equals"
+msgstr "Равни"
 
-#: models.py:18 templates/transactions/transaction_detail.html:12
-#: templates/transactions/transaction_list.html:14
+#: contuga/contrib/transactions/filters.py:31
+msgid "Greater than"
+msgstr "По-големи"
+
+#: contuga/contrib/transactions/filters.py:32
+msgid "Less than"
+msgstr "По-малки"
+
+#: contuga/contrib/transactions/filters.py:40
+#: contuga/contrib/transactions/models.py:20
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:11
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:12
 msgid "Amount"
 msgstr "Сума"
 
-#: models.py:25 templates/transactions/transaction_list.html:18
-msgid "Description"
+#: contuga/contrib/transactions/filters.py:41
+msgid "Creation date"
+msgstr "Дата на създаване"
+
+#: contuga/contrib/transactions/filters.py:42
+msgid "Last updated"
+msgstr "Последно променена"
+
+#: contuga/contrib/transactions/filters.py:52
+msgid "Ordering"
+msgstr "Сортиране"
+
+#: contuga/contrib/transactions/filters.py:62
+msgid "Descripton"
 msgstr "Описание"
 
-#: models.py:33
-msgid "Transaction"
-msgstr "Трансакция"
+#: contuga/contrib/transactions/forms.py:23
+msgid "Invalid date range"
+msgstr "Невалиден времеви диапазон"
 
-#: models.py:34 templates/transactions/transaction_list.html:8
-msgid "Transactions"
-msgstr "Трансакции"
+#: contuga/contrib/transactions/models.py:15
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:12
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:16
+msgid "Type"
+msgstr "Тип"
 
-#: templates/transactions/transaction_confirm_delete.html:10
-msgid "Are you sure you want to delete this transaction?"
-msgstr "Сигурен ли си, че искаш да изтриеш тази трансакция?"
-
-#: templates/transactions/transaction_confirm_delete.html:11
-msgid "Confirm"
-msgstr "Потвърждавам"
-
-#: templates/transactions/transaction_detail.html:8
-msgid "Transaction details"
-msgstr "Детайли за трансакция"
-
+#: contuga/contrib/transactions/models.py:28
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:14
 #: contuga/contrib/transactions/templates/transactions/transaction_detail.html:20
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:16
-msgid "Account"
-msgstr "Сметка"
-
-#: templates/transactions/transaction_detail.html:20
-#: templates/transactions/transaction_list.html:16
 msgid "Category"
 msgstr "Категория"
 
-#: templates/transactions/transaction_detail.html:24
-#: templates/transactions/transaction_list.html:17
+#: contuga/contrib/transactions/models.py:36
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:13
+msgid "Account"
+msgstr "Сметка"
+
+#: contuga/contrib/transactions/models.py:38
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:17
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:32
+msgid "Description"
+msgstr "Описание"
+
+#: contuga/contrib/transactions/models.py:44
+msgid "Transaction"
+msgstr "Трансакция"
+
+#: contuga/contrib/transactions/models.py:45
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:5
+msgid "Transactions"
+msgstr "Трансакции"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_form.html:7
+msgid "Filters"
+msgstr "Филтри"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_form.html:60
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:39
+msgid "Apply"
+msgstr "Приложи"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:15
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:24
 msgid "Created at"
 msgstr "Създаден на"
 
-#: templates/transactions/transaction_detail.html:28
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:72
+msgid "No transactions"
+msgstr "Няма намерени трансакции"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:81
+msgid "Previous"
+msgstr "Предишна"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:97
+msgid "Next"
+msgstr "Следваща"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_confirm_delete.html:11
+msgid "Are you sure you want to delete this transaction?"
+msgstr "Сигурен ли си, че искаш да изтриеш тази трансакция?"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_confirm_delete.html:14
+msgid "Confirm"
+msgstr "Потвърждавам"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:8
+msgid "Transaction details"
+msgstr "Детайли за трансакция"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:28
 msgid "Updated at"
 msgstr "Обновен на"
 
@@ -87,72 +147,129 @@ msgstr "Редактирай"
 msgid "Delete"
 msgstr "Изтрий"
 
-#: templates/transactions/transaction_form.html:20
+#: contuga/contrib/transactions/templates/transactions/transaction_form.html:28
 msgid "Save"
 msgstr "Запиши"
 
-#: templates/transactions/transaction_list.html:53
-#: templates/transactions/transaction_list.html:155
-msgid "Previous"
-msgstr "Предишна"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:26
+msgid "Today"
+msgstr "Днес"
 
-#: templates/transactions/transaction_list.html:65
-#: templates/transactions/transaction_list.html:154
-msgid "Next"
-msgstr "Следваща"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:27
+msgid "Yesterday"
+msgstr "Вчера"
 
-#: templates/transactions/transaction_list.html:139
-msgid "All"
-msgstr "Всички"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:28
+msgid "Last 7 Days"
+msgstr "Последните 7 дни"
 
-#: templates/transactions/transaction_list.html:142
-msgid "No data available in table"
-msgstr "В таблицата няма данни"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:29
+msgid "Last 30 Days"
+msgstr "Последните 30 дни"
 
-#: templates/transactions/transaction_list.html:143
-msgid "Showing _START_ to _END_ of _TOTAL_ entries"
-msgstr "Показване на резултати от _START_ до _END_ от общо _TOTAL_"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:30
+msgid "This Month"
+msgstr "Този месец"
 
-#: templates/transactions/transaction_list.html:144
-msgid "Showing 0 to 0 of 0 entries"
-msgstr "Показване на резултати от 0 до 0 от общо 0"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:31
+msgid "Last Month"
+msgstr "Последния месец"
 
-#: templates/transactions/transaction_list.html:145
-msgid "(filtered from _MAX_ total entries)"
-msgstr "(филтрирани от общо _MAX_ резултата)"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:40
+msgid "Clear"
+msgstr "Изчисти"
 
-#: templates/transactions/transaction_list.html:146
-msgid "Show _MENU_ entries"
-msgstr "Показване на _MENU_ резултата"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:41
+msgid "From"
+msgstr "От"
 
-#: templates/transactions/transaction_list.html:147
-msgid "Loading"
-msgstr "Зареждане"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:42
+msgid "To"
+msgstr "До"
 
-#: templates/transactions/transaction_list.html:148
-msgid "Processing"
-msgstr "Обработване"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:43
+msgid "Custom"
+msgstr "По избор"
 
-#: templates/transactions/transaction_list.html:149
-msgid "Search"
-msgstr "Търсене"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:45
+msgctxt "Day of the week"
+msgid "Su"
+msgstr "Нд"
 
-#: templates/transactions/transaction_list.html:150
-msgid "No matching records found"
-msgstr "Няма намерени резултати"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:46
+msgctxt "Day of the week"
+msgid "Mo"
+msgstr "Пн"
 
-#: templates/transactions/transaction_list.html:152
-msgid "First"
-msgstr "Първи"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:47
+msgctxt "Day of the week"
+msgid "Tu"
+msgstr "Вт"
 
-#: templates/transactions/transaction_list.html:153
-msgid "Last"
-msgstr "Последен"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:48
+msgctxt "Day of the week"
+msgid "We"
+msgstr "Ср"
 
-#: templates/transactions/transaction_list.html:158
-msgid "activate to sort column ascending"
-msgstr "избери, за да сортираш във възходящ ред"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:49
+msgctxt "Day of the week"
+msgid "Th"
+msgstr "Чт"
 
-#: templates/transactions/transaction_list.html:159
-msgid "activate to sort column descending"
-msgstr "избери, за да сортираш във низходящ ред"
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:50
+msgctxt "Day of the week"
+msgid "Fr"
+msgstr "Пт"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:51
+msgctxt "Day of the week"
+msgid "Sa"
+msgstr "Ст"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:54
+msgid "January"
+msgstr "Януари"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:55
+msgid "February"
+msgstr "Февруари"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:56
+msgid "March"
+msgstr "Март"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:57
+msgid "April"
+msgstr "Април"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:58
+msgid "May"
+msgstr "Май"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:59
+msgid "June"
+msgstr "Юни"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:60
+msgid "July"
+msgstr "Юли"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:61
+msgid "August"
+msgstr "Август"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:62
+msgid "September"
+msgstr "Септември"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:63
+msgid "October"
+msgstr "Октомври"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:64
+msgid "November"
+msgstr "Ноември"
+
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:65
+msgid "December"
+msgstr "Декември"
