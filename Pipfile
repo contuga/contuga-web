@@ -10,6 +10,7 @@ black = "==19.3b0"
 pre-commit = "*"
 wily = "*"
 bandit = "*"
+coverage = "*"
 
 [packages]
 django = "==2.1.*"
