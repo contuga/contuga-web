@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<table class="table">
+  <tbody>
+    <tr>
+      <th scope="row">{% trans "Name" %}</th>
+      <td>{{ account.name }}</td>
+    </tr>
+    <tr>
+      <th scope="row">{% trans "Currency" %}</th>
+      <td>{{ account.get_currency_display }}</td>
+    </tr>
+    <tr>
+      <th scope="row">{% trans "Balance" %}</th>
+      <td>{{ account.balance|floatformat:2 }}</td>
+    </tr>
+    <tr>
+      <th scope="row">{% trans "Description" %}</th>
+      <td>{{ account.description }}</td>
+    </tr>
+    <tr>
+      <th scope="row">{% trans "Created at" %}</th>
+      <td>{{ account.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+    </tr>
+    <tr>
+      <th scope="row">{% trans "Updated at" %}</th>
+      <td>{{ account.updated_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+    </tr>
+  </tbody>
+</table>
