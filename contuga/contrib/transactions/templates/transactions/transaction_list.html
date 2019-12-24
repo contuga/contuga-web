@@ -5,7 +5,21 @@
 
 {% block content %}
 <main class="container">
-  {% include "transactions/includes/transaction_filter_form.html" %}
+  <div class="row" id="actionGroup">
+    <div class="col-12">
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-dark btn-action" type="button" data-toggle="collapse" data-target="#exportFormContainer">
+          {% trans "Export" %}
+        </button>
+        <button class="btn btn-dark btn-action" type="button" data-toggle="collapse" data-target="#filterFormContainer">
+          {% trans "Filters" %}
+        </button>
+      </div>
+      {% include "transactions/includes/transaction_export_form.html" %}
+      {% include "transactions/includes/transaction_filter_form.html" %}
+    </div>
+  </div>
+
   {% include "transactions/includes/transaction_list.html" %}
 </main>
 {% endblock %}
