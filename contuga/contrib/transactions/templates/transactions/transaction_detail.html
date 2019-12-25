@@ -19,6 +19,10 @@
             <td>{{ transaction.get_type_display }}</td>
           </tr>
           <tr>
+            <th scope="row">{% trans "Account" %}</th>
+            <td>{{ transaction.account.name }}</td>
+          </tr>
+          <tr>
             <th scope="row">{% trans "Category" %}</th>
             <td>{{ transaction.category.name }}</td>
           </tr>

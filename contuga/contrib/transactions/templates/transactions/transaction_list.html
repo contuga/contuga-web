@@ -15,6 +15,7 @@
               <th scope="col" class="d-none d-md-table-cell">#</th>
               <th scope="col">{% trans "Amount" %}</th>
               <th scope="col">{% trans "Type" %}</th>
+              <th scope="col">{% trans "Account" %}</th>
               <th scope="col">{% trans "Category" %}</th>
               <th scope="col">{% trans "Created at" %}</th>
               <th scope="col" class="d-none d-md-table-cell">
@@ -36,6 +37,11 @@
               </td>
               <td>
                 <i class="{{ transaction.type_icon_class }}"></i>
+              </td>
+              <td>
+                <a href="{{ transaction.account.get_absolute_url }}">
+                  {{ transaction.account.name }}
+                </a>
               </td>
               <td>
                 <a href="{{ transaction.category.get_absolute_url }}">
