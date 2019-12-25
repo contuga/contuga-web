@@ -18,6 +18,10 @@
         {% endif %}
         {% include 'contuga/forms/field.html' with field=form.username %}
         {% include 'contuga/forms/field.html' with field=form.password %}
+        <p>
+          {% trans "Don't have an account yet?" %}
+          <a href="{% url 'users:registration' %}">{% trans "Register" %}</a>
+        </p>
         <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
       </form>
     </div>
