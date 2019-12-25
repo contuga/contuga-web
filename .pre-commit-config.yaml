@@ -21,3 +21,8 @@
       language: python
       pass_filenames: false
       additional_dependencies: [bandit]
+    - id: tests
+      name: run tests
+      entry: pipenv run test
+      language: python
+      pass_filenames: false
