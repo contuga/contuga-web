@@ -7,3 +7,5 @@ local.py
 media/
 /static/
 node_modules/
+.coverage
+htmlcov
