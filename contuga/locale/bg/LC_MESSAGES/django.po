@@ -54,6 +54,10 @@ msgstr "Моля, последвайте връзката по-долу, за д
 msgid "Registration confirmation"
 msgstr "Потвърждение на регистрацията"
 
+#: contuga/contrib/users/templates/users/login.html:13
+msgid "Don't have an account yet?"
+msgstr "Все още нямате акаунт?"
+
 #: contuga/contrib/users/templates/users/login.html:12
 #: contuga/templates/base/includes/header.html:63
 msgid "Login"
@@ -73,6 +77,10 @@ msgstr "В момента регистрацията е забранена."
 #: contuga/templates/base/includes/header.html:66
 msgid "Register"
 msgstr "Регистрация"
+
+#: contuga/contrib/users/templates/users/registration_form.html:16
+msgid "Already have an account?"
+msgstr "Вече имате акаунт?"
 
 #: contuga/contrib/users/templates/users/user_detail.html:12
 msgid "Email"
