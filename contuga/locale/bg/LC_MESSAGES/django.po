@@ -106,6 +106,18 @@ msgstr "Създаден на"
 msgid "Updated at"
 msgstr "Обновен на"
 
+#: contuga/templates/base/base.html:9
+msgid "Simple web-based expense manager"
+msgstr "Прост уеб-базиран инструмент за управление на разходите"
+
+#: contuga/templates/base/base.html:10
+msgid "expense, income, manager, accounts, money, filter, export"
+msgstr "разходи, приходи, управление, сметки, пари, филтриране, експортиране"
+
+#: contuga/templates/base/base.html:11
+msgid "Hristo Gatsinski"
+msgstr "Христо Гацински"
+
 #: templates/base/includes/header.html:18
 msgid "Transactions"
 msgstr "Трансакции"
