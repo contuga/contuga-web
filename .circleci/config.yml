@@ -41,5 +41,10 @@ jobs:
           command: |
             pipenv run black . --check
 
+      - run:
+          name: Run flake8
+          command: |
+            pipenv run flake8 . --statistic --exclude .venv
+
       - store_artifacts:
           path: htmlcov
