@@ -60,6 +60,11 @@ msgstr "Потвърждавам"
 msgid "Transaction details"
 msgstr "Детайли за трансакция"
 
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:20
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:16
+msgid "Account"
+msgstr "Сметка"
+
 #: templates/transactions/transaction_detail.html:20
 #: templates/transactions/transaction_list.html:16
 msgid "Category"
