@@ -36,5 +36,10 @@ jobs:
             pipenv run coverage report
             pipenv run coverage html
 
+      - run:
+          name: Run black
+          command: |
+            pipenv run black . --check
+
       - store_artifacts:
           path: htmlcov
