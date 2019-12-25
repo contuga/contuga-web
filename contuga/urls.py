@@ -16,6 +16,8 @@ Including another URLconf
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
+from django.views import generic
+from . import views
 
 urlpatterns = i18n_patterns(
     path("categories/", include(("contuga.contrib.categories.urls", "categories"))),
@@ -25,5 +27,13 @@ urlpatterns = i18n_patterns(
     path("accounts/", include(("contuga.contrib.accounts.urls", "accounts"))),
     path("users/", include(("contuga.contrib.users.urls", "users"))),
     path("admin/", admin.site.urls),
+    path(
+        "browserconfig.xml",
+        generic.TemplateView.as_view(
+            template_name="browserconfig.xml", content_type="text/xml"
+        ),
+        name="browserconfig",
+    ),
+    path("manifest.json", views.ManifestView.as_view(), name="manifest"),
     path("", include(("contuga.contrib.analytics.urls", "analytics"))),
 )
