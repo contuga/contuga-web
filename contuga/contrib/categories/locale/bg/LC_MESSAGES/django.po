@@ -48,6 +48,18 @@ msgstr "Потвърждавам"
 msgid "Category details"
 msgstr "Детайли за категория"
 
+#: contuga/contrib/categories/templates/categories/category_detail.html:22
+msgid "Latest transactions"
+msgstr "Последни трансакции"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:28
+msgid "Amount"
+msgstr "Сума"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:29
+msgid "Account"
+msgstr "Сметка"
+
 #: templates/categories/category_detail.html:16
 #: templates/categories/category_list.html:14
 msgid "Created at"
@@ -56,6 +68,10 @@ msgstr "Създаден на"
 #: templates/categories/category_detail.html:20
 msgid "Updated at"
 msgstr "Обновен на"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:84
+msgid "No transactions"
+msgstr "Няма трансакции"
 
 #: contuga/contrib/categories/templates/categories/category_detail.html:30
 msgid "Edit"
