@@ -25,3 +25,6 @@ class Category(TimestampModel):
 
     def get_absolute_url(self):
         return reverse("categories:detail", kwargs={"pk": self.pk})
+
+    def latest_transactions(self, count=20):
+        return self.transactions.all()[:count]
