@@ -40,6 +40,9 @@ class Account(TimestampModel):
     def is_balance_negative(self):
         return self.balance < 0
 
+    def latest_transactions(self, count=20):
+        return self.transactions.all()[:count]
+
     @cached_property
     def balance(self):
         expenditures, incomes = self.transactions.aggregate(
