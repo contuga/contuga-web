@@ -9,7 +9,6 @@
           <thead>
             <tr>
               <th scope="col">{% trans "Amount" %}</th>
-              <th scope="col">{% trans "Type" %}</th>
               <th scope="col">{% trans "Account" %}</th>
               <th scope="col">{% trans "Category" %}</th>
               <th scope="col">{% trans "Created at" %}</th>
@@ -26,14 +25,12 @@
           <tbody>
             {% for transaction in object_list %}
             <tr>
-              <td>
+              <td nowrap>
+                <i class="{{ transaction.type_icon_class }}"></i>
                 <a href="{{ transaction.get_absolute_url }}"
                   class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
                   {{ transaction.amount|floatformat:2 }} {{ transaction.currency }}
                 </a>
-              </td>
-              <td>
-                <i class="{{ transaction.type_icon_class }}"></i>
               </td>
               <td>
                 <a href="{{ transaction.account.get_absolute_url }}">
