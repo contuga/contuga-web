@@ -81,6 +81,18 @@ msgstr "Потвърждавам"
 msgid "Account details"
 msgstr "Детайли за сметка"
 
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:21
+msgid "Latest transactions"
+msgstr "Последни трансакции"
+
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:27
+msgid "Amount"
+msgstr "Сума"
+
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:28
+msgid "Category"
+msgstr "Категория"
+
 #: templates/accounts/account_detail.html:28
 msgid "Created at"
 msgstr "Създаден на"
@@ -88,6 +100,10 @@ msgstr "Създаден на"
 #: templates/accounts/account_detail.html:32
 msgid "Updated at"
 msgstr "Обновен на"
+
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:83
+msgid "No transactions"
+msgstr "Няма трансакции"
 
 #: templates/accounts/account_detail.html:38
 msgid "Edit"
