@@ -66,3 +66,7 @@ class Transaction(TimestampModel):
             return "text-danger fa fa-arrow-circle-down"
         else:
             return "text-success fa fa-arrow-circle-up"
+
+    @property
+    def currency(self):
+        return self.account.currency
