@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 22:46+0200\n"
+"POT-Creation-Date: 2019-12-29 11:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: contrib/analytics/templates/analytics/analytics.html:8
+#: contuga/contrib/analytics/templates/analytics/analytics.html:8
 msgid "Analytics"
 msgstr "Анализ"
 
-#: contrib/analytics/templates/analytics/analytics.html:26
+#: contuga/contrib/analytics/templates/analytics/analytics.html:26
 msgid "Number of transactions by type"
 msgstr "Брой на трансакции от тип"
 
-#: contrib/analytics/templates/analytics/analytics.html:27
+#: contuga/contrib/analytics/templates/analytics/analytics.html:27
 msgid "Expenditures"
 msgstr "Разход"
 
-#: contrib/analytics/templates/analytics/analytics.html:27
+#: contuga/contrib/analytics/templates/analytics/analytics.html:27
 msgid "Incomes"
 msgstr "Приход"
 
-#: contrib/analytics/templates/analytics/analytics.html:33
+#: contuga/contrib/analytics/templates/analytics/analytics.html:33
 msgid "Volume by type"
 msgstr "Обем от тип"
