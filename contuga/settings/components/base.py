@@ -82,6 +82,8 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 # Third party context processors
                 "sekizai.context_processors.sekizai",
+                # Project context processors
+                "contuga.context_processors.tracking",
             ]
         },
     }
