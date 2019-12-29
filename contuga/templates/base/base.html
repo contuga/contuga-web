@@ -43,5 +43,16 @@
     {% javascript 'main' %}
     {% block js %} {% endblock js %}
     {% render_block "js" %}
+    {% block trackers %}
+      {% if IS_TRACKING_ENABLED %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_TRACKING_CODE }}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '{{ GOOGLE_TRACKING_CODE }}');
+        </script>
+      {% endif %}
+    {% endblock %}
   </body>
 </html>
