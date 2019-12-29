@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 22:34+0200\n"
+"POT-Creation-Date: 2019-12-29 11:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,77 +18,97 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: models.py:10 templates/categories/category_detail.html:12
-#: templates/categories/category_list.html:13
+#: contuga/contrib/categories/models.py:12
+#: contuga/contrib/categories/templates/categories/category_list.html:16
+#: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:6
 msgid "Name"
 msgstr "Име"
 
-#: models.py:15 templates/categories/category_detail.html:24
-#: templates/categories/category_list.html:16
+#: contuga/contrib/categories/models.py:16
+#: contuga/contrib/categories/templates/categories/category_detail.html:37
+#: contuga/contrib/categories/templates/categories/category_list.html:19
+#: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:18
 msgid "Description"
 msgstr "Описание"
 
-#: models.py:21
+#: contuga/contrib/categories/models.py:20
 msgid "Category"
 msgstr "Категория"
 
-#: models.py:22 templates/categories/category_list.html:8
+#: contuga/contrib/categories/models.py:21
+#: contuga/contrib/categories/templates/categories/category_list.html:4
+#: contuga/contrib/categories/templates/categories/category_list.html:10
 msgid "Categories"
 msgstr "Категории"
 
-#: templates/categories/category_confirm_delete.html:11
+#: contuga/contrib/categories/templates/categories/category_confirm_delete.html:4
+msgid "Confirm deletion"
+msgstr "Потвърди изтриване"
+
+#: contuga/contrib/categories/templates/categories/category_confirm_delete.html:13
 msgid "Are you sure you want to delete this category?"
 msgstr "Сигурен ли си, че искаш да изтриеш тази категория?"
 
-#: templates/categories/category_confirm_delete.html:14
+#: contuga/contrib/categories/templates/categories/category_confirm_delete.html:17
 msgid "Confirm"
 msgstr "Потвърждавам"
 
-#: templates/categories/category_detail.html:8
+#: contuga/contrib/categories/templates/categories/category_detail.html:10
 msgid "Category details"
 msgstr "Детайли за категория"
 
-#: contuga/contrib/categories/templates/categories/category_detail.html:22
-msgid "Latest transactions"
-msgstr "Последни трансакции"
-
-#: contuga/contrib/categories/templates/categories/category_detail.html:28
-msgid "Amount"
-msgstr "Сума"
-
-#: contuga/contrib/categories/templates/categories/category_detail.html:29
-msgid "Account"
-msgstr "Сметка"
-
-#: templates/categories/category_detail.html:16
-#: templates/categories/category_list.html:14
-msgid "Created at"
-msgstr "Създаден на"
-
-#: templates/categories/category_detail.html:20
-msgid "Updated at"
-msgstr "Обновен на"
-
-#: contuga/contrib/categories/templates/categories/category_detail.html:84
-msgid "No transactions"
-msgstr "Няма трансакции"
-
-#: contuga/contrib/categories/templates/categories/category_detail.html:30
+#: contuga/contrib/categories/templates/categories/category_detail.html:13
 msgid "Edit"
 msgstr "Редактирай"
 
-#: contuga/contrib/categories/templates/categories/category_detail.html:33
+#: contuga/contrib/categories/templates/categories/category_detail.html:16
 msgid "Delete"
 msgstr "Изтрий"
 
-#: templates/categories/category_form.html:13
+#: contuga/contrib/categories/templates/categories/category_detail.html:24
+msgid "Latest transactions"
+msgstr "Последни трансакции"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:30
+msgid "Amount"
+msgstr "Сума"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:31
+msgid "Account"
+msgstr "Сметка"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:32
+#: contuga/contrib/categories/templates/categories/category_list.html:17
+#: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:10
+msgid "Created at"
+msgstr "Създаден на"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:34
+#: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:14
+msgid "Updated at"
+msgstr "Обновен на"
+
+#: contuga/contrib/categories/templates/categories/category_detail.html:86
+msgid "No transactions"
+msgstr "Няма трансакции"
+
+#: contuga/contrib/categories/templates/categories/category_form.html:4
+msgid "Create category"
+msgstr "Създай категория"
+
+#: contuga/contrib/categories/templates/categories/category_form.html:15
 msgid "Save"
 msgstr "Запиши"
 
-#: templates/categories/category_list.html:58
+#: contuga/contrib/categories/templates/categories/category_list.html:64
 msgid "Previous"
 msgstr "Предишна"
 
-#: templates/categories/category_list.html:74
+#: contuga/contrib/categories/templates/categories/category_list.html:80
 msgid "Next"
 msgstr "Следваща"
+
+#: contuga/contrib/categories/templates/categories/category_update_form.html:4
+msgctxt "noun"
+msgid "Update"
+msgstr "Промяна"
