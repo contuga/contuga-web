@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-22 14:57+0000\n"
+"POT-Creation-Date: 2019-12-29 11:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,31 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: contuga/contrib/users/managers.py:9
+#: contuga/contrib/users/managers.py:8
 msgid "Email is required"
 msgstr "Електронната поща е задължителна"
 
-#: contuga/contrib/users/managers.py:20
+#: contuga/contrib/users/managers.py:19
 msgid "Superuser must have is_staff=True."
 msgstr "Суперпотребителите трябва да имат is_staff=True."
 
-#: contuga/contrib/users/managers.py:22
+#: contuga/contrib/users/managers.py:21
 msgid "Superuser must have is_superuser=True."
 msgstr "Суперпотребителите трябва да имат is_superuser=True."
 
-#: contuga/contrib/users/models.py:18
+#: contuga/contrib/users/models.py:14
 msgid "Username"
 msgstr "Потребителско име"
 
-#: contuga/contrib/users/models.py:23
+#: contuga/contrib/users/models.py:19
 msgid "150 characters or fewer. Letters, digits and @/./+/-/_ only."
 msgstr "150 символа или по-малко. Букви, цифри и @/./+/-/_."
 
-#: contuga/contrib/users/models.py:27
+#: contuga/contrib/users/models.py:21
 msgid "A user with that username already exists."
 msgstr "Потребител с това потребителско име вече съществува."
 
-#: contuga/contrib/users/templates/users/activation_complete.html:8
+#: contuga/contrib/users/templates/users/activation_complete.html:4
+msgid "Successful activation"
+msgstr "Успешна активация"
+
+#: contuga/contrib/users/templates/users/activation_complete.html:10
 msgid "Your activation was successful"
 msgstr "Активацията беше успешна."
 
@@ -54,105 +58,261 @@ msgstr "Моля, последвайте връзката по-долу, за д
 msgid "Registration confirmation"
 msgstr "Потвърждение на регистрацията"
 
-#: contuga/contrib/users/templates/users/login.html:13
-msgid "Don't have an account yet?"
-msgstr "Все още нямате акаунт?"
+#: contuga/contrib/users/templates/users/activation_failed.html:3
+msgid "Activation failed"
+msgstr "Неуспешна активация"
 
-#: contuga/contrib/users/templates/users/login.html:12
-#: contuga/templates/base/includes/header.html:63
+#: contuga/contrib/users/templates/users/login.html:4
+#: contuga/contrib/users/templates/users/login.html:18
+#: contuga/contrib/users/templates/users/registration_form.html:19
+#: contuga/templates/base/includes/header.html:79
 msgid "Login"
 msgstr "Вход"
 
-#: contuga/contrib/users/templates/users/registration_complete.html:8
-msgid ""
-"Your registration is successful. An activation link has been sent to your email."
-msgstr ""
-"Вашата регистрация е успешна. Изпратен е Email за активация."
+#: contuga/contrib/users/templates/users/login.html:15
+msgid "Don't have an account yet?"
+msgstr "Все още нямате акаунт?"
 
-#: contuga/contrib/users/templates/users/registration_disallowed.html:8
-msgid "Registration is currently disallowed"
-msgstr "В момента регистрацията е забранена."
-
-#: contuga/contrib/users/templates/users/registration_form.html:15
-#: contuga/templates/base/includes/header.html:66
+#: contuga/contrib/users/templates/users/login.html:16
+#: contuga/contrib/users/templates/users/registration_form.html:22
+#: contuga/templates/base/includes/header.html:82
 msgid "Register"
 msgstr "Регистрация"
 
-#: contuga/contrib/users/templates/users/registration_form.html:16
+#: contuga/contrib/users/templates/users/password_change_done.html:4
+msgid "Successful pasword change"
+msgstr "Успешна промяна на паролата"
+
+#: contuga/contrib/users/templates/users/password_change_done.html:10
+msgid "Your password was changed."
+msgstr "Вашата парола беше променена."
+
+#: contuga/contrib/users/templates/users/password_change_form.html:4
+msgid "Password change"
+msgstr "Промяна на паролата"
+
+#: contuga/contrib/users/templates/users/password_change_form.html:14
+msgid "Please correct the error below."
+msgstr "Моля, поправете грешката долу."
+
+#: contuga/contrib/users/templates/users/password_change_form.html:14
+msgid "Please correct the errors below."
+msgstr "Моля, поправете грешките долу."
+
+#: contuga/contrib/users/templates/users/password_change_form.html:18
+msgid ""
+"Please enter your old password, for security’s sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+"Моля, въведете своята стара парола от съображения за сигурност и след това "
+"попълнете своята нова парола два пъти, за да сме сигурни, че е въведена "
+"правилно."
+
+#: contuga/contrib/users/templates/users/password_change_form.html:27
+#: contuga/contrib/users/templates/users/password_reset_confirm.html:17
+msgid "Change my password"
+msgstr "Промяна на парола"
+
+#: contuga/contrib/users/templates/users/password_reset_complete.html:4
+msgid "Successful pasword reset"
+msgstr "Успешно възстановяване на паролата"
+
+#: contuga/contrib/users/templates/users/password_reset_complete.html:10
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr "Вашата парола беше обновена. Може да влезете отново."
+
+#: contuga/contrib/users/templates/users/password_reset_complete.html:13
+msgid "Log in"
+msgstr "Вход"
+
+#: contuga/contrib/users/templates/users/password_reset_confirm.html:4
+#: contuga/contrib/users/templates/users/password_reset_done.html:4
+#: contuga/contrib/users/templates/users/password_reset_form.html:4
+msgid "Password reset"
+msgstr "Възстановяване на паролата"
+
+#: contuga/contrib/users/templates/users/password_reset_confirm.html:11
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Моля, попълнете своята нова парола два пъти, за да сме сигурни, че е "
+"въведена правилно."
+
+#: contuga/contrib/users/templates/users/password_reset_confirm.html:21
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"Връзката за възстановяване на паролата е невалидна. Вероятно вече е "
+"използване. Моля, заявете нова връзка."
+
+#: contuga/contrib/users/templates/users/password_reset_done.html:10
+msgid ""
+"We’ve emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Ако въведената електронна поща съществува, ще получите инструкции за "
+"възстановяване на паролата."
+
+#: contuga/contrib/users/templates/users/password_reset_done.html:11
+msgid ""
+"If you don’t receive an email, please make sure you’ve entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Ако не получите писмо, моля, проверете дали сте въвели електронната поща, с "
+"която сте се регистрирали и проверете своята спам папка."
+
+#: contuga/contrib/users/templates/users/password_reset_email.html:5
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+"Получавате това писмо, защото сте подали заявка за възстановяване на "
+"паролата на своя потребител в %(site_name)s."
+
+#: contuga/contrib/users/templates/users/password_reset_email.html:7
+msgid "Please go to the following page and choose a new password:"
+msgstr "Моля, проследете следната връзка, за да промените своята парола:"
+
+#: contuga/contrib/users/templates/users/password_reset_email.html:13
+msgid "Your username, in case you’ve forgotten:"
+msgstr "Вашето потребителско име, в случай че сте го забравили:"
+
+#: contuga/contrib/users/templates/users/password_reset_email.html:15
+msgid "Thanks for using our site!"
+msgstr "Благодарим Ви, че използвате нашия сайт!"
+
+#: contuga/contrib/users/templates/users/password_reset_email.html:17
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Екипът на %(site_name)s"
+
+#: contuga/contrib/users/templates/users/password_reset_form.html:10
+msgid ""
+"Forgotten your password? Enter your email address below, and we’ll email "
+"instructions for setting a new one."
+msgstr ""
+"Забравили сте своята парола? Попълнете своята електронна поща и ние ще Ви "
+"изпратим инструкции за получаването на нова."
+
+#: contuga/contrib/users/templates/users/password_reset_form.html:15
+msgid "Reset my password"
+msgstr "Възстанови моята парола"
+
+#: contuga/contrib/users/templates/users/password_reset_subject.txt:5
+#, python-format
+msgid "Password reset on %(site_name)s"
+msgstr "Възстановяване на парола в %(site_name)s"
+
+#: contuga/contrib/users/templates/users/registration_complete.html:4
+msgid "Successful registration"
+msgstr "Успешна регистрация"
+
+#: contuga/contrib/users/templates/users/registration_complete.html:10
+msgid ""
+"Your registration is successful. An activation link has been sent to your email."
+msgstr "Вашата регистрация е успешна. Изпратен е Email за активация."
+
+#: contuga/contrib/users/templates/users/registration_disallowed.html:4
+msgid "Registration is disallowed"
+msgstr "Забранена регистрация"
+
+#: contuga/contrib/users/templates/users/registration_disallowed.html:10
+msgid "Registration is currently disallowed"
+msgstr "В момента регистрацията е забранена."
+
+#: contuga/contrib/users/templates/users/registration_form.html:4
+msgid "Registration"
+msgstr "Регистрация"
+
+#: contuga/contrib/users/templates/users/registration_form.html:18
 msgid "Already have an account?"
 msgstr "Вече имате акаунт?"
 
-#: contuga/contrib/users/templates/users/user_detail.html:12
+#: contuga/contrib/users/templates/users/user_detail.html:14
 msgid "Email"
 msgstr ""
 
-#: contuga/contrib/users/templates/users/user_detail.html:17
+#: contuga/contrib/users/templates/users/user_detail.html:19
 msgid "Name"
 msgstr "Име"
 
-#: contuga/contrib/users/templates/users/user_detail.html:22
+#: contuga/contrib/users/templates/users/user_detail.html:24
 msgid "Total transactions"
 msgstr "Трансакции"
 
-#: contuga/contrib/users/templates/users/user_detail.html:26
+#: contuga/contrib/users/templates/users/user_detail.html:28
 msgid "Total categories"
 msgstr "Категории"
 
-#: contuga/contrib/users/views.py:29
+#: contuga/contrib/users/views.py:30
 msgid ""
 "Redirection loop for authenticated user detected. Check that your "
 "LOGIN_REDIRECT_URL doesn't point to registration page."
 msgstr ""
-"Открит е цикъл на препращане. Проверете дали "
-"LOGIN_REDIRECT_URL не води към регистрационната форма."
+"Открит е цикъл на препращане. Проверете дали LOGIN_REDIRECT_URL не води към "
+"регистрационната форма."
 
-#: models.py:8
+#: contuga/models.py:6
 msgid "Created at"
 msgstr "Създаден на"
 
-#: models.py:9
+#: contuga/models.py:7
 msgid "Updated at"
 msgstr "Обновен на"
 
-#: contuga/templates/base/base.html:9
+#: contuga/templates/base/base.html:4 contuga/templates/base/base.html:25
+#: contuga/views.py:28
 msgid "Simple web-based expense manager"
 msgstr "Прост уеб-базиран инструмент за управление на разходите"
 
-#: contuga/templates/base/base.html:10
+#: contuga/templates/base/base.html:26
 msgid "expense, income, manager, accounts, money, filter, export"
 msgstr "разходи, приходи, управление, сметки, пари, филтриране, експортиране"
 
-#: contuga/templates/base/base.html:11
+#: contuga/templates/base/base.html:27
 msgid "Hristo Gatsinski"
 msgstr "Христо Гацински"
 
-#: templates/base/includes/header.html:18
+#: contuga/templates/base/includes/header.html:18
 msgid "Transactions"
 msgstr "Трансакции"
 
-#: templates/base/includes/header.html:22
-#: templates/base/includes/header.html:35
+#: contuga/templates/base/includes/header.html:22
+#: contuga/templates/base/includes/header.html:35
+#: contuga/templates/base/includes/header.html:48
 msgid "View all"
 msgstr "Виж всички"
 
-#: templates/base/includes/header.html:25
-#: templates/base/includes/header.html:38
+#: contuga/templates/base/includes/header.html:25
+#: contuga/templates/base/includes/header.html:38
+#: contuga/templates/base/includes/header.html:51
 msgid "Add new"
 msgstr "Добави нова"
 
-#: templates/base/includes/header.html:31
+#: contuga/templates/base/includes/header.html:31
+msgid "Accounts"
+msgstr "Сметки"
+
+#: contuga/templates/base/includes/header.html:44
 msgid "Categories"
 msgstr "Категории"
 
-#: contuga/templates/base/includes/header.html:51
+#: contuga/templates/base/includes/header.html:64
 msgid "Profile"
 msgstr "Профил"
 
-#: contuga/templates/base/includes/header.html:54
+#: contuga/templates/base/includes/header.html:67
+msgid "Change password"
+msgstr "Промени парола"
+
+#: contuga/templates/base/includes/header.html:70
 msgid "Logout"
 msgstr "Изход"
 
-#: contuga/templates/base/includes/header.html:59
+#: contuga/templates/base/includes/header.html:75
 msgid "User"
 msgstr "Потребител"
 
