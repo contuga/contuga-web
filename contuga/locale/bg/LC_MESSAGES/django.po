@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-29 11:35+0000\n"
+"POT-Creation-Date: 2020-01-25 21:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr "Неуспешна активация"
 #: contuga/contrib/users/templates/users/login.html:4
 #: contuga/contrib/users/templates/users/login.html:18
 #: contuga/contrib/users/templates/users/registration_form.html:19
-#: contuga/templates/base/includes/header.html:79
+#: contuga/templates/base/includes/header.html:82
 msgid "Login"
 msgstr "Вход"
 
@@ -75,7 +75,7 @@ msgstr "Все още нямате акаунт?"
 
 #: contuga/contrib/users/templates/users/login.html:16
 #: contuga/contrib/users/templates/users/registration_form.html:22
-#: contuga/templates/base/includes/header.html:82
+#: contuga/templates/base/includes/header.html:85
 msgid "Register"
 msgstr "Регистрация"
 
@@ -281,41 +281,45 @@ msgid "Transactions"
 msgstr "Трансакции"
 
 #: contuga/templates/base/includes/header.html:22
-#: contuga/templates/base/includes/header.html:35
-#: contuga/templates/base/includes/header.html:48
+#: contuga/templates/base/includes/header.html:38
+#: contuga/templates/base/includes/header.html:51
 msgid "View all"
 msgstr "Виж всички"
 
 #: contuga/templates/base/includes/header.html:25
-#: contuga/templates/base/includes/header.html:38
-#: contuga/templates/base/includes/header.html:51
+#: contuga/templates/base/includes/header.html:41
+#: contuga/templates/base/includes/header.html:54
 msgid "Add new"
 msgstr "Добави нова"
 
-#: contuga/templates/base/includes/header.html:31
+#: contuga/templates/base/includes/header.html:28
+msgid "Add new transfer"
+msgstr "Добави нов превод"
+
+#: contuga/templates/base/includes/header.html:34
 msgid "Accounts"
 msgstr "Сметки"
 
-#: contuga/templates/base/includes/header.html:44
+#: contuga/templates/base/includes/header.html:47
 msgid "Categories"
 msgstr "Категории"
 
-#: contuga/templates/base/includes/header.html:64
+#: contuga/templates/base/includes/header.html:67
 msgid "Profile"
 msgstr "Профил"
 
-#: contuga/templates/base/includes/header.html:67
+#: contuga/templates/base/includes/header.html:70
 msgid "Change password"
 msgstr "Промени парола"
 
-#: contuga/templates/base/includes/header.html:70
+#: contuga/templates/base/includes/header.html:73
 msgid "Logout"
 msgstr "Изход"
 
-#: contuga/templates/base/includes/header.html:75
+#: contuga/templates/base/includes/header.html:78
 msgid "User"
 msgstr "Потребител"
 
-#: contuga/templates/base/includes/header.html:85
+#: contuga/templates/base/includes/header.html:88
 msgid "Reset password"
 msgstr "Забравена парола"
