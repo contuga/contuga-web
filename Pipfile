@@ -13,7 +13,7 @@ bandit = "*"
 coverage = "*"
 
 [packages]
-django = "==2.1.*"
+django = "==2.2.*"
 django-pipeline = "==1.6.*"
 django-sekizai = "==0.10.*"
 django-widget-tweaks = "==1.4.*"
