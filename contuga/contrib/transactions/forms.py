@@ -1,6 +1,8 @@
 from django import forms
-from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+
+from contuga.contrib.accounts.models import Account
 
 
 class TransactionFilterForm(forms.Form):
@@ -24,3 +26,43 @@ class TransactionFilterForm(forms.Form):
             )
 
         return value
+
+
+class InternalTransferForm(forms.Form):
+    from_account = forms.ModelChoiceField(label=_("From"), queryset=None)
+    to_account = forms.ModelChoiceField(
+        label=pgettext_lazy("preposition, towards", "To"), queryset=None
+    )
+    amount = forms.DecimalField(label=_("Amount"), min_value=0)
+    rate = forms.DecimalField(label=_("Exchange rate"), required=False)
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["from_account"].queryset = Account.objects.filter(owner=user)
+        self.fields["to_account"].queryset = Account.objects.filter(owner=user)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        from_account = cleaned_data.get("from_account")
+        to_account = cleaned_data.get("to_account")
+        rate = cleaned_data.get("rate")
+
+        if from_account and to_account:
+            if from_account == to_account:
+                self.add_error(
+                    NON_FIELD_ERRORS,
+                    ValidationError(
+                        message=_("The two accounts shouldn't be the same."),
+                        code="invalid",
+                    ),
+                )
+            if from_account.currency != to_account.currency and not rate:
+                message = _(
+                    "You need to specify exchange rate if the "
+                    "two accounts are of different currencies."
+                )
+                self.add_error(
+                    NON_FIELD_ERRORS, ValidationError(message=message, code="required")
+                )
+
+        return cleaned_data

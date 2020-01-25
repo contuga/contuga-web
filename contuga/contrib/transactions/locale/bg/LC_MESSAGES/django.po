@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-29 11:35+0000\n"
+"POT-Creation-Date: 2020-02-01 22:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,7 @@ msgid "Less than"
 msgstr "По-малки"
 
 #: contuga/contrib/transactions/filters.py:40
+#: contuga/contrib/transactions/forms.py:36
 #: contuga/contrib/transactions/models.py:22
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:6
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:11
@@ -61,9 +62,37 @@ msgstr "Сортиране"
 msgid "Descripton"
 msgstr "Описание"
 
-#: contuga/contrib/transactions/forms.py:23
+#: contuga/contrib/transactions/forms.py:25
 msgid "Invalid date range"
 msgstr "Невалиден времеви диапазон"
+
+#: contuga/contrib/transactions/forms.py:32
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:57
+msgid "From"
+msgstr "От"
+
+#: contuga/contrib/transactions/forms.py:34
+msgctxt "preposition, towards"
+msgid "To"
+msgstr "Към"
+
+#: contuga/contrib/transactions/forms.py:37
+msgid "Exchange rate"
+msgstr "Обменен курс"
+
+#: contuga/contrib/transactions/forms.py:55
+#: contuga/contrib/transactions/tests/test_transfer_form.py:154
+msgid "The two accounts shouldn't be the same."
+msgstr "Двете сметки трябва да бъдат различни."
+
+#: contuga/contrib/transactions/forms.py:61
+#: contuga/contrib/transactions/tests/test_transfer_form.py:110
+#: contuga/contrib/transactions/tests/test_transfer_form.py:135
+msgid ""
+"You need to specify exchange rate if the two accounts are of different "
+"currencies."
+msgstr ""
+"Трябва да посочите обменен курс, ако двете сметки са в различна валута."
 
 #: contuga/contrib/transactions/models.py:16
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:10
@@ -130,6 +159,35 @@ msgstr "Предишна"
 msgid "Next"
 msgstr "Следваща"
 
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_form.html:4
+msgid "Transfer between own accounts"
+msgstr "Превод между собствени сметки"
+
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_form.html:26
+msgid "Transfer"
+msgstr "Превод"
+
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_success.html:4
+msgid "Successful transfer between own accounts"
+msgstr "Успешен превод между собствени сметки"
+
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_success.html:10
+msgid "Successful transfer"
+msgstr "Успешен превод"
+
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_success.html:15
+msgid "from"
+msgstr "от"
+
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_success.html:23
+msgctxt "preposition, towards"
+msgid "to"
+msgstr "към"
+
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_success.html:30
+msgid "Create another"
+msgstr "Създай нов"
+
 #: contuga/contrib/transactions/templates/transactions/transaction_confirm_delete.html:4
 msgid "Confirm deletion"
 msgstr "Потвърди изтриване"
@@ -194,10 +252,6 @@ msgstr "Последния месец"
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:56
 msgid "Clear"
 msgstr "Изчисти"
-
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:57
-msgid "From"
-msgstr "От"
 
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:58
 msgid "To"
@@ -293,3 +347,12 @@ msgstr "Декември"
 #: contuga/contrib/transactions/templates/transactions/transaction_update_form.html:4
 msgid "Update transaction"
 msgstr "Обновяване на трансакция"
+
+#: contuga/contrib/transactions/tests/test_transfer_form.py:89
+msgid "Ensure this value is greater than or equal to 0."
+msgstr "Стойността трябва да е по-голяма или равна на 0."
+
+#: contuga/contrib/transactions/tests/test_transfer_form.py:176
+#: contuga/contrib/transactions/tests/test_transfer_form.py:202
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr "Изберете валидна стойност. Въведената не е сред разрешените."

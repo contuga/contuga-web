@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Successful transfer between own accounts" %}{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>{% trans "Successful transfer" %}</h1>
+      <p>
+        <a href="{{ expenditure.url }}" class="text-danger">
+          {{ expenditure.amount|floatformat:2 }} {{ expenditure.currency }}
+        </a>
+        {% trans "from" %}
+        <a href="{{ expenditure.account.url }}">
+          {{ expenditure.account.name }}
+        </a>
+        <i class="fa fa-angle-double-right"></i>
+        <a href="{{ income.url }}" class="text-success">
+          {{ income.amount|floatformat:2 }} {{ income.currency }}
+        </a>
+        {% trans "to" context "preposition, towards" %}
+        <a href="{{ income.account.url }}">
+          {{ income.account.name }}
+        </a>
+      </p>
+      <p>
+        <a class="btn btn-primary" href="{% url 'transactions:internal_transfer_form' %}" role="button">
+          <i class="fa fa-pencil"></i> {% trans "Create another" %}
+        </a>
+      </p>
+    </div>
+  </div>
+</main>
+{% endblock %}
