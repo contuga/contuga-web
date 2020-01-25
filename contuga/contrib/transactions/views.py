@@ -1,14 +1,19 @@
-from django import forms
+import json
+
+from django import forms as django_forms
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.views import generic
 from django.contrib.auth import mixins
 from django.urls import reverse_lazy
+from django.db import transaction
 
 from import_export.mixins import ExportViewFormMixin
 
+from contuga.contrib.accounts import models as account_models
 from contuga.mixins import OnlyAuthoredByCurrentUserMixin
 from contuga import views
-from . import models, filters, resources
+from . import models, filters, resources, forms, constants
 
 
 class BaseTransactionFormViewMixin:
@@ -20,7 +25,7 @@ class BaseTransactionFormViewMixin:
         )
 
         description_field = form.fields["description"]
-        description_field.widget = forms.Textarea()
+        description_field.widget = django_forms.Textarea()
 
         account_field = form.fields["account"]
         account_field.queryset = account_field.queryset.filter(owner=self.request.user)
@@ -75,3 +80,103 @@ class TransactionDeleteView(
 ):
     model = models.Transaction
     success_url = reverse_lazy("transactions:list")
+
+
+class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
+    template_name = "transactions/internal_transfer_form.html"
+    form_class = forms.InternalTransferForm
+    success_url = reverse_lazy("transactions:internal_transfer_success")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    @transaction.atomic
+    def form_valid(self, form):
+        cleaned_data = form.cleaned_data
+        from_account = cleaned_data.get("from_account")
+        to_account = cleaned_data.get("to_account")
+        amount = cleaned_data.get("amount")
+
+        # TODO: Separate transfers from normal transactions
+        session = self.request.session
+
+        expenditure = models.Transaction.objects.create(
+            type=constants.EXPENDITURE,
+            amount=amount,
+            author=self.request.user,
+            account=from_account,
+        )
+
+        session["expenditure"] = {
+            "amount": str(expenditure.amount),
+            "currency": expenditure.currency,
+            "url": expenditure.get_absolute_url(),
+            "account": {
+                "name": expenditure.account.name,
+                "url": expenditure.account.get_absolute_url(),
+            },
+        }
+
+        if from_account.currency != to_account.currency:
+            amount = amount * cleaned_data.get("rate")
+
+        income = models.Transaction.objects.create(
+            type=constants.INCOME,
+            amount=amount,
+            author=self.request.user,
+            account=to_account,
+        )
+
+        session["income"] = {
+            "amount": str(income.amount),
+            "currency": income.currency,
+            "url": income.get_absolute_url(),
+            "account": {
+                "name": income.account.name,
+                "url": income.account.get_absolute_url(),
+            },
+        }
+
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        accounts = account_models.Account.objects.active().filter(
+            owner=self.request.user
+        )
+        accounts_dict = {account.pk: account.currency for account in accounts}
+        context["accounts"] = json.dumps(accounts_dict)
+
+        return context
+
+
+class InternalTransferSuccessView(mixins.LoginRequiredMixin, generic.TemplateView):
+    template_name = "transactions/internal_transfer_success.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        session = self.request.session
+        context.update(
+            {"expenditure": session.get("expenditure"), "income": session.get("income")}
+        )
+        self.delete_session_data()
+        return context
+
+    def delete_session_data(self):
+        session = self.request.session
+
+        if session.get("expenditure"):
+            del session["expenditure"]
+
+        if session.get("income"):
+            del session["income"]
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        if context.get("expenditure") and context.get("income"):
+            return self.render_to_response(context)
+        else:
+            return redirect("transactions:internal_transfer_form")
