@@ -12,11 +12,19 @@
     </tr>
     <tr>
       <th scope="row">{% trans "Account" %}</th>
-      <td>{{ transaction.account.name }}</td>
+      <td>
+        <a href="{{ transaction.account.get_absolute_url }}">
+          {{ transaction.account.name }}
+        </a>
+      </td>
     </tr>
     <tr>
       <th scope="row">{% trans "Category" %}</th>
-      <td>{{ transaction.category.name }}</td>
+      <td>
+        <a href="{{ transaction.category.get_absolute_url }}">
+          {{ transaction.category.name }}
+        </a>
+      </td>
     </tr>
     <tr>
       <th scope="row">{% trans "Created at" %}</th>
