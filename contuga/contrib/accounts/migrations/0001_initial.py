@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Account",
                 "verbose_name_plural": "Accounts",
-                "ordering": ["created_at"],
+                "ordering": ["name", "created_at"],
             },
         )
     ]
