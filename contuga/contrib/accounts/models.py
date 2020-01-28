@@ -22,7 +22,7 @@ class Account(TimestampModel):
     description = models.CharField(_("Description"), max_length=1000, blank=True)
 
     class Meta:
-        ordering = ["created_at"]
+        ordering = ["name", "created_at"]
         verbose_name = _("Account")
         verbose_name_plural = _("Accounts")
 
