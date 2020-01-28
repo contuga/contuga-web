@@ -34,9 +34,11 @@
       <th scope="row">{% trans "Updated at" %}</th>
       <td>{{ transaction.updated_at|date:"SHORT_DATETIME_FORMAT" }}</td>
     </tr>
-    <tr>
-      <th scope="row">{% trans "Description" %}</th>
-      <td>{{ transaction.description }}</td>
-    </tr>
+    {% if transaction.description %}
+      <tr>
+        <th scope="row">{% trans "Description" %}</th>
+        <td>{{ transaction.description }}</td>
+      </tr>
+    {% endif %}
   </tbody>
 </table>
