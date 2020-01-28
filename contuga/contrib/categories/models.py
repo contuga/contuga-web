@@ -16,7 +16,7 @@ class Category(TimestampModel):
     description = models.CharField(_("Description"), max_length=1000, blank=True)
 
     class Meta:
-        ordering = ["created_at"]
+        ordering = ["name", "created_at"]
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
 
