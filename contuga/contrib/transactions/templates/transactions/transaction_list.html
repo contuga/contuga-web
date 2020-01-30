@@ -8,6 +8,9 @@
   <div class="row" id="actionGroup">
     <div class="col-12">
       <div class="d-flex justify-content-end">
+        <a class="btn btn-primary btn-action" href="{% url 'transactions:create' %}" role="button">
+          {% trans "Add new" %}
+        </a>
         <button class="btn btn-dark btn-action" type="button" data-toggle="collapse" data-target="#exportFormContainer">
           {% trans "Export" %}
         </button>
