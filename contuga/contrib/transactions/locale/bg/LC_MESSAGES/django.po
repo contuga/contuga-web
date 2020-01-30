@@ -221,6 +221,10 @@ msgstr "Добави трансакция"
 msgid "Save"
 msgstr "Запиши"
 
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:12
+msgid "Add new"
+msgstr "Добави нова"
+
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:15
 msgid "Filters"
 msgstr "Филтри"
