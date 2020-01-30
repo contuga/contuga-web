@@ -25,7 +25,7 @@ class BaseTransactionFormViewMixin:
         )
 
         description_field = form.fields["description"]
-        description_field.widget = django_forms.Textarea()
+        description_field.widget = django_forms.Textarea(attrs={"rows": 3})
 
         account_field = form.fields["account"]
         account_field.queryset = account_field.queryset.filter(owner=self.request.user)
