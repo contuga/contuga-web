@@ -1,6 +1,6 @@
-@import '../bootstrap/scss/_functions';
-@import '../bootstrap/scss/mixins/breakpoints';
-@import '../scss/variables.scss';
+@import "../bootstrap/scss/_functions";
+@import "../bootstrap/scss/mixins/breakpoints";
+@import "../scss/variables.scss";
 
 @include media-breakpoint-down(sm) {
   .dropdown-item {
