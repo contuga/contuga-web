@@ -44,6 +44,7 @@ class InternalTransferFormTests(TestCase):
             "to_account": second_account,
             "amount": Decimal("101.00"),
             "rate": None,
+            "description": "",
         }
 
         self.assertDictEqual(form.cleaned_data, expected_cleaned_data)
@@ -67,6 +68,7 @@ class InternalTransferFormTests(TestCase):
             "to_account": second_account,
             "amount": Decimal("101.00"),
             "rate": Decimal("1.98"),
+            "description": "",
         }
 
         self.assertDictEqual(form.cleaned_data, expected_cleaned_data)
