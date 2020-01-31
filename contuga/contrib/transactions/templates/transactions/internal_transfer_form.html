@@ -22,6 +22,7 @@
         <div id="rateContainer" style="display: none;">
           {% include 'contuga/forms/field.html' with field=form.rate %}
         </div>
+        {% include 'contuga/forms/field.html' with field=form.description %}
         <button type="submit" class="btn btn-primary">
           {% trans "Transfer" %}
         </button>
