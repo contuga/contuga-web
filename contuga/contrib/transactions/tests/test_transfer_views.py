@@ -55,6 +55,7 @@ class InternalTransferViewTests(TestCase):
             "from_account": self.account.pk,
             "to_account": second_account.pk,
             "amount": "145.33",
+            "description": "Transfer description",
         }
         old_transaction_count = Transaction.objects.count()
 
@@ -90,7 +91,7 @@ class InternalTransferViewTests(TestCase):
             "author": self.user,
             "category": None,
             "account": self.account,
-            "description": "",
+            "description": data["description"],
         }
         self.assertDictEqual(expenditure_data, expected_expenditure_data)
 
@@ -109,7 +110,7 @@ class InternalTransferViewTests(TestCase):
             "author": self.user,
             "category": None,
             "account": second_account,
-            "description": "",
+            "description": data["description"],
         }
         self.assertDictEqual(income_data, expected_income_data)
 
