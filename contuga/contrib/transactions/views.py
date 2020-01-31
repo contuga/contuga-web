@@ -98,6 +98,7 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
         from_account = cleaned_data.get("from_account")
         to_account = cleaned_data.get("to_account")
         amount = cleaned_data.get("amount")
+        description = cleaned_data.get("description")
 
         # TODO: Separate transfers from normal transactions
         session = self.request.session
@@ -107,6 +108,7 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
             amount=amount,
             author=self.request.user,
             account=from_account,
+            description=description,
         )
 
         session["expenditure"] = {
@@ -127,6 +129,7 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
             amount=amount,
             author=self.request.user,
             account=to_account,
+            description=description,
         )
 
         session["income"] = {
