@@ -35,6 +35,7 @@ class InternalTransferForm(forms.Form):
     )
     amount = forms.DecimalField(label=_("Amount"), min_value=0)
     rate = forms.DecimalField(label=_("Exchange rate"), required=False)
+    description = forms.CharField(label=_("Description"), required=False)
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
