@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
 
-from . import constants
+from . import constants, managers
 from contuga.models import TimestampModel
 
 UserModel = get_user_model()
@@ -20,6 +20,9 @@ class Account(TimestampModel):
         UserModel, related_name="accounts", on_delete=models.CASCADE
     )
     description = models.CharField(_("Description"), max_length=1000, blank=True)
+    is_active = models.BooleanField(_("Is active"), default=True)
+
+    objects = managers.AccountManager()
 
     class Meta:
         ordering = ["name", "created_at"]

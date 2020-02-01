@@ -39,6 +39,14 @@ class TransactionCreateView(
     model = models.Transaction
     fields = ("type", "amount", "account", "category", "description")
 
+    def get_form(self):
+        form = super().get_form()
+
+        account_field = form.fields["account"]
+        account_field.queryset = account_field.queryset.filter(is_active=True)
+
+        return form
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         self.object = form.save()
