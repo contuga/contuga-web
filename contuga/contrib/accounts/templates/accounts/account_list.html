@@ -16,6 +16,7 @@
               <th scope="col">{% trans "Name" %}</th>
               <th scope="col">{% trans "Currency" %}</th>
               <th scope="col">{% trans "Balance" %}</th>
+              <th scope="col">{% trans "Status" %}</th>
               <th></th>
               <th></th>
             </tr>
@@ -36,6 +37,13 @@
               </td>
               <td class="{% if account.is_balance_negative %} text-danger {% else %} text-success {% endif %}">
                 {{ account.balance|floatformat:2 }}
+              </td>
+              <td>
+                {% if account.is_active %}
+                  {% trans "Active" %}
+                {% else %}
+                  {% trans "Arhived" %}
+                {% endif %}
               </td>
               <td>
                 <a href="{% url 'accounts:update' account.pk %}">

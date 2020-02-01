@@ -1,0 +1,13 @@
+{% load widget_tweaks %}
+
+{% block input %}
+  {% with classes=class|default:''|add:' form-check-input' %}
+    {{ field|add_class:classes }}
+  {% endwith %}
+{% endblock %}
+
+{% block label %}
+  <label for="{{ field.auto_id }}" class="{% if field.errors %} text-danger {% endif %}">
+    {{ label|default:field.label }}{% if field.field.required or required %} &#42;{% endif %}
+  </label>
+{% endblock %}

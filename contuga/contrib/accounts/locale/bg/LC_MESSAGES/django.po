@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-29 11:35+0000\n"
+"POT-Creation-Date: 2020-02-01 21:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,11 +60,15 @@ msgstr "Валута"
 msgid "Description"
 msgstr "Описание"
 
-#: contuga/contrib/accounts/models.py:26
+#: contuga/contrib/accounts/models.py:23
+msgid "Is active"
+msgstr "Активна"
+
+#: contuga/contrib/accounts/models.py:29
 msgid "Account"
 msgstr "Сметка"
 
-#: contuga/contrib/accounts/models.py:27
+#: contuga/contrib/accounts/models.py:30
 #: contuga/contrib/accounts/templates/accounts/account_list.html:4
 #: contuga/contrib/accounts/templates/accounts/account_list.html:10
 msgid "Accounts"
@@ -120,7 +124,7 @@ msgstr "Няма трансакции"
 msgid "Add account"
 msgstr "Добави сметка"
 
-#: contuga/contrib/accounts/templates/accounts/account_form.html:15
+#: contuga/contrib/accounts/templates/accounts/account_form.html:16
 msgid "Save"
 msgstr "Запиши"
 
@@ -129,69 +133,84 @@ msgstr "Запиши"
 msgid "Balance"
 msgstr "Баланс"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:61
-#: contuga/contrib/accounts/templates/accounts/account_list.html:116
+#: contuga/contrib/accounts/templates/accounts/account_list.html:19
+#: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:30
+msgid "Status"
+msgstr "Статус"
+
+#: contuga/contrib/accounts/templates/accounts/account_list.html:43
+#: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:33
+msgid "Active"
+msgstr "Активна"
+
+#: contuga/contrib/accounts/templates/accounts/account_list.html:45
+#: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:35
+msgid "Arhived"
+msgstr "Архивирана"
+
+#: contuga/contrib/accounts/templates/accounts/account_list.html:69
+#: contuga/contrib/accounts/templates/accounts/account_list.html:124
 msgid "Previous"
 msgstr "Предишна"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:77
-#: contuga/contrib/accounts/templates/accounts/account_list.html:115
+#: contuga/contrib/accounts/templates/accounts/account_list.html:85
+#: contuga/contrib/accounts/templates/accounts/account_list.html:123
 msgid "Next"
 msgstr "Следваща"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:101
+#: contuga/contrib/accounts/templates/accounts/account_list.html:109
 msgid "All"
 msgstr "Всички"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:103
+#: contuga/contrib/accounts/templates/accounts/account_list.html:111
 msgid "No data available in table"
 msgstr "В таблицата няма данни"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:104
+#: contuga/contrib/accounts/templates/accounts/account_list.html:112
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr "Показване на резултати от _START_ до _END_ от общо _TOTAL_"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:105
+#: contuga/contrib/accounts/templates/accounts/account_list.html:113
 msgid "Showing 0 to 0 of 0 entries"
 msgstr "Показване на резултати от 0 до 0 от общо 0"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:106
+#: contuga/contrib/accounts/templates/accounts/account_list.html:114
 msgid "(filtered from _MAX_ total entries)"
 msgstr "(филтрирани от общо _MAX_ резултата)"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:107
+#: contuga/contrib/accounts/templates/accounts/account_list.html:115
 msgid "Show _MENU_ entries"
 msgstr "Показване на _MENU_ резултата"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:108
+#: contuga/contrib/accounts/templates/accounts/account_list.html:116
 msgid "Loading"
 msgstr "Зареждане"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:109
+#: contuga/contrib/accounts/templates/accounts/account_list.html:117
 msgid "Processing"
 msgstr "Обработване"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:110
+#: contuga/contrib/accounts/templates/accounts/account_list.html:118
 msgid "Search"
 msgstr "Търсене"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:111
+#: contuga/contrib/accounts/templates/accounts/account_list.html:119
 msgid "No matching records found"
 msgstr "Няма намерени резултати"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:113
+#: contuga/contrib/accounts/templates/accounts/account_list.html:121
 msgid "First"
 msgstr "Първи"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:114
+#: contuga/contrib/accounts/templates/accounts/account_list.html:122
 msgid "Last"
 msgstr "Последен"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:119
+#: contuga/contrib/accounts/templates/accounts/account_list.html:127
 msgid "activate to sort column ascending"
 msgstr "избери, за да сортираш във възходящ ред"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:120
+#: contuga/contrib/accounts/templates/accounts/account_list.html:128
 msgid "activate to sort column descending"
 msgstr "избери, за да сортираш във низходящ ред"
 
