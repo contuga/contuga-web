@@ -34,7 +34,7 @@ class AccountUpdateView(
     OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.UpdateView
 ):
     model = models.Account
-    fields = ("name", "description")
+    fields = ("name", "description", "is_active")
     template_name = "accounts/account_update_form.html"
 
     def form_valid(self, form):

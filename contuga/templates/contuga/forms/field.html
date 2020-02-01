@@ -3,18 +3,21 @@
     {{ field }}
   {% else %}
     {% load widget_tweaks %}
-    <div class="form-group">
-      {% block label %}
-        <label for="{{ field.auto_id }}" class="{% if field.errors %} text-danger {% endif %}">
-          {{ label|default:field.label }}{% if field.field.required or required %} &#42;{% endif %}
-        </label>
-      {% endblock %}
 
-      {% block input %}
-        {% with classes=class|default:''|add:' form-control' %}
-          {{ field|add_class:classes }}
-        {% endwith %}
-      {% endblock %}
+    <div class="
+      {% if field.field.widget.input_type == 'checkbox' %}
+        form-check
+      {% else %}
+        form-group
+      {% endif %}
+    ">
+
+
+      {% if field.field.widget.input_type == "checkbox" %}
+        {% include "contuga/forms/includes/checkbox.html" %}
+      {% else %}
+        {% include "contuga/forms/includes/input.html" %}
+      {% endif %}
 
       {% block errors %}
         {% if field.errors %}
