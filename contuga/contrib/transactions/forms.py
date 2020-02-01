@@ -39,8 +39,8 @@ class InternalTransferForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["from_account"].queryset = Account.objects.filter(owner=user)
-        self.fields["to_account"].queryset = Account.objects.filter(owner=user)
+        self.fields["from_account"].queryset = Account.objects.active(owner=user)
+        self.fields["to_account"].queryset = Account.objects.active(owner=user)
 
     def clean(self):
         cleaned_data = super().clean()
