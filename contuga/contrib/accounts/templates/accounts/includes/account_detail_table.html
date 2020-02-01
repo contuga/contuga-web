@@ -26,5 +26,15 @@
       <th scope="row">{% trans "Updated at" %}</th>
       <td>{{ account.updated_at|date:"SHORT_DATETIME_FORMAT" }}</td>
     </tr>
+    <tr>
+      <th scope="row">{% trans "Status" %}</th>
+      <td>
+        {% if account.is_active %}
+          {% trans "Active" %}
+        {% else %}
+          {% trans "Archived" %}
+        {% endif %}
+      </td>
+    </tr>
   </tbody>
 </table>
