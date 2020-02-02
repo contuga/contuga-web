@@ -8,6 +8,7 @@ from contuga.contrib.transactions.models import Transaction
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.categories.models import Category
 from contuga.contrib.accounts.models import Account
+from contuga.contrib.settings.models import Settings
 from contuga.contrib.accounts.constants import BGN
 
 UserModel = get_user_model()
@@ -76,6 +77,27 @@ class TransactionViewTests(TestCase):
         ]
         for field in fields:
             self.assertContains(response=response, text=field)
+
+    def test_create_get(self):
+        settings = Settings.objects.last()
+        settings.default_category = self.category
+        settings.default_account = self.account
+        settings.save()
+
+        url = reverse("transactions:create")
+        response = self.client.post(url)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert initial form data is correct
+        form = response.context.get("form")
+
+        category_field = form.fields["category"]
+        self.assertEqual(category_field.initial, settings.default_category)
+
+        account_field = form.fields["account"]
+        self.assertEqual(account_field.initial, settings.default_account)
 
     def test_create(self):
         data = {
