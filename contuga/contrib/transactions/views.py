@@ -41,9 +41,14 @@ class TransactionCreateView(
 
     def get_form(self):
         form = super().get_form()
+        settings = self.request.user.settings
+
+        category_field = form.fields["category"]
+        category_field.initial = settings.default_category
 
         account_field = form.fields["account"]
         account_field.queryset = account_field.queryset.filter(is_active=True)
+        account_field.initial = settings.default_account
 
         return form
 

@@ -26,6 +26,7 @@ urlpatterns = i18n_patterns(
     ),
     path("accounts/", include(("contuga.contrib.accounts.urls", "accounts"))),
     path("users/", include(("contuga.contrib.users.urls", "users"))),
+    path("settings/", include(("contuga.contrib.settings.urls", "settings"))),
     path("admin/", admin.site.urls),
     path(
         "browserconfig.xml",
