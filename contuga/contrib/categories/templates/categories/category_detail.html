@@ -10,10 +10,10 @@
       <h1>{% trans "Category details" %}</h1>
       {% include "categories/includes/category_detail_table.html" %}
       <a class="btn btn-primary" href="{% url 'categories:update' category.pk %}" role="button">
-        <i class="fa fa-pencil"></i> {% trans "Edit" %}
+        <i class="fa fa-pencil"></i> {% trans "Edit" context "verb" %}
       </a>
       <a class="btn btn-danger" href="{% url 'categories:delete' category.pk %}" role="button">
-        <i class="fa fa-trash"></i> {% trans "Delete" %}
+        <i class="fa fa-trash"></i> {% trans "Delete" context "verb" %}
       </a>
     </div>
   </div>
