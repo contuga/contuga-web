@@ -1,0 +1,32 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Settings" %}{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>{% trans "Settings" %}</h1>
+
+      <table class="table">
+        <tbody>
+          {% trans "Not selected" as not_selected_translation %}
+          <tr>
+            <th scope="row">{% trans "Default category" %}</th>
+            <td>{{ settings.default_category|default:not_selected_translation }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{% trans "Default account" %}</th>
+            <td>{{ settings.default_account|default:not_selected_translation }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <a class="btn btn-primary" href="{% url 'settings:update' %}" role="button">
+        <i class="fa fa-pencil"></i> {% trans "Edit" context "verb" %}
+      </a>
+    </div>
+  </div>
+</main>
+{% endblock %}
