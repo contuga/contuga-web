@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-02 11:29+0000\n"
+"POT-Creation-Date: 2020-02-02 19:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr "Неуспешна активация"
 #: contuga/contrib/users/templates/users/login.html:4
 #: contuga/contrib/users/templates/users/login.html:25
 #: contuga/contrib/users/templates/users/registration_form.html:19
-#: contuga/templates/base/includes/header.html:82
+#: contuga/templates/base/includes/header.html:85
 msgid "Login"
 msgstr "Вход"
 
@@ -75,7 +75,7 @@ msgstr "Все още нямате акаунт?"
 
 #: contuga/contrib/users/templates/users/login.html:23
 #: contuga/contrib/users/templates/users/registration_form.html:22
-#: contuga/templates/base/includes/header.html:85
+#: contuga/templates/base/includes/header.html:88
 msgid "Register"
 msgstr "Регистрация"
 
@@ -313,17 +313,21 @@ msgid "Profile"
 msgstr "Профил"
 
 #: contuga/templates/base/includes/header.html:70
+msgid "Settings"
+msgstr "Настройки"
+
+#: contuga/templates/base/includes/header.html:73
 msgid "Change password"
 msgstr "Промени парола"
 
-#: contuga/templates/base/includes/header.html:73
+#: contuga/templates/base/includes/header.html:76
 msgid "Logout"
 msgstr "Изход"
 
-#: contuga/templates/base/includes/header.html:78
+#: contuga/templates/base/includes/header.html:81
 msgid "User"
 msgstr "Потребител"
 
-#: contuga/templates/base/includes/header.html:88
+#: contuga/templates/base/includes/header.html:91
 msgid "Reset password"
 msgstr "Забравена парола"
