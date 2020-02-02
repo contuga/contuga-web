@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-29 11:35+0000\n"
+"POT-Creation-Date: 2020-02-02 11:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,10 +58,14 @@ msgid "Category details"
 msgstr "Детайли за категория"
 
 #: contuga/contrib/categories/templates/categories/category_detail.html:13
+#: contuga/contrib/categories/templates/categories/category_list.html:44
+msgctxt "verb"
 msgid "Edit"
 msgstr "Редактирай"
 
 #: contuga/contrib/categories/templates/categories/category_detail.html:16
+#: contuga/contrib/categories/templates/categories/category_list.html:49
+msgctxt "verb"
 msgid "Delete"
 msgstr "Изтрий"
 
@@ -97,6 +101,7 @@ msgid "Create category"
 msgstr "Създай категория"
 
 #: contuga/contrib/categories/templates/categories/category_form.html:15
+msgctxt "verb"
 msgid "Save"
 msgstr "Запиши"
 
