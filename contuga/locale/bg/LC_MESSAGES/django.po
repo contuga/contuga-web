@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-25 21:53+0000\n"
+"POT-Creation-Date: 2020-02-02 11:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,22 +58,22 @@ msgstr "Моля, последвайте връзката по-долу, за д
 msgid "Registration confirmation"
 msgstr "Потвърждение на регистрацията"
 
-#: contuga/contrib/users/templates/users/activation_failed.html:3
+#: contuga/contrib/users/templates/users/activation_failed.html:4
 msgid "Activation failed"
 msgstr "Неуспешна активация"
 
 #: contuga/contrib/users/templates/users/login.html:4
-#: contuga/contrib/users/templates/users/login.html:18
+#: contuga/contrib/users/templates/users/login.html:25
 #: contuga/contrib/users/templates/users/registration_form.html:19
 #: contuga/templates/base/includes/header.html:82
 msgid "Login"
 msgstr "Вход"
 
-#: contuga/contrib/users/templates/users/login.html:15
+#: contuga/contrib/users/templates/users/login.html:22
 msgid "Don't have an account yet?"
 msgstr "Все още нямате акаунт?"
 
-#: contuga/contrib/users/templates/users/login.html:16
+#: contuga/contrib/users/templates/users/login.html:23
 #: contuga/contrib/users/templates/users/registration_form.html:22
 #: contuga/templates/base/includes/header.html:85
 msgid "Register"
@@ -109,7 +109,7 @@ msgstr ""
 "правилно."
 
 #: contuga/contrib/users/templates/users/password_change_form.html:27
-#: contuga/contrib/users/templates/users/password_reset_confirm.html:17
+msgctxt "verb"
 msgid "Change my password"
 msgstr "Промяна на парола"
 
@@ -138,6 +138,10 @@ msgid ""
 msgstr ""
 "Моля, попълнете своята нова парола два пъти, за да сме сигурни, че е "
 "въведена правилно."
+
+#: contuga/contrib/users/templates/users/password_reset_confirm.html:17
+msgid "Change my password"
+msgstr "Промяна на парола"
 
 #: contuga/contrib/users/templates/users/password_reset_confirm.html:21
 msgid ""

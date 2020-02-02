@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-01 21:57+0000\n"
+"POT-Creation-Date: 2020-02-02 11:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,10 +87,14 @@ msgid "Account details"
 msgstr "Детайли за сметка"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:13
+#: contuga/contrib/accounts/templates/accounts/account_list.html:50
+msgctxt "verb"
 msgid "Edit"
 msgstr "Редактирай"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:16
+#: contuga/contrib/accounts/templates/accounts/account_list.html:55
+msgctxt "verb"
 msgid "Delete"
 msgstr "Изтрий"
 
@@ -125,6 +129,7 @@ msgid "Add account"
 msgstr "Добави сметка"
 
 #: contuga/contrib/accounts/templates/accounts/account_form.html:16
+msgctxt "verb"
 msgid "Save"
 msgstr "Запиши"
 
