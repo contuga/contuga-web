@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-01 22:20+0000\n"
+"POT-Creation-Date: 2020-02-02 11:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,7 +67,7 @@ msgid "Invalid date range"
 msgstr "Невалиден времеви диапазон"
 
 #: contuga/contrib/transactions/forms.py:32
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:57
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:63
 msgid "From"
 msgstr "От"
 
@@ -80,14 +80,21 @@ msgstr "Към"
 msgid "Exchange rate"
 msgstr "Обменен курс"
 
-#: contuga/contrib/transactions/forms.py:55
-#: contuga/contrib/transactions/tests/test_transfer_form.py:154
+#: contuga/contrib/transactions/forms.py:38
+#: contuga/contrib/transactions/models.py:44
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:39
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:19
+msgid "Description"
+msgstr "Описание"
+
+#: contuga/contrib/transactions/forms.py:56
+#: contuga/contrib/transactions/tests/test_transfer_form.py:156
 msgid "The two accounts shouldn't be the same."
 msgstr "Двете сметки трябва да бъдат различни."
 
-#: contuga/contrib/transactions/forms.py:61
-#: contuga/contrib/transactions/tests/test_transfer_form.py:110
-#: contuga/contrib/transactions/tests/test_transfer_form.py:135
+#: contuga/contrib/transactions/forms.py:62
+#: contuga/contrib/transactions/tests/test_transfer_form.py:112
+#: contuga/contrib/transactions/tests/test_transfer_form.py:137
 msgid ""
 "You need to specify exchange rate if the two accounts are of different "
 "currencies."
@@ -100,7 +107,7 @@ msgid "Type"
 msgstr "Тип"
 
 #: contuga/contrib/transactions/models.py:34
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:18
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:22
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:13
 msgid "Category"
 msgstr "Категория"
@@ -110,12 +117,6 @@ msgstr "Категория"
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:12
 msgid "Account"
 msgstr "Сметка"
-
-#: contuga/contrib/transactions/models.py:44
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:30
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:19
-msgid "Description"
-msgstr "Описание"
 
 #: contuga/contrib/transactions/models.py:50
 msgid "Transaction"
@@ -127,25 +128,45 @@ msgstr "Трансакция"
 msgid "Transactions"
 msgstr "Трансакции"
 
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:22
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:14
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:30
 msgid "Created at"
 msgstr "Създаден на"
 
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:26
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:16
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:34
 msgid "Updated at"
 msgstr "Обновен на"
 
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_export_form.html:12
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:12
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:17
 msgid "Export"
 msgstr "Експортиране"
 
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_form.html:52
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:55
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:61
 msgid "Apply"
 msgstr "Приложи"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:14
+msgctxt "transaction"
+msgid "Created at"
+msgstr "Създадена на"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:16
+msgctxt "transaction"
+msgid "Updated at"
+msgstr "Обновена на"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:58
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:13
+msgctxt "verb"
+msgid "Edit"
+msgstr "Редактирай"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:63
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:16
+msgctxt "verb"
+msgid "Delete"
+msgstr "Изтрий"
 
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:73
 msgid "No transactions"
@@ -163,7 +184,8 @@ msgstr "Следваща"
 msgid "Transfer between own accounts"
 msgstr "Превод между собствени сметки"
 
-#: contuga/contrib/transactions/templates/transactions/internal_transfer_form.html:26
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_form.html:27
+msgctxt "verb"
 msgid "Transfer"
 msgstr "Превод"
 
@@ -205,146 +227,139 @@ msgstr "Потвърждавам"
 msgid "Transaction details"
 msgstr "Детайли за трансакция"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:13
-msgid "Edit"
-msgstr "Редактирай"
-
-#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:16
-msgid "Delete"
-msgstr "Изтрий"
-
 #: contuga/contrib/transactions/templates/transactions/transaction_form.html:4
 msgid "Add transaction"
 msgstr "Добави трансакция"
 
 #: contuga/contrib/transactions/templates/transactions/transaction_form.html:30
+msgctxt "verb"
 msgid "Save"
 msgstr "Запиши"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:12
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:13
 msgid "Add new"
 msgstr "Добави нова"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:15
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:21
 msgid "Filters"
 msgstr "Филтри"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:42
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:48
 msgid "Today"
 msgstr "Днес"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:43
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:49
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:44
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:50
 msgid "Last 7 Days"
 msgstr "Последните 7 дни"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:45
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:51
 msgid "Last 30 Days"
 msgstr "Последните 30 дни"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:46
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:52
 msgid "This Month"
 msgstr "Този месец"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:47
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:53
 msgid "Last Month"
 msgstr "Последния месец"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:56
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:62
 msgid "Clear"
 msgstr "Изчисти"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:58
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:64
 msgid "To"
 msgstr "До"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:59
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:65
 msgid "Custom"
 msgstr "По избор"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:61
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:67
 msgctxt "Day of the week"
 msgid "Su"
 msgstr "Нд"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:62
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:68
 msgctxt "Day of the week"
 msgid "Mo"
 msgstr "Пн"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:63
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:69
 msgctxt "Day of the week"
 msgid "Tu"
 msgstr "Вт"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:64
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:70
 msgctxt "Day of the week"
 msgid "We"
 msgstr "Ср"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:65
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:71
 msgctxt "Day of the week"
 msgid "Th"
 msgstr "Чт"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:66
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:72
 msgctxt "Day of the week"
 msgid "Fr"
 msgstr "Пт"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:67
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:73
 msgctxt "Day of the week"
 msgid "Sa"
 msgstr "Ст"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:70
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:76
 msgid "January"
 msgstr "Януари"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:71
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:77
 msgid "February"
 msgstr "Февруари"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:72
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:78
 msgid "March"
 msgstr "Март"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:73
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:79
 msgid "April"
 msgstr "Април"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:74
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:80
 msgid "May"
 msgstr "Май"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:75
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:81
 msgid "June"
 msgstr "Юни"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:76
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:82
 msgid "July"
 msgstr "Юли"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:77
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:83
 msgid "August"
 msgstr "Август"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:78
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:84
 msgid "September"
 msgstr "Септември"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:79
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:85
 msgid "October"
 msgstr "Октомври"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:80
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:86
 msgid "November"
 msgstr "Ноември"
 
-#: contuga/contrib/transactions/templates/transactions/transaction_list.html:81
+#: contuga/contrib/transactions/templates/transactions/transaction_list.html:87
 msgid "December"
 msgstr "Декември"
 
@@ -352,11 +367,11 @@ msgstr "Декември"
 msgid "Update transaction"
 msgstr "Обновяване на трансакция"
 
-#: contuga/contrib/transactions/tests/test_transfer_form.py:89
+#: contuga/contrib/transactions/tests/test_transfer_form.py:91
 msgid "Ensure this value is greater than or equal to 0."
 msgstr "Стойността трябва да е по-голяма или равна на 0."
 
-#: contuga/contrib/transactions/tests/test_transfer_form.py:176
-#: contuga/contrib/transactions/tests/test_transfer_form.py:202
+#: contuga/contrib/transactions/tests/test_transfer_form.py:178
+#: contuga/contrib/transactions/tests/test_transfer_form.py:204
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr "Изберете валидна стойност. Въведената не е сред разрешените."
