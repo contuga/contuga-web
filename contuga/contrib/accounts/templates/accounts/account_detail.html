@@ -10,10 +10,10 @@
       <h1>{% trans "Account details" %}</h1>
       {% include "accounts/includes/account_detail_table.html" %}
       <a class="btn btn-primary" href="{% url 'accounts:update' account.pk %}" role="button">
-        <i class="fa fa-pencil"></i> {% trans "Edit" %}
+        <i class="fa fa-pencil"></i> {% trans "Edit" context "verb" %}
       </a>
       <a class="btn btn-danger" href="{% url 'accounts:delete' account.pk %}" role="button">
-        <i class="fa fa-trash"></i> {% trans "Delete" %}
+        <i class="fa fa-trash"></i> {% trans "Delete" context "verb" %}
       </a>
     </div>
   </div>
