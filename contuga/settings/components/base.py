@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "contuga.contrib.analytics.apps.AnalyticsConfig",
     "contuga.contrib.users.apps.UsersConfig",
     "contuga.contrib.accounts.apps.AccountsConfig",
+    "contuga.contrib.settings.apps.SettingsConfig",
 ]
 
 MIDDLEWARE = [
