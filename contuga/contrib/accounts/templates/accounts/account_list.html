@@ -47,12 +47,12 @@
               </td>
               <td>
                 <a href="{% url 'accounts:update' account.pk %}">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="{% trans "Edit" context "verb" %}"></i>
                 </a>
               </td>
               <td>
                 <a href="{% url 'accounts:delete' account.pk %}">
-                  <i class="fa fa-trash"></i>
+                  <i class="fa fa-trash" title="{% trans "Delete" context "verb" %}"></i>
                 </a>
               </td>
             </tr>

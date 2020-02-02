@@ -11,9 +11,9 @@
               <th scope="col">{% trans "Amount" %}</th>
               <th scope="col">{% trans "Account" %}</th>
               <th scope="col">{% trans "Category" %}</th>
-              <th scope="col">{% trans "Created at" %}</th>
+              <th scope="col">{% trans "Created at" context "transaction" %}</th>
               {% if filterset.form.updated_at.value %}
-                <th scope="col">{% trans "Updated at" %}</th>
+                <th scope="col">{% trans "Updated at" context "transaction" %}</th>
               {% endif %}
               <th scope="col" class="d-none d-md-table-cell">
                 {% trans "Description" %}
@@ -55,12 +55,12 @@
               </td>
               <td>
                 <a href="{% url 'transactions:update' transaction.pk %}">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-pencil" title="{% trans "Edit" context "verb" %}"></i>
                 </a>
               </td>
               <td>
                 <a href="{% url 'transactions:delete' transaction.pk %}">
-                  <i class="fa fa-trash"></i>
+                  <i class="fa fa-trash" title="{% trans "Delete" context "verb" %}"></i>
                 </a>
               </td>
             </tr>
