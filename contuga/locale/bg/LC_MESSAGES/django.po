@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-08 10:26+0200\n"
+"POT-Creation-Date: 2020-02-08 11:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -883,6 +883,30 @@ msgid ""
 msgstr ""
 "Открит е цикъл на препращане. Проверете дали LOGIN_REDIRECT_URL не води към "
 "регистрационната форма."
+
+#: contuga/settings/components/base.py:133
+msgid "Food and drinks"
+msgstr "Храни и напитки"
+
+#: contuga/settings/components/base.py:134
+msgid "Entertainment"
+msgstr "Забавления"
+
+#: contuga/settings/components/base.py:135
+msgid "Bills"
+msgstr "Сметки"
+
+#: contuga/settings/components/base.py:136
+msgid "Transport"
+msgstr "Транспорт"
+
+#: contuga/settings/components/base.py:137
+msgid "Drugs and pharmaceuticals"
+msgstr "Лекарства и козметика"
+
+#: contuga/settings/components/base.py:138
+msgid "Other"
+msgstr "Други"
 
 #: contuga/templates/base/base.html:4 contuga/templates/base/base.html:25
 #: contuga/views.py:28

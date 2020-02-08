@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+_ = lambda s: s  # NOQA
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_PATH)
@@ -126,3 +128,12 @@ LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = "/"
 
 TIME_ZONE = "Europe/Sofia"
 USE_TZ = True
+
+DEFAULT_CATEGORIES = [
+    _("Food and drinks"),
+    _("Entertainment"),
+    _("Bills"),
+    _("Transport"),
+    _("Drugs and pharmaceuticals"),
+    _("Other"),
+]
