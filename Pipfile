@@ -24,6 +24,7 @@ django-recaptcha = "==2.0.*"
 django-split-settings = "==1.0.*"
 django-filter = "==2.2.*"
 django-import-export = "*"
+djangorestframework = "==3.11.*"
 
 [requires]
 python_version = "3.7"
