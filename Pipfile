@@ -25,6 +25,7 @@ django-split-settings = "==1.0.*"
 django-filter = "==2.2.*"
 django-import-export = "*"
 djangorestframework = "==3.11.*"
+markdown = "==3.2.*"
 
 [requires]
 python_version = "3.7"
