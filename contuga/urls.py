@@ -22,6 +22,7 @@ from . import views
 from rest_framework.routers import DefaultRouter
 from rest_framework.documentation import include_docs_urls
 
+from contuga.contrib.transactions.views import TransactionViewSet
 from contuga.contrib.accounts.views import AccountViewSet
 from contuga.contrib.categories.views import CategoryViewSet
 from contuga.contrib.users.views import UserViewSet
@@ -29,6 +30,7 @@ from contuga.contrib.settings.views import SettingsViewSet
 
 
 router = DefaultRouter()
+router.register(r"transactions", TransactionViewSet, basename="transaction")
 router.register(r"accounts", AccountViewSet, basename="account")
 router.register(r"categories", CategoryViewSet, basename="category")
 router.register(r"users", UserViewSet, basename="user")
