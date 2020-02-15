@@ -20,6 +20,8 @@ from django.views import generic
 from . import views
 
 from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
+
 
 router = DefaultRouter()
 
@@ -33,6 +35,7 @@ urlpatterns = i18n_patterns(
     path("settings/", include(("contuga.contrib.settings.urls", "settings"))),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
+    path("api/docs/", include_docs_urls(title="Contuga Web API", public=False)),
     path("api/auth/", include("rest_framework.urls")),
     path(
         "browserconfig.xml",
