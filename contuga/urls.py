@@ -22,11 +22,13 @@ from . import views
 from rest_framework.routers import DefaultRouter
 from rest_framework.documentation import include_docs_urls
 
+from contuga.contrib.accounts.views import AccountViewSet
 from contuga.contrib.users.views import UserViewSet
 from contuga.contrib.settings.views import SettingsViewSet
 
 
 router = DefaultRouter()
+router.register(r"accounts", AccountViewSet, basename="account")
 router.register(r"users", UserViewSet, basename="user")
 router.register(r"settings", SettingsViewSet, basename="settings")
 
