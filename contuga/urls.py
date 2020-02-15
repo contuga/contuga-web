@@ -22,8 +22,11 @@ from . import views
 from rest_framework.routers import DefaultRouter
 from rest_framework.documentation import include_docs_urls
 
+from contuga.contrib.users.views import UserViewSet
+
 
 router = DefaultRouter()
+router.register(r"users", UserViewSet, basename="user")
 
 urlpatterns = i18n_patterns(
     path("categories/", include(("contuga.contrib.categories.urls", "categories"))),
