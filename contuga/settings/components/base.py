@@ -138,3 +138,5 @@ DEFAULT_CATEGORIES = [
     _("Drugs and pharmaceuticals"),
     _("Other"),
 ]
+
+REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"}
