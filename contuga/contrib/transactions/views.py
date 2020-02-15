@@ -9,11 +9,12 @@ from django.urls import reverse_lazy
 from django.db import transaction
 
 from import_export.mixins import ExportViewFormMixin
+from rest_framework import viewsets, permissions
 
 from contuga.contrib.accounts import models as account_models
 from contuga.mixins import OnlyAuthoredByCurrentUserMixin
 from contuga import views
-from . import models, filters, resources, forms, constants
+from . import models, filters, resources, forms, constants, serializers
 
 
 class BaseTransactionFormViewMixin:
@@ -194,3 +195,19 @@ class InternalTransferSuccessView(mixins.LoginRequiredMixin, generic.TemplateVie
             return self.render_to_response(context)
         else:
             return redirect("transactions:internal_transfer_form")
+
+
+class TransactionViewSet(OnlyAuthoredByCurrentUserMixin, viewsets.ModelViewSet):
+    serializer_class = serializers.TransactionSerializer
+    http_method_names = ("get", "post", "put", "patch", "delete")
+
+    def get_permissions(self):
+        permission_classes = super().get_permissions()
+        permission_classes.append(permissions.IsAuthenticated())
+        return permission_classes
+
+    def get_queryset(self):
+        return models.Transaction.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
