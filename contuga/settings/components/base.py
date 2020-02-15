@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "anymail",
     "captcha",
     "import_export",
+    "rest_framework",
     # Django Apps
     "django.contrib.admin",
     "django.contrib.auth",
