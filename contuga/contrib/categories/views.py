@@ -3,8 +3,10 @@ from django.views import generic
 from django.contrib.auth import mixins
 from django.urls import reverse_lazy
 
+from rest_framework import viewsets, permissions
+
 from contuga.mixins import OnlyAuthoredByCurrentUserMixin
-from . import models
+from . import models, serializers
 
 
 class CategoryCreateView(mixins.LoginRequiredMixin, generic.CreateView):
@@ -48,3 +50,19 @@ class CategoryDeleteView(
 ):
     model = models.Category
     success_url = reverse_lazy("categories:list")
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.CategorySerializer
+    http_method_names = ("get", "post", "put", "patch", "delete")
+
+    def get_permissions(self):
+        permission_classes = super().get_permissions()
+        permission_classes.append(permissions.IsAuthenticated())
+        return permission_classes
+
+    def get_queryset(self):
+        return models.Category.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
