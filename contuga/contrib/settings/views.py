@@ -2,7 +2,9 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 from django.contrib.auth import mixins
 
-from . import models
+from rest_framework import viewsets, permissions
+
+from . import models, serializers
 
 
 class BaseSettingsViewMixin:
@@ -45,3 +47,16 @@ class SettingsUpdateView(
         form.instance.user = self.request.user
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+class SettingsViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.SettingsSerializer
+    http_method_names = ("get", "put", "patch")
+
+    def get_permissions(self):
+        permission_classes = super().get_permissions()
+        permission_classes.append(permissions.IsAuthenticated())
+        return permission_classes
+
+    def get_queryset(self):
+        return models.Settings.objects.filter(user=self.request.user)
