@@ -4,18 +4,8 @@
 {% block content %}
 <main class="container">
   <div class="row">
-    <div class="col-12">
-      <h1>{% trans "Analytics" %}</h1>
-
-      <div class="row">
-        <div class="col-md-5 col-lg-4">
-          <canvas id="numberOfTransactions" width="300" height="200"></canvas>
-        </div>
-        <div class="col-md-5 col-lg-4">
-          <canvas id="amountOfTransactions" width="300" height="200"></canvas>
-        </div>
-      </div>
-
+    <div class="col-12" id="chartContainer">
+      <h1>{% trans "Stats" %}</h1>
     </div>
   </div>
 </main>
@@ -23,39 +13,73 @@
 
 {% block js %}
   <script type="text/javascript">
-    var label = '{% trans "Number of transactions by type" %}';
-    var labels = ['{% trans "Expenditures" %}', '{% trans "Incomes" %}'];
-    var data = ['{{ expenditures_count }}', '{{ income_count }}'];
-    var backgroundColor = ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)',];
-    var borderColor = ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)'];
-    createBarChart('numberOfTransactions', label, labels, data, backgroundColor, borderColor);
+    var reports = {{ reports | safe }};
 
-    label = '{% trans "Volume by type" %}';
-    data = ['{{ expenditures_sum }}', '{{ income_sum }}'];
-    createBarChart('amountOfTransactions', label, labels, data, backgroundColor, borderColor);
+    Object.keys(reports).forEach(function(key) {
+      var title = '<h2>' + reports[key]["name"] + '</h2>';
 
-    function createBarChart(element, label, labels, data, backgroundColor, borderColor) {
+      var barChartId = 'barChart' + key
+      var barChart = '<div class="col-md-5"><canvas id="' + barChartId + '" width="300" height="200"></canvas></div>';
+
+      var lineChartId = 'lineChart' + key
+      var lineChart = '<div class="col-md-5"><canvas id="' + lineChartId + '" width="300" height="200"></canvas></div>';
+
+      var $row = $('<div class="row">').append(barChart, lineChart)
+      $('#chartContainer').append(title, $row)
+
+      var labels = reports[key]["reports"].map((it) => `${it.month}.${it.year}`);
+      var datasets = [
+          {
+              label: '{% trans "Income" %}',
+              data: reports[key]["reports"].map((it) => it.income),
+              backgroundColor:'rgba(54, 162, 235, 1)'
+          },
+          {
+              label: '{% trans "Expenditures" %}',
+              data: reports[key]["reports"].map((it) => it.expenditures),
+              backgroundColor: 'rgba(255,99,132,1)'
+          }
+      ]
+
+      createChart('bar', barChartId, labels, datasets, reports[key]["currency"]);
+
+      var lineDatasets = [
+          {
+              label: '{% trans "Balance" %}',
+              data: reports[key]["reports"].map((it) => it.balance),
+              backgroundColor:'rgba(54, 162, 235, 1)'
+          }
+      ]
+
+      createChart('line', lineChartId, labels, lineDatasets, reports[key]["currency"]);
+    })
+
+    function createChart(type, element, labels, datasets, currency) {
       var canvas = document.getElementById(element).getContext('2d');
       var myChart = new Chart(canvas, {
-        type: 'bar',
+        type: type,
         data: {
           labels: labels,
-          datasets: [{
-            label: label,
-            data: data,
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
-            borderWidth: 1
-          }]
+          datasets: datasets,
         },
         options: {
+          animation: false,
           scales: {
             yAxes: [{
               ticks: {
                 beginAtZero: true
               }
             }]
-          }
+          },
+          tooltips: {
+            enabled: true,
+            mode: 'single',
+            callbacks: {
+              label: function(tooltipItems, data) {
+                  return `${tooltipItems.yLabel.toLocaleString()} ${currency}`;
+              }
+            }
+          },
         }
       });
     }
