@@ -27,6 +27,7 @@ django-import-export = "*"
 djangorestframework = "==3.11.*"
 markdown = "==3.2.*"
 coreapi = "==2.3.*"
+python-dateutil = "==2.8.*"
 
 [requires]
 python_version = "3.7"
