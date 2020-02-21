@@ -283,8 +283,8 @@ msgid "Update"
 msgstr "Промяна"
 
 #: contuga/contrib/analytics/templates/analytics/analytics.html:8
-msgid "Analytics"
-msgstr "Анализ"
+msgid "Stats"
+msgstr "Статистика"
 
 #: contuga/contrib/analytics/templates/analytics/analytics.html:26
 msgid "Number of transactions by type"
