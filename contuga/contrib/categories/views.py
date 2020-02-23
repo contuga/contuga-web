@@ -23,7 +23,7 @@ class CategoryListView(
     OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.ListView
 ):
     model = models.Category
-    paginate_by = 10
+    paginate_by = 20
 
 
 class CategoryDetailView(
