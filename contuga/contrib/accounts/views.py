@@ -21,6 +21,7 @@ class AccountListView(
     OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.ListView
 ):
     model = models.Account
+    paginate_by = 10
 
 
 class AccountDetailView(
