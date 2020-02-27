@@ -27,6 +27,7 @@ from contuga.contrib.accounts.views import AccountViewSet
 from contuga.contrib.categories.views import CategoryViewSet
 from contuga.contrib.users.views import UserViewSet
 from contuga.contrib.settings.views import SettingsViewSet
+from contuga.contrib.analytics.views import AnalyticsViewSet
 
 
 router = DefaultRouter()
@@ -35,6 +36,7 @@ router.register(r"accounts", AccountViewSet, basename="account")
 router.register(r"categories", CategoryViewSet, basename="category")
 router.register(r"users", UserViewSet, basename="user")
 router.register(r"settings", SettingsViewSet, basename="settings")
+router.register(r"analytics", AnalyticsViewSet, basename="analytics")
 
 urlpatterns = i18n_patterns(
     path("categories/", include(("contuga.contrib.categories.urls", "categories"))),
