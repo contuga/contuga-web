@@ -2,8 +2,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 
-from rest_framework.test import APITestCase
-
+from rest_framework.test import APITestCase, APIClient
+from rest_framework.authtoken.models import Token
 from ..models import User
 
 UserModel = get_user_model()
@@ -12,7 +12,11 @@ UserModel = get_user_model()
 class UserDetailTestCase(APITestCase):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.client.force_login(self.user)
+
+        token, created = Token.objects.get_or_create(user=self.user)
+        self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
+
+        self.client.force_login(self.user)  # Needed for last_login check
 
     def test_get(self):
         url = reverse("user-detail", args=[self.user.pk])

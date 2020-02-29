@@ -1,7 +1,8 @@
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
+from rest_framework.authtoken.models import Token
 
 from ..models import User
 
@@ -17,7 +18,10 @@ class UserListTestCase(APITestCase):
         # Creating another user to make sure the currently logged in user cannot see others
         UserModel.objects.create_user("richard.roe@example.com", "password")
 
-        self.client.force_login(user)
+        token, created = Token.objects.get_or_create(user=user)
+        self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
+
+        self.client.force_login(user)  # Needed for last_login check
 
         response = self.client.get(url, format="json")
 
