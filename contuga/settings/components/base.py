@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "captcha",
     "import_export",
     "rest_framework",
+    "rest_framework.authtoken",
     # Django Apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -143,4 +144,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ),
 }

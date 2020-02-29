@@ -1,7 +1,8 @@
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
+from rest_framework.authtoken.models import Token
 
 from contuga.contrib.transactions.constants import INCOME
 from contuga.contrib.categories.models import Category
@@ -32,7 +33,9 @@ class TransactionListTestCase(APITestCase):
             account=self.account,
             description="Transaction description",
         )
-        self.client.force_login(self.user)
+
+        token, created = Token.objects.get_or_create(user=self.user)
+        self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
 
     def test_get(self):
         url = reverse("transaction-list")
