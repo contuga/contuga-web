@@ -2,7 +2,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
+from rest_framework.authtoken.models import Token
 
 from ..models import Account
 from .. import constants
@@ -22,7 +23,9 @@ class AccountDetailTestCase(APITestCase):
             description="Account description",
             is_active=True,
         )
-        self.client.force_login(self.user)
+
+        token, created = Token.objects.get_or_create(user=self.user)
+        self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
 
     def test_get(self):
         url = reverse("account-detail", args=[self.account.pk])

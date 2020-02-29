@@ -4,7 +4,8 @@ from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
+from rest_framework.authtoken.models import Token
 
 from contuga.contrib.accounts import constants as account_constants
 from contuga.contrib.accounts.models import Account
@@ -23,7 +24,9 @@ class AnalyticsAPITestCase(APITestCase):
         self.account = Account.objects.create(
             name="Account name", currency=account_constants.BGN, owner=user
         )
-        self.client.force_login(user)
+
+        token, created = Token.objects.get_or_create(user=user)
+        self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
 
     def test_get(self):
         url = reverse("analytics-list")
