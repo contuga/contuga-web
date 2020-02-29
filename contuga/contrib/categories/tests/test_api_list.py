@@ -1,7 +1,8 @@
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
+from rest_framework.authtoken.models import Token
 
 from ..models import Category
 from . import utils
@@ -12,7 +13,9 @@ UserModel = get_user_model()
 class CategoryListTestCase(APITestCase):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.client.force_login(self.user)
+
+        token, created = Token.objects.get_or_create(user=self.user)
+        self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
 
     def test_get(self):
         url = reverse("category-list")
