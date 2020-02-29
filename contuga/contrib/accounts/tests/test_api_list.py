@@ -1,7 +1,8 @@
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
+from rest_framework.authtoken.models import Token
 
 from ..models import Account
 from .. import constants
@@ -19,7 +20,9 @@ class AccountListTestCase(APITestCase):
             owner=self.user,
             description="Account description",
         )
-        self.client.force_login(self.user)
+
+        token, created = Token.objects.get_or_create(user=self.user)
+        self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
 
     def test_get(self):
         url = reverse("account-list")
