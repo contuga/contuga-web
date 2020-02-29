@@ -20,6 +20,7 @@ from django.views import generic
 from . import views
 
 from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken import views as authtoken_views
 from rest_framework.documentation import include_docs_urls
 
 from contuga.contrib.transactions.views import TransactionViewSet
@@ -50,6 +51,7 @@ urlpatterns = i18n_patterns(
     path("api/", include(router.urls)),
     path("api/docs/", include_docs_urls(title="Contuga Web API", public=False)),
     path("api/auth/", include("rest_framework.urls")),
+    path("api/token/", authtoken_views.obtain_auth_token),
     path(
         "browserconfig.xml",
         generic.TemplateView.as_view(
