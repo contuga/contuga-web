@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "import_export",
     "rest_framework",
     "rest_framework.authtoken",
+    "parler",
     # Django Apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Project apps
     "contuga",
+    "contuga.contrib.home.apps.HomeConfig",
     "contuga.contrib.categories.apps.CategoriesConfig",
     "contuga.contrib.transactions.apps.TransactionsConfig",
     "contuga.contrib.analytics.apps.AnalyticsConfig",
