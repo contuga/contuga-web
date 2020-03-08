@@ -9,6 +9,8 @@ from django.contrib.auth import mixins
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 
+from contuga.contrib.pages import constants
+from contuga.contrib.pages.models import Page
 from . import utils
 from .serializers import MonthlyReportSerializer
 from .api_filters import MonthlyReportFilterBackend
@@ -22,6 +24,8 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
 
         reports = utils.get_monthly_reports(self.request.user)
         context["reports"] = json.dumps(reports, cls=DjangoJSONEncoder)
+
+        context["page"] = Page.objects.filter(type=constants.ANALYTICS_TYPE).first()
 
         return context
 
