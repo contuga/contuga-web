@@ -6,7 +6,7 @@
 {% block content %}
 <main class="container">
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 col-md-8">
       <h1>{% trans "Transaction details" %}</h1>
       {% include "transactions/includes/transaction_detail_table.html" %}
       <a class="btn btn-primary" href="{% url 'transactions:update' transaction.pk %}" role="button">

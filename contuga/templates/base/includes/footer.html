@@ -1,3 +1,128 @@
-<footer>
+{% load i18n static %}
 
+<footer class="pt-4 pt-md-5 border-top">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-4 col-lg">
+        <a class="footer-brand" href="/">
+          <img src="{% static 'contuga/logo.svg' %}" alt="{% trans 'Contuga logo' %}" width="24" height="24">
+          <span>Contuga</span>
+        </a>
+        <small class="copyright">&copy; 2019 - {% now "Y" %} </small>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="col-6 col-md-4 col-lg">
+          <h5>
+            <a href="{% url 'transactions:list' %}">
+              {% trans "Transactions" %}
+            </a>
+          </h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a href="{% url 'transactions:list' %}">
+                {% trans "View all transactions" %}
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'transactions:create' %}">
+                {% trans "Add new transaction" %}
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'transactions:internal_transfer_form' %}">
+                {% trans "Add new transfer" %}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4 col-lg">
+          <h5>
+            <a href="{% url 'accounts:list' %}">
+              {% trans "Accounts" %}
+            </a>
+          </h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a href="{% url 'accounts:list' %}">
+                {% trans "View all accounts" %}
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'accounts:create' %}">
+                {% trans "Add new account" %}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4 col-lg">
+          <h5>
+            <a href="{% url 'categories:list' %}">
+              {% trans "Categories" %}
+            </a>
+          </h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a href="{% url 'categories:list' %}">
+                {% trans "View all categories" %}
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'categories:create' %}">
+                {% trans "Add new category" %}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4 col-lg">
+          <h5>
+            <a href="{% url 'users:profile' user.pk %}">
+              {% trans "Profile" %}
+            </a>
+          </h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a href="{% url 'settings:detail' %}}">
+                {% trans "Settings" %}
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'users:password_change' %}">
+                {% trans "Change password" %}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4 col-lg">
+          <h5>
+            <a href="{% url 'analytics:list' %}">
+              {% trans "Statistics" %}
+            </a>
+          </h5>
+        </div>
+      </div>
+    {% else %}
+      <div class="col-6 col-md">
+        <h5>
+          <a href="{% url 'users:login' %}">
+            {% trans "Login" %}
+          </a>
+        </h5>
+      </div>
+      <div class="col-6 col-md">
+        <h5>
+          <a href="{% url 'users:registration' %}">
+            {% trans "Register" %}
+          </a>
+        </h5>
+      </div>
+      <div class="col-6 col-md">
+        <h5>
+          <a href="{% url 'users:password_reset' %}">
+            {% trans 'Reset password' %}
+          </a>
+        </h5>
+      </div>
+    </div>
+    {% endif %}
+  </div>
 </footer>
