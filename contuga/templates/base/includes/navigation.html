@@ -1,0 +1,112 @@
+{% load i18n static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand" href="/">
+      <img src="{% static 'contuga/logo.svg' %}" alt="{% trans 'Contuga logo' %}">
+      <span>Contuga</span>
+    </a>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    {% if user.is_authenticated %}
+      <div class="collapse navbar-collapse justify-content-between" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+              {% trans 'Transactions' %}
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'transactions:list' %}">
+                {% trans 'View all' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'transactions:create' %}">
+                {% trans 'Add new' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'transactions:internal_transfer_form' %}">
+                {% trans 'Add new transfer' %}
+              </a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                {% trans 'Accounts' %}
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'accounts:list' %}">
+                  {% trans 'View all' %}
+                </a>
+                <a class="dropdown-item" href="{% url 'accounts:create' %}">
+                  {% trans 'Add new' %}
+                </a>
+              </div>
+            </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+              {% trans 'Categories' %}
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'categories:list' %}">
+                {% trans 'View all' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'categories:create' %}">
+                {% trans 'Add new' %}
+              </a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'analytics:list' %}">
+              {% trans 'Statistics' %}
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+              {{ user }}
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'users:profile' user.pk %}">
+                {% trans 'Profile' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'settings:detail' %}">
+                {% trans 'Settings' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'users:password_change' %}">
+                {% trans 'Change password' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'users:logout' %}">
+                {% trans 'Logout' %}
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    {% else %}
+      <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:login' %}">
+              {% trans 'Login' %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:registration' %}">
+              {% trans 'Register' %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:password_reset' %}">
+              {% trans 'Reset password' %}
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</nav>
