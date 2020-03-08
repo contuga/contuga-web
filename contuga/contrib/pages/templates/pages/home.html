@@ -1,0 +1,44 @@
+{% extends "base/base.html" %}
+{% load i18n static %}
+
+{% block content %}
+   <main class="home-page">
+      <header>
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h1>{{ page.title|default:_("Contuga") }}</h1>
+              <h2>{{ page.description|default:_("Simple web-based expense manager.") }}</h2>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            {% for section in page.page_sections %}
+              <section class="row">
+                <div class="{% if section.is_image_on_right %} offset-md-2 {% else %} order-xs-1 order-md-2 {% endif %} col-md-5 text-center">
+                  <p>
+                    {{ section.text }}
+                  </p>
+                </div>
+                <div class="{% if not section.is_image_on_right %} offset-md-2 order-xs-2 order-md-1 {% endif %}  col-md-3 home-page-image">
+                  <img src="{{ section.image.url }}">
+                </div>
+              </section>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+  </main>
+{% endblock %}
+
+{% block css %}
+  {{ block.super }}
+  <style>
+    .home-page header {
+      background: #254c7c url("{{ page.background.url }}") bottom left / cover no-repeat;
+    }
+  </style>
+{% endblock css %}

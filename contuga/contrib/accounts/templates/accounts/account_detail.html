@@ -6,7 +6,7 @@
 {% block content %}
 <main class="container">
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 col-md-8">
       <h1>{% trans "Account details" %}</h1>
       {% include "accounts/includes/account_detail_table.html" %}
       <a class="btn btn-primary" href="{% url 'accounts:update' account.pk %}" role="button">
@@ -18,73 +18,82 @@
     </div>
   </div>
 
-  <div class="row mt-3">
+  <div class="row latest-transactions">
     <div class="col-12">
-      <h2>{% trans "Latest transactions" %}</h2>
-      {% if account.latest_transactions %}
-        <div class="table-responsive">
-          <table class="table table-striped table-sm" id="transactions">
-            <thead>
-              <tr>
-                <th scope="col">{% trans "Amount" %}</th>
-                <th scope="col">{% trans "Category" %}</th>
-                <th scope="col">{% trans "Created at" %}</th>
-                {% if filterset.form.updated_at.value %}
-                  <th scope="col">{% trans "Updated at" %}</th>
-                {% endif %}
-                <th scope="col" class="d-none d-md-table-cell">
-                  {% trans "Description" %}
-                </th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for transaction in account.latest_transactions %}
-              <tr>
-                <td>
-                  <i class="{{ transaction.type_icon_class }}"></i>
-                  <a href="{{ transaction.get_absolute_url }}"
-                    class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
-                    {{ transaction.amount|floatformat:2 }} {{ transaction.currency }}
-                  </a>
-                </td>
-                <td>
-                  <a href="{{ transaction.category.get_absolute_url }}">
-                    {{ transaction.category.name }}
-                  </a>
-                </td>
-                <td>
-                  {{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}
-                </td>
-                {% if filterset.form.updated_at.value %}
-                  <td>
-                    {{ transaction.updated_at|date:"SHORT_DATETIME_FORMAT" }}
-                  </td>
-                {% endif %}
-                <td class="d-none d-md-table-cell">
-                  {{ transaction.description }}
-                </td>
-                <td>
-                  <a href="{% url 'transactions:update' transaction.pk %}">
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                </td>
-                <td>
-                  <a href="{% url 'transactions:delete' transaction.pk %}">
-                    <i class="fa fa-trash"></i>
-                  </a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+      <div class="row">
+        <div class="col-12 col-md-8">
+          <h2>{% trans "Latest transactions" %}</h2>
+          {% if not account.latest_transactions %}
+            <div class="alert alert-primary" role="alert">
+              {% trans "No transactions" %}
+            </div>
+          {% endif %}
         </div>
-      {% else %}
-      <div class="alert alert-primary" role="alert">
-        {% trans "No transactions" %}
       </div>
-      {% endif %}
+      <div class="row table-row">
+        <div class="col-12">
+          {% if account.latest_transactions %}
+            <div class="table-responsive">
+              <table class="table table-striped" id="transactions">
+                <thead>
+                  <tr>
+                    <th scope="col">{% trans "Amount" %}</th>
+                    <th scope="col">{% trans "Category" %}</th>
+                    <th scope="col">{% trans "Created at" %}</th>
+                    {% if filterset.form.updated_at.value %}
+                      <th scope="col">{% trans "Updated at" %}</th>
+                    {% endif %}
+                    <th scope="col" class="d-none d-md-table-cell">
+                      {% trans "Description" %}
+                    </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for transaction in account.latest_transactions %}
+                  <tr>
+                    <td nowrap>
+                      <i class="{{ transaction.type_icon_class }}"></i>
+                      <a href="{{ transaction.get_absolute_url }}"
+                        class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
+                        {{ transaction.amount|floatformat:2 }} {{ transaction.currency }}
+                      </a>
+                    </td>
+                    <td>
+                      <a href="{{ transaction.category.get_absolute_url }}">
+                        {{ transaction.category.name }}
+                      </a>
+                    </td>
+                    <td>
+                      {{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}
+                    </td>
+                    {% if filterset.form.updated_at.value %}
+                      <td>
+                        {{ transaction.updated_at|date:"SHORT_DATETIME_FORMAT" }}
+                      </td>
+                    {% endif %}
+                    <td class="d-none d-md-table-cell">
+                      {{ transaction.description }}
+                    </td>
+                    <td>
+                      <a href="{% url 'transactions:update' transaction.pk %}">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="{% url 'transactions:delete' transaction.pk %}">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
   </div>
 </main>

@@ -1,0 +1,43 @@
+footer {
+  background-color: $primary;
+  color: $gray-500;
+  padding-bottom: 1rem;
+
+  h5 {
+    &,
+    & a {
+      color: $gray-100;
+    }
+  }
+
+  a {
+    &,
+    &:hover {
+      color: $gray-500;
+    }
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    color: $white;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.5rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+      margin-bottom: 0;
+    }
+  }
+
+  .col-12 {
+    @include media-breakpoint-down(sm) {
+      margin-bottom: 0.5rem;
+    }
+  }
+}

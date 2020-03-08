@@ -20,3 +20,6 @@ USE_L10N = True
 FORMAT_MODULE_PATH = ["contuga.formats"]
 USE_THOUSAND_SEPARATOR = True
 NUMBER_GROUPING = 3
+
+
+PARLER_LANGUAGES = {None: ({"code": "en"}, {"code": "bg"})}

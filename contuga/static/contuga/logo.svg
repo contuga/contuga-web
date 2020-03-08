@@ -1,0 +1,11 @@
+<svg width="210mm" height="210mm" version="1.1" viewBox="0 0 210 210" xmlns="http://www.w3.org/2000/svg" xmlns:osb="http://www.openswatchbook.org/uri/2009/osb">
+ <g transform="translate(0,-87)">
+  <text x="44.901279" y="217.08641" fill="#000000" font-family="sans-serif" font-size="50.8px" letter-spacing="0px" stroke-width=".26458" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="44.901279" y="262.0325" stroke-width=".26458"/></text>
+ </g>
+ <g transform="translate(0,-87)" fill="#ff0" stroke="#000">
+  <circle cx="147.63" cy="190.52" r="42.98" stroke-width="2.1864"/>
+  <g transform="matrix(1.0939 .013722 0 .91418 0 0)" stroke-width="2.4721" aria-label="C">
+   <path d="m52.337 266.73q7.244 8.6928 17.868 12.395t27.044 3.7025q16.42 0 31.069-4.6684v31.069q-18.512 5.9562-38.635 5.9562-40.405 0-61.815-28.332-21.41-28.332-21.41-79.523 0.16098-78.879 47.81-99.323 15.454-6.6001 35.898-6.6001 20.444 0 35.898 5.9562v30.747q-14.488-4.3464-30.425-4.3464-15.776 0-26.078 3.3805-10.142 3.3805-17.225 11.751-6.922 8.3708-10.625 22.698-3.5415 14.166-3.5415 35.737t3.5415 36.059 10.625 23.342z" fill="#ff0" stroke="#000" stroke-width="2.4721"/>
+  </g>
+ </g>
+</svg>

@@ -2,13 +2,21 @@
 {% load i18n %}
 
 {% block content %}
-<main class="container">
-  <div class="row">
-    <div class="col-12" id="chartContainer">
-      <h1>{% trans "Stats" %}</h1>
+  <main class="analytics-page">
+    <header>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1>{{ page.title|default:_("Statistics")}}</h1>
+            <h2>{{ page.description|default:_("Monthly reports to help you analyze your financial performance.") }}</h2>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="container-fluid" id="chartContainer">
+
     </div>
-  </div>
-</main>
+  </main>
 {% endblock %}
 
 {% block js %}
@@ -16,28 +24,31 @@
     var reports = {{ reports | safe }};
 
     Object.keys(reports).forEach(function(key) {
-      var title = '<h2>' + reports[key]["name"] + '</h2>';
+      var title = '<div class="row"><div class="col"><h2>' + reports[key]["name"] + '</h2></div></div>';
 
       var barChartId = 'barChart' + key
-      var barChart = '<div class="col-md-5"><canvas id="' + barChartId + '" width="300" height="200"></canvas></div>';
+      var barChart = '<div class="col-md-5"><canvas id="' + barChartId + '"></canvas></div>';
 
       var lineChartId = 'lineChart' + key
-      var lineChart = '<div class="col-md-5"><canvas id="' + lineChartId + '" width="300" height="200"></canvas></div>';
+      var lineChart = '<div class="col-md-5"><canvas id="' + lineChartId + '"></canvas></div>';
 
       var $row = $('<div class="row">').append(barChart, lineChart)
-      $('#chartContainer').append(title, $row)
+      var $col = $('<div class="col-12 col-md-11 offset-md-1">').append(title, $row)
+      var $section = $('<section class="row">').append($col)
+
+      $('#chartContainer').append($section)
 
       var labels = reports[key]["reports"].map((it) => `${it.month}.${it.year}`);
       var datasets = [
           {
               label: '{% trans "Income" %}',
               data: reports[key]["reports"].map((it) => it.income),
-              backgroundColor:'rgba(54, 162, 235, 1)'
+              backgroundColor: '#28a745'
           },
           {
               label: '{% trans "Expenditures" %}',
               data: reports[key]["reports"].map((it) => it.expenditures),
-              backgroundColor: 'rgba(255,99,132,1)'
+              backgroundColor: '#dc3545'
           }
       ]
 
@@ -47,7 +58,7 @@
           {
               label: '{% trans "Balance" %}',
               data: reports[key]["reports"].map((it) => it.balance),
-              backgroundColor:'rgba(54, 162, 235, 1)'
+              backgroundColor: '#254c7c'
           }
       ]
 
@@ -86,3 +97,12 @@
   </script>
 
 {% endblock js %}
+
+{% block css %}
+  {{ block.super }}
+  <style>
+    header {
+      background: #254c7c url("{{ page.background.url }}") bottom left / cover no-repeat;
+    }
+  </style>
+{% endblock css %}

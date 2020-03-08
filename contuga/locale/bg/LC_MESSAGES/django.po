@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-08 11:03+0200\n"
+"POT-Creation-Date: 2020-03-22 20:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,32 +43,32 @@ msgid "Russian ruble"
 msgstr "Руска рубла"
 
 #: contuga/contrib/accounts/models.py:15
-#: contuga/contrib/accounts/templates/accounts/account_list.html:16
+#: contuga/contrib/accounts/templates/accounts/account_list.html:27
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:6
 #: contuga/contrib/categories/models.py:12
-#: contuga/contrib/categories/templates/categories/category_list.html:16
+#: contuga/contrib/categories/templates/categories/category_list.html:27
 #: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:6
 #: contuga/contrib/users/templates/users/user_detail.html:19
 msgid "Name"
 msgstr "Име"
 
 #: contuga/contrib/accounts/models.py:17
-#: contuga/contrib/accounts/templates/accounts/account_list.html:17
+#: contuga/contrib/accounts/templates/accounts/account_list.html:28
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:10
 msgid "Currency"
 msgstr "Валута"
 
 #: contuga/contrib/accounts/models.py:22
-#: contuga/contrib/accounts/templates/accounts/account_detail.html:36
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:42
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:18
 #: contuga/contrib/categories/models.py:16
-#: contuga/contrib/categories/templates/categories/category_detail.html:36
-#: contuga/contrib/categories/templates/categories/category_list.html:19
+#: contuga/contrib/categories/templates/categories/category_detail.html:42
+#: contuga/contrib/categories/templates/categories/category_list.html:30
 #: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:18
-#: contuga/contrib/transactions/forms.py:38
+#: contuga/contrib/pages/models.py:21 contuga/contrib/transactions/forms.py:38
 #: contuga/contrib/transactions/models.py:44
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:39
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:19
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:29
 msgid "Description"
 msgstr "Описание"
 
@@ -77,19 +77,26 @@ msgid "Is active"
 msgstr "Активна"
 
 #: contuga/contrib/accounts/models.py:29
-#: contuga/contrib/categories/templates/categories/category_detail.html:30
+#: contuga/contrib/categories/templates/categories/category_detail.html:36
 #: contuga/contrib/transactions/models.py:42
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:14
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:12
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:22
 msgid "Account"
 msgstr "Сметка"
 
 #: contuga/contrib/accounts/models.py:30
 #: contuga/contrib/accounts/templates/accounts/account_list.html:4
 #: contuga/contrib/accounts/templates/accounts/account_list.html:10
-#: contuga/templates/base/includes/header.html:34
+#: contuga/templates/base/includes/footer.html:41
+#: contuga/templates/base/includes/navigation.html:38
 msgid "Accounts"
 msgstr "Сметки"
+
+#: contuga/contrib/accounts/templates/accounts/account_confirm_delete.html:4
+#: contuga/contrib/categories/templates/categories/category_confirm_delete.html:4
+#: contuga/contrib/transactions/templates/transactions/transaction_confirm_delete.html:4
+msgid "Confirm deletion"
+msgstr "Потвърди изтриване"
 
 #: contuga/contrib/accounts/templates/accounts/account_confirm_delete.html:13
 msgid "Are you sure you want to delete this account?"
@@ -106,71 +113,71 @@ msgid "Account details"
 msgstr "Детайли за сметка"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:13
-#: contuga/contrib/accounts/templates/accounts/account_list.html:50
+#: contuga/contrib/accounts/templates/accounts/account_list.html:61
 #: contuga/contrib/categories/templates/categories/category_detail.html:13
-#: contuga/contrib/categories/templates/categories/category_list.html:44
+#: contuga/contrib/categories/templates/categories/category_list.html:55
 #: contuga/contrib/settings/templates/settings/settings_detail.html:27
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:58
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:68
 #: contuga/contrib/transactions/templates/transactions/transaction_detail.html:13
 msgctxt "verb"
 msgid "Edit"
 msgstr "Редактирай"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:16
-#: contuga/contrib/accounts/templates/accounts/account_list.html:55
+#: contuga/contrib/accounts/templates/accounts/account_list.html:66
 #: contuga/contrib/categories/templates/categories/category_detail.html:16
-#: contuga/contrib/categories/templates/categories/category_list.html:49
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:63
+#: contuga/contrib/categories/templates/categories/category_list.html:60
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:73
 #: contuga/contrib/transactions/templates/transactions/transaction_detail.html:16
 msgctxt "verb"
 msgid "Delete"
 msgstr "Изтрий"
 
-#: contuga/contrib/accounts/templates/accounts/account_detail.html:23
-#: contuga/contrib/categories/templates/categories/category_detail.html:23
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:25
+#: contuga/contrib/categories/templates/categories/category_detail.html:25
 msgid "Latest transactions"
 msgstr "Последни трансакции"
 
-#: contuga/contrib/accounts/templates/accounts/account_detail.html:29
-#: contuga/contrib/categories/templates/categories/category_detail.html:29
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:35
+#: contuga/contrib/categories/templates/categories/category_detail.html:35
 #: contuga/contrib/transactions/filters.py:40
 #: contuga/contrib/transactions/forms.py:36
 #: contuga/contrib/transactions/models.py:22
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:6
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:11
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:21
 msgid "Amount"
 msgstr "Сума"
 
-#: contuga/contrib/accounts/templates/accounts/account_detail.html:30
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:36
 #: contuga/contrib/categories/models.py:20
 #: contuga/contrib/transactions/models.py:34
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:22
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:13
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:23
 msgid "Category"
 msgstr "Категория"
 
-#: contuga/contrib/accounts/templates/accounts/account_detail.html:31
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:37
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:22
-#: contuga/contrib/categories/templates/categories/category_detail.html:31
-#: contuga/contrib/categories/templates/categories/category_list.html:17
+#: contuga/contrib/categories/templates/categories/category_detail.html:37
+#: contuga/contrib/categories/templates/categories/category_list.html:28
 #: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:10
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:30
 #: contuga/models.py:6
 msgid "Created at"
 msgstr "Създаден на"
 
-#: contuga/contrib/accounts/templates/accounts/account_detail.html:33
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:39
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:26
-#: contuga/contrib/categories/templates/categories/category_detail.html:33
+#: contuga/contrib/categories/templates/categories/category_detail.html:39
 #: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:14
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:34
 #: contuga/models.py:7
 msgid "Updated at"
 msgstr "Обновен на"
 
-#: contuga/contrib/accounts/templates/accounts/account_detail.html:85
-#: contuga/contrib/categories/templates/categories/category_detail.html:85
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:73
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:91
+#: contuga/contrib/categories/templates/categories/category_detail.html:91
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:9
 msgid "No transactions"
 msgstr "Няма трансакции"
 
@@ -186,95 +193,30 @@ msgctxt "verb"
 msgid "Save"
 msgstr "Запиши"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:18
+#: contuga/contrib/accounts/templates/accounts/account_list.html:14
+msgid "No accounts"
+msgstr "Няма открити сметки"
+
+#: contuga/contrib/accounts/templates/accounts/account_list.html:29
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:14
+#: contuga/contrib/analytics/templates/analytics/analytics.html:59
 msgid "Balance"
 msgstr "Баланс"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:19
+#: contuga/contrib/accounts/templates/accounts/account_list.html:30
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:30
 msgid "Status"
 msgstr "Статус"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:43
+#: contuga/contrib/accounts/templates/accounts/account_list.html:54
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:33
 msgid "Active"
 msgstr "Активна"
 
-#: contuga/contrib/accounts/templates/accounts/account_list.html:45
+#: contuga/contrib/accounts/templates/accounts/account_list.html:56
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:35
 msgid "Archived"
 msgstr "Архивирана"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:69
-#: contuga/contrib/accounts/templates/accounts/account_list.html:124
-#: contuga/contrib/categories/templates/categories/category_list.html:64
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:82
-msgid "Previous"
-msgstr "Предишна"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:85
-#: contuga/contrib/accounts/templates/accounts/account_list.html:123
-#: contuga/contrib/categories/templates/categories/category_list.html:80
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:98
-msgid "Next"
-msgstr "Следваща"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:109
-msgid "All"
-msgstr "Всички"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:111
-msgid "No data available in table"
-msgstr "В таблицата няма данни"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:112
-msgid "Showing _START_ to _END_ of _TOTAL_ entries"
-msgstr "Показване на резултати от _START_ до _END_ от общо _TOTAL_"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:113
-msgid "Showing 0 to 0 of 0 entries"
-msgstr "Показване на резултати от 0 до 0 от общо 0"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:114
-msgid "(filtered from _MAX_ total entries)"
-msgstr "(филтрирани от общо _MAX_ резултата)"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:115
-msgid "Show _MENU_ entries"
-msgstr "Показване на _MENU_ резултата"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:116
-msgid "Loading"
-msgstr "Зареждане"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:117
-msgid "Processing"
-msgstr "Обработване"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:118
-msgid "Search"
-msgstr "Търсене"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:119
-msgid "No matching records found"
-msgstr "Няма намерени резултати"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:121
-msgid "First"
-msgstr "Първи"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:122
-msgid "Last"
-msgstr "Последен"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:127
-msgid "activate to sort column ascending"
-msgstr "избери, за да сортираш във възходящ ред"
-
-#: contuga/contrib/accounts/templates/accounts/account_list.html:128
-msgid "activate to sort column descending"
-msgstr "избери, за да сортираш във низходящ ред"
 
 #: contuga/contrib/accounts/templates/accounts/account_update_form.html:4
 #: contuga/contrib/categories/templates/categories/category_update_form.html:4
@@ -282,37 +224,45 @@ msgctxt "noun"
 msgid "Update"
 msgstr "Промяна"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:8
-msgid "Stats"
+#: contuga/contrib/accounts/tests/test_api_detail.py:63
+#: contuga/contrib/accounts/tests/test_api_detail.py:123
+#: contuga/contrib/categories/tests/test_api_detail.py:55
+#: contuga/contrib/categories/tests/test_api_detail.py:106
+#: contuga/contrib/settings/tests/test_api_detail.py:96
+#: contuga/contrib/settings/tests/test_api_detail.py:175
+#: contuga/contrib/transactions/tests/test_api_detail.py:79
+#: contuga/contrib/transactions/tests/test_api_detail.py:173
+#: contuga/contrib/users/tests/test_api_detail.py:51
+#: contuga/contrib/users/tests/test_api_detail.py:98
+msgid "Not found."
+msgstr "Не е открит."
+
+#: contuga/contrib/analytics/templates/analytics/analytics.html:10
+#: contuga/templates/base/includes/footer.html:98
+#: contuga/templates/base/includes/navigation.html:64
+msgid "Statistics"
 msgstr "Статистика"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:26
-msgid "Number of transactions by type"
-msgstr "Брой на трансакции от тип"
+#: contuga/contrib/analytics/templates/analytics/analytics.html:11
+msgid "Monthly reports to help you analyze your financial performance."
+msgstr "Месечни отчети за лесно анализиране на финансовото представяне."
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:27
-msgid "Expenditures"
-msgstr "Разход"
-
-#: contuga/contrib/analytics/templates/analytics/analytics.html:27
-msgid "Incomes"
+#: contuga/contrib/analytics/templates/analytics/analytics.html:44
+#: contuga/contrib/transactions/constants.py:6
+msgid "Income"
 msgstr "Приход"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:33
-msgid "Volume by type"
-msgstr "Обем от тип"
+#: contuga/contrib/analytics/templates/analytics/analytics.html:49
+msgid "Expenditures"
+msgstr "Разход"
 
 #: contuga/contrib/categories/models.py:21
 #: contuga/contrib/categories/templates/categories/category_list.html:4
 #: contuga/contrib/categories/templates/categories/category_list.html:10
-#: contuga/templates/base/includes/header.html:47
+#: contuga/templates/base/includes/footer.html:60
+#: contuga/templates/base/includes/navigation.html:51
 msgid "Categories"
 msgstr "Категории"
-
-#: contuga/contrib/categories/templates/categories/category_confirm_delete.html:4
-#: contuga/contrib/transactions/templates/transactions/transaction_confirm_delete.html:4
-msgid "Confirm deletion"
-msgstr "Потвърди изтриване"
 
 #: contuga/contrib/categories/templates/categories/category_confirm_delete.html:13
 msgid "Are you sure you want to delete this category?"
@@ -325,6 +275,75 @@ msgstr "Детайли за категория"
 #: contuga/contrib/categories/templates/categories/category_form.html:4
 msgid "Create category"
 msgstr "Създай категория"
+
+#: contuga/contrib/categories/templates/categories/category_list.html:14
+msgid "No categories"
+msgstr "Няма открити категории"
+
+#: contuga/contrib/pages/constants.py:6
+msgid "Left"
+msgstr "Отляво"
+
+#: contuga/contrib/pages/constants.py:6
+msgid "Right"
+msgstr "Отдясно"
+
+#: contuga/contrib/pages/constants.py:11
+msgid "Home"
+msgstr "Начална страница"
+
+#: contuga/contrib/pages/constants.py:11
+msgid "Analytics"
+msgstr "Анализ"
+
+#: contuga/contrib/pages/models.py:15 contuga/contrib/transactions/models.py:16
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:10
+msgid "Type"
+msgstr "Тип"
+
+#: contuga/contrib/pages/models.py:19
+msgid "Title"
+msgstr "Заглавие"
+
+#: contuga/contrib/pages/models.py:20
+msgid "Slug"
+msgstr "Слъг"
+
+#: contuga/contrib/pages/models.py:22
+msgid "Background image"
+msgstr "Фоново изображение"
+
+#: contuga/contrib/pages/models.py:26
+msgid "Page"
+msgstr "Страница"
+
+#: contuga/contrib/pages/models.py:27
+msgid "Pages"
+msgstr "Страници"
+
+#: contuga/contrib/pages/models.py:42
+msgid "Image"
+msgstr "Изображение"
+
+#: contuga/contrib/pages/models.py:46
+msgid "Image position"
+msgstr "Позиция на изображението"
+
+#: contuga/contrib/pages/models.py:54
+msgid "Page section"
+msgstr "Секция на страницата"
+
+#: contuga/contrib/pages/models.py:55
+msgid "Page sections"
+msgstr "Секции на страниците"
+
+#: contuga/contrib/pages/templates/pages/home.html:10
+msgid "Contuga"
+msgstr ""
+
+#: contuga/contrib/pages/templates/pages/home.html:11
+msgid "Simple web-based expense manager."
+msgstr "Прост уеб-базиран инструмент за управление на разходите."
 
 #: contuga/contrib/settings/models.py:20
 #: contuga/contrib/settings/templates/settings/settings_detail.html:16
@@ -346,7 +365,8 @@ msgstr "Настройки на всички потребители"
 
 #: contuga/contrib/settings/templates/settings/settings_detail.html:4
 #: contuga/contrib/settings/templates/settings/settings_detail.html:10
-#: contuga/templates/base/includes/header.html:70
+#: contuga/templates/base/includes/footer.html:85
+#: contuga/templates/base/includes/navigation.html:78
 msgid "Settings"
 msgstr "Настройки"
 
@@ -358,9 +378,9 @@ msgstr "Не е посочено"
 msgid "Change settings"
 msgstr "Промяна на настройките"
 
-#: contuga/contrib/transactions/constants.py:6
-msgid "Income"
-msgstr "Приход"
+#: contuga/contrib/settings/tests/test_api_list.py:132
+msgid "Method \"POST\" not allowed."
+msgstr "Метод \"POST\" не е разрешен."
 
 #: contuga/contrib/transactions/constants.py:6
 msgid "Expenditure"
@@ -425,11 +445,6 @@ msgid ""
 msgstr ""
 "Трябва да посочите обменен курс, ако двете сметки са в различна валута."
 
-#: contuga/contrib/transactions/models.py:16
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:10
-msgid "Type"
-msgstr "Тип"
-
 #: contuga/contrib/transactions/models.py:50
 msgid "Transaction"
 msgstr "Трансакция"
@@ -437,7 +452,8 @@ msgstr "Трансакция"
 #: contuga/contrib/transactions/models.py:51
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:5
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:4
-#: contuga/templates/base/includes/header.html:18
+#: contuga/templates/base/includes/footer.html:17
+#: contuga/templates/base/includes/navigation.html:22
 msgid "Transactions"
 msgstr "Трансакции"
 
@@ -451,12 +467,12 @@ msgstr "Експортиране"
 msgid "Apply"
 msgstr "Приложи"
 
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:14
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:24
 msgctxt "transaction"
 msgid "Created at"
 msgstr "Създадена на"
 
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:16
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:26
 msgctxt "transaction"
 msgid "Updated at"
 msgstr "Обновена на"
@@ -505,9 +521,9 @@ msgid "Add transaction"
 msgstr "Добави трансакция"
 
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:13
-#: contuga/templates/base/includes/header.html:25
-#: contuga/templates/base/includes/header.html:41
-#: contuga/templates/base/includes/header.html:54
+#: contuga/templates/base/includes/navigation.html:29
+#: contuga/templates/base/includes/navigation.html:45
+#: contuga/templates/base/includes/navigation.html:58
 msgid "Add new"
 msgstr "Добави нова"
 
@@ -671,6 +687,18 @@ msgstr "150 символа или по-малко. Букви, цифри и @/.
 msgid "A user with that username already exists."
 msgstr "Потребител с това потребителско име вече съществува."
 
+#: contuga/contrib/users/models.py:31
+msgid "User"
+msgstr "Потребител"
+
+#: contuga/contrib/users/models.py:32
+msgid "Users"
+msgstr "Потребители"
+
+#: contuga/contrib/users/serializers.py:48
+msgid "Invalid current password"
+msgstr "Невалидна текуща парола"
+
 #: contuga/contrib/users/templates/users/activation_complete.html:4
 msgid "Successful activation"
 msgstr "Успешна активация"
@@ -694,7 +722,8 @@ msgstr "Неуспешна активация"
 #: contuga/contrib/users/templates/users/login.html:4
 #: contuga/contrib/users/templates/users/login.html:25
 #: contuga/contrib/users/templates/users/registration_form.html:19
-#: contuga/templates/base/includes/header.html:85
+#: contuga/templates/base/includes/footer.html:107
+#: contuga/templates/base/includes/navigation.html:95
 msgid "Login"
 msgstr "Вход"
 
@@ -704,7 +733,8 @@ msgstr "Все още нямате акаунт?"
 
 #: contuga/contrib/users/templates/users/login.html:23
 #: contuga/contrib/users/templates/users/registration_form.html:22
-#: contuga/templates/base/includes/header.html:88
+#: contuga/templates/base/includes/footer.html:114
+#: contuga/templates/base/includes/navigation.html:100
 msgid "Register"
 msgstr "Регистрация"
 
@@ -876,7 +906,7 @@ msgstr "Трансакции"
 msgid "Total categories"
 msgstr "Категории"
 
-#: contuga/contrib/users/views.py:30
+#: contuga/contrib/users/views.py:31
 msgid ""
 "Redirection loop for authenticated user detected. Check that your "
 "LOGIN_REDIRECT_URL doesn't point to registration page."
@@ -884,27 +914,27 @@ msgstr ""
 "Открит е цикъл на препращане. Проверете дали LOGIN_REDIRECT_URL не води към "
 "регистрационната форма."
 
-#: contuga/settings/components/base.py:133
+#: contuga/settings/components/base.py:138
 msgid "Food and drinks"
 msgstr "Храни и напитки"
 
-#: contuga/settings/components/base.py:134
+#: contuga/settings/components/base.py:139
 msgid "Entertainment"
 msgstr "Забавления"
 
-#: contuga/settings/components/base.py:135
+#: contuga/settings/components/base.py:140
 msgid "Bills"
 msgstr "Сметки"
 
-#: contuga/settings/components/base.py:136
+#: contuga/settings/components/base.py:141
 msgid "Transport"
 msgstr "Транспорт"
 
-#: contuga/settings/components/base.py:137
+#: contuga/settings/components/base.py:142
 msgid "Drugs and pharmaceuticals"
 msgstr "Лекарства и козметика"
 
-#: contuga/settings/components/base.py:138
+#: contuga/settings/components/base.py:143
 msgid "Other"
 msgstr "Други"
 
@@ -921,32 +951,65 @@ msgstr "разходи, приходи, управление, сметки, па
 msgid "Hristo Gatsinski"
 msgstr "Христо Гацински"
 
-#: contuga/templates/base/includes/header.html:22
-#: contuga/templates/base/includes/header.html:38
-#: contuga/templates/base/includes/header.html:51
-msgid "View all"
-msgstr "Виж всички"
+#: contuga/templates/base/includes/footer.html:8
+#: contuga/templates/base/includes/navigation.html:7
+msgid "Contuga logo"
+msgstr ""
 
-#: contuga/templates/base/includes/header.html:28
+#: contuga/templates/base/includes/footer.html:23
+msgid "View all transactions"
+msgstr "Всички трансакции"
+
+#: contuga/templates/base/includes/footer.html:28
+msgid "Add new transaction"
+msgstr "Добави трансакция"
+
+#: contuga/templates/base/includes/footer.html:33
+#: contuga/templates/base/includes/navigation.html:32
 msgid "Add new transfer"
 msgstr "Добави нов превод"
 
-#: contuga/templates/base/includes/header.html:67
+#: contuga/templates/base/includes/footer.html:47
+msgid "View all accounts"
+msgstr "Всички сметки"
+
+#: contuga/templates/base/includes/footer.html:52
+msgid "Add new account"
+msgstr "Добави сметка"
+
+#: contuga/templates/base/includes/footer.html:66
+msgid "View all categories"
+msgstr "Всички категории"
+
+#: contuga/templates/base/includes/footer.html:71
+msgid "Add new category"
+msgstr "Добави категория"
+
+#: contuga/templates/base/includes/footer.html:79
+#: contuga/templates/base/includes/navigation.html:75
 msgid "Profile"
 msgstr "Профил"
 
-#: contuga/templates/base/includes/header.html:73
+#: contuga/templates/base/includes/footer.html:90
+#: contuga/templates/base/includes/navigation.html:81
 msgid "Change password"
 msgstr "Промени парола"
 
-#: contuga/templates/base/includes/header.html:76
+#: contuga/templates/base/includes/footer.html:121
+#: contuga/templates/base/includes/navigation.html:105
+msgid "Reset password"
+msgstr "Забравена парола"
+
+#: contuga/templates/base/includes/navigation.html:26
+#: contuga/templates/base/includes/navigation.html:42
+#: contuga/templates/base/includes/navigation.html:55
+msgid "View all"
+msgstr "Виж всички"
+
+#: contuga/templates/base/includes/navigation.html:84
 msgid "Logout"
 msgstr "Изход"
 
-#: contuga/templates/base/includes/header.html:81
-msgid "User"
-msgstr "Потребител"
-
-#: contuga/templates/base/includes/header.html:91
-msgid "Reset password"
-msgstr "Забравена парола"
+#: contuga/tests.py:23
+msgid "Authentication credentials were not provided."
+msgstr "Данните за автентификация не бяха предоставени."

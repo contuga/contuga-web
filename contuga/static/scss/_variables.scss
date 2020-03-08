@@ -1,4 +1,10 @@
-@import '../bootstrap/scss/_functions';
-@import '../bootstrap/scss/_variables.scss';
+@import "../bootstrap/scss/_functions";
+@import "../bootstrap/scss/_variables.scss";
+
+/* Custom colors */
+$bay-of-many: #254c7c;
+$whitesmoke: #f5f5f5;
 
 /* Override Bootstrap Variables here */
+$blue: $bay-of-many;
+$primary: $bay-of-many;

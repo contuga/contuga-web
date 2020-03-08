@@ -32,11 +32,9 @@
     {% render_block "css" %}
   </head>
   <body>
-    {% include "base/includes/header.html" %}
+    {% include "base/includes/navigation.html" %}
 
-    <main>
-      {% block content %}{% endblock content %}
-    </main>
+    {% block content %}{% endblock content %}
 
     {% include "base/includes/footer.html" %}
 
