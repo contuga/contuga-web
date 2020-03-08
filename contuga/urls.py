@@ -14,6 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.views import generic
@@ -60,5 +62,10 @@ urlpatterns = i18n_patterns(
         name="browserconfig",
     ),
     path("manifest.json", views.ManifestView.as_view(), name="manifest"),
-    path("", include(("contuga.contrib.analytics.urls", "analytics"))),
+    path("analytics", include(("contuga.contrib.analytics.urls", "analytics"))),
+    path("", include(("contuga.contrib.pages.urls", "pages"))),
 )
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
