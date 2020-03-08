@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Project apps
     "contuga",
-    "contuga.contrib.home.apps.HomeConfig",
+    "contuga.contrib.pages.apps.PagesConfig",
     "contuga.contrib.categories.apps.CategoriesConfig",
     "contuga.contrib.transactions.apps.TransactionsConfig",
     "contuga.contrib.analytics.apps.AnalyticsConfig",
@@ -128,7 +128,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.11/topics/auth/default/
 # https://django-registration.readthedocs.io/en/3.0.1/
 LOGIN_URL = "/users/login/"
-LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "transactions:list"
+LOGOUT_REDIRECT_URL = "/"
 
 TIME_ZONE = "Europe/Sofia"
 USE_TZ = True
