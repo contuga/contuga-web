@@ -25,11 +25,21 @@ class AccountListView(
     model = models.Account
     paginate_by = 20
 
+    def get_queryset(self):
+        return super().get_queryset()
+
 
 class AccountDetailView(
     OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.DetailView
 ):
     model = models.Account
+
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .prefetch_related("transactions", "transactions__category")
+        )
 
 
 class AccountUpdateView(
