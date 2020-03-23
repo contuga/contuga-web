@@ -12,6 +12,7 @@ from import_export.mixins import ExportViewFormMixin
 from rest_framework import viewsets, permissions
 
 from contuga.contrib.accounts import models as account_models
+from contuga.contrib.settings import models as settings_models
 from contuga.mixins import OnlyAuthoredByCurrentUserMixin
 from contuga import views
 from . import models, filters, resources, forms, constants, serializers
@@ -42,7 +43,11 @@ class TransactionCreateView(
 
     def get_form(self):
         form = super().get_form()
-        settings = self.request.user.settings
+        settings = (
+            settings_models.Settings.objects.filter(user=self.request.user)
+            .select_related("default_category", "default_account")
+            .first()
+        )
 
         category_field = form.fields["category"]
         category_field.initial = settings.default_category
@@ -70,6 +75,9 @@ class TransactionListView(
     resource_class = resources.TransactionResource
     paginate_by = 50
     success_url = reverse_lazy("transactions:list")
+
+    def get_queryset(self):
+        return super().get_queryset().select_related("category", "account")
 
 
 class TransactionDetailView(
