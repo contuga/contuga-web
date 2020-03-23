@@ -31,6 +31,13 @@ class AccountDetailView(
 ):
     model = models.Account
 
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .prefetch_related("transactions", "transactions__category")
+        )
+
 
 class AccountUpdateView(
     OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.UpdateView
