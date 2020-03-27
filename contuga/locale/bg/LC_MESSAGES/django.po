@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 20:21+0200\n"
+"POT-Creation-Date: 2020-03-27 23:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -905,6 +905,10 @@ msgstr "Трансакции"
 #: contuga/contrib/users/templates/users/user_detail.html:28
 msgid "Total categories"
 msgstr "Категории"
+
+#: contuga/contrib/users/templates/users/user_detail.html:32
+msgid "Total accounts"
+msgstr "Сметки"
 
 #: contuga/contrib/users/views.py:31
 msgid ""
