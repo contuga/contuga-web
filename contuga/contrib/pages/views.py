@@ -1,7 +1,15 @@
-from django.views.generic.base import TemplateView
-from django.shortcuts import redirect
+from django.views.generic.base import TemplateView, RedirectView
+from django.urls import reverse
 
 from . import models, constants
+
+
+class PageRedirectView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return reverse("transactions:list")
+        else:
+            return reverse("pages:home")
 
 
 class HomeView(TemplateView):
@@ -17,8 +25,3 @@ class HomeView(TemplateView):
         )
 
         return context
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect("transactions:list")
-        return super().dispatch(request, *args, **kwargs)
