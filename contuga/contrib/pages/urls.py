@@ -1,8 +1,8 @@
-from django.conf.urls import re_path
+from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    re_path(r"^$", views.PageRedirectView.as_view(), name="redirect"),
-    re_path(r"^home/$", views.HomeView.as_view(), name="home"),
+    path("", views.PageRedirectView.as_view(), name="redirect"),
+    path("home/", views.HomeView.as_view(), name="home"),
 ]

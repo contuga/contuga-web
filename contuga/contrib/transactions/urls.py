@@ -1,24 +1,20 @@
-from django.conf.urls import re_path
+from django.urls import path
 from . import views
 
 urlpatterns = [
-    re_path(r"^$", views.TransactionListView.as_view(), name="list"),
-    re_path(r"^(?P<pk>\d+)/$", views.TransactionDetailView.as_view(), name="detail"),
-    re_path(
-        r"^transfer/$",
+    path("", views.TransactionListView.as_view(), name="list"),
+    path("<int:pk>/", views.TransactionDetailView.as_view(), name="detail"),
+    path(
+        "transfer/",
         views.InternalTransferFormView.as_view(),
         name="internal_transfer_form",
     ),
-    re_path(
-        r"^transfer/success$",
+    path(
+        "transfer/success/",
         views.InternalTransferSuccessView.as_view(),
         name="internal_transfer_success",
     ),
-    re_path(r"^new/$", views.TransactionCreateView.as_view(), name="create"),
-    re_path(
-        r"^(?P<pk>\d+)/update/$", views.TransactionUpdateView.as_view(), name="update"
-    ),
-    re_path(
-        r"^(?P<pk>\d+)/delete/$", views.TransactionDeleteView.as_view(), name="delete"
-    ),
+    path("new/", views.TransactionCreateView.as_view(), name="create"),
+    path("<int:pk>/update/", views.TransactionUpdateView.as_view(), name="update"),
+    path("<int:pk>/delete/", views.TransactionDeleteView.as_view(), name="delete"),
 ]
