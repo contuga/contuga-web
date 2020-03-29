@@ -149,6 +149,35 @@ class TransactionViewTests(TestCase):
             fetch_redirect_response=True,
         )
 
+    def test_update_get(self):
+        url = reverse("transactions:update", kwargs={"pk": self.transaction.pk})
+        response = self.client.get(url)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert instance is correct
+        instance = response.context.get("object")
+        self.assertEqual(instance, self.transaction)
+
+        # Assert initial form data is correct
+        form = response.context.get("form")
+        form_data = {
+            "type": form.initial["type"],
+            "amount": form.initial["amount"],
+            "category": form.initial["category"],
+            "account": form.initial["account"],
+            "description": form.initial["description"],
+        }
+        expected_data = {
+            "type": self.transaction.type,
+            "amount": self.transaction.amount,
+            "category": self.transaction.category.pk,
+            "account": self.transaction.account.pk,
+            "description": self.transaction.description,
+        }
+        self.assertDictEqual(form_data, expected_data)
+
     def test_update(self):
         category = Category.objects.create(
             name="Second category name",

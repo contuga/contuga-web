@@ -49,6 +49,13 @@ class CategoryViewTests(TestCase):
         for field in fields:
             self.assertContains(response=response, text=field)
 
+    def test_create_get(self):
+        url = reverse("categories:create")
+        response = self.client.get(url)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
     def test_create(self):
         data = {"name": "New category name", "description": "New category description"}
         old_category_count = Category.objects.count()
@@ -76,6 +83,29 @@ class CategoryViewTests(TestCase):
             target_status_code=200,
             fetch_redirect_response=True,
         )
+
+    def test_update_get(self):
+        url = reverse("categories:update", kwargs={"pk": self.category.pk})
+        response = self.client.get(url)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert instance is correct
+        instance = response.context.get("object")
+        self.assertEqual(instance, self.category)
+
+        # Assert initial form data is correct
+        form = response.context.get("form")
+        form_data = {
+            "name": form.initial["name"],
+            "description": form.initial["description"],
+        }
+        expected_data = {
+            "name": self.category.name,
+            "description": self.category.description,
+        }
+        self.assertDictEqual(form_data, expected_data)
 
     def test_update(self):
         data = {"name": "New category name", "description": "New category description"}
