@@ -53,6 +53,7 @@ class AccountListTestCase(APITestCase):
                     ),
                     "description": self.account.description,
                     "is_active": self.account.is_active,
+                    "balance": f"{self.account.balance:.2f}",
                     "updated_at": self.account.updated_at.astimezone().isoformat(),
                     "created_at": self.account.created_at.astimezone().isoformat(),
                 }
@@ -90,6 +91,7 @@ class AccountListTestCase(APITestCase):
             ),
             "description": account.description,
             "is_active": account.is_active,
+            "balance": f"{account.balance:.2f}",
             "updated_at": account.updated_at.astimezone().isoformat(),
             "created_at": account.created_at.astimezone().isoformat(),
         }
@@ -127,6 +129,7 @@ class AccountListTestCase(APITestCase):
             ),
             "description": account.description,
             "is_active": account.is_active,
+            "balance": f"{account.balance:.2f}",
             "updated_at": account.updated_at.astimezone().isoformat(),
             "created_at": account.created_at.astimezone().isoformat(),
         }
