@@ -30,7 +30,6 @@ class AccountsModelsTestCase(TestCase):
             account=self.account,
         )
 
-        del self.account.balance
         self.assertEqual(self.account.balance, Decimal("100.50"))
 
         Transaction.objects.create(

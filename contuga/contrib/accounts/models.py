@@ -1,6 +1,5 @@
 from django.db import models
 from django.urls import reverse
-from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
@@ -21,6 +20,9 @@ class Account(TimestampModel):
     )
     description = models.CharField(_("Description"), max_length=1000, blank=True)
     is_active = models.BooleanField(_("Is active"), default=True)
+    balance = models.DecimalField(
+        _("Balance"), max_digits=22, decimal_places=2, default=0
+    )
 
     objects = managers.AccountManager()
 
@@ -46,8 +48,7 @@ class Account(TimestampModel):
     def latest_transactions(self, count=20):
         return self.transactions.all()[:count]
 
-    @cached_property
-    def balance(self):
+    def calculate_balance(self):
         expenditures, incomes = self.transactions.aggregate(
             expenditures=Sum("amount", filter=Q(type="expenditure")),
             incomes=Sum("amount", filter=Q(type="income")),

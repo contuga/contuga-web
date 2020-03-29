@@ -7,7 +7,7 @@ class AccountSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Account
         fields = "__all__"
-        extra_kwargs = {"owner": {"read_only": True}}
+        extra_kwargs = {"owner": {"read_only": True}, "balance": {"read_only": True}}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
