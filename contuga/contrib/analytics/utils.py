@@ -16,6 +16,7 @@ def get_aggregated_data(transactions, start_date):
         .values(
             "account__name",
             "account__pk",
+            "account__balance",
             "account__currency",
             "created_at__month",
             "created_at__year",
@@ -39,6 +40,7 @@ def group_reports(aggregated_data):
                 "pk": item["account__pk"],
                 "name": item["account__name"],
                 "currency": item["account__currency"],
+                "balance": item["account__balance"],
                 "reports": {},
             },
         )
@@ -55,11 +57,9 @@ def group_reports(aggregated_data):
     return grouped_reports
 
 
-def calculate_balance(report, next_report, balances, primary_key, today):
+def calculate_balance(report, next_report, account_balance, today):
     if report["year"] == today.year and report["month"] == today.month:
-        return next(
-            x for x in balances if x["account__pk"] == primary_key
-        )["balance"]
+        return account_balance
     else:
         return (
             next_report.get("balance", 0)
@@ -68,7 +68,7 @@ def calculate_balance(report, next_report, balances, primary_key, today):
         )
 
 
-def process_reports(start_date, grouped_reports, balances):
+def process_reports(start_date, grouped_reports):
     start_date_string = f"{start_date.year}{str(start_date.month).zfill(2)}"
 
     for primary_key, account in grouped_reports.items():
@@ -87,8 +87,7 @@ def process_reports(start_date, grouped_reports, balances):
             report["balance"] = calculate_balance(
                 report=report,
                 next_report=account["reports"][next_month],
-                balances=balances,
-                primary_key=primary_key,
+                account_balance=account["balance"],
                 today=today
             )
 
@@ -101,6 +100,8 @@ def process_reports(start_date, grouped_reports, balances):
                 month = 12
 
             date_string = f"{year}{str(month).zfill(2)}"
+
+        del account["balance"]
 
         account["reports"] = sorted(
             account["reports"].values(), key=lambda x: (x["year"], x["month"])
@@ -118,18 +119,7 @@ def get_monthly_reports(user, start_date=None):
     start_date = datetime.combine(date=start_date, time=time.min, tzinfo=pytz.UTC)
 
     aggregated_data = get_aggregated_data(transactions, start_date)
-
-    balances = (
-        transactions.values("account__pk").annotate(
-            balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
-            - Coalesce(Sum("amount", filter=Q(type="expenditure")), 0)
-        )
-        # order_by() is used to remove the default ordering from Group By
-        # https://docs.djangoproject.com/en/2.2/topics/db/aggregation/#interaction-with-default-ordering-or-order-by
-        .order_by()
-    )
-
     grouped_reports = group_reports(aggregated_data)
-    processed_reports = process_reports(start_date, grouped_reports, balances)
+    processed_reports = process_reports(start_date, grouped_reports)
 
     return list(processed_reports.values())
