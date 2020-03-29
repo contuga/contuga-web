@@ -27,6 +27,45 @@ class SettingsViewTests(TestCase):
         # Assert correct model is retrieved
         self.assertEqual(response.context["settings"], self.settings)
 
+    def test_update_get(self):
+        category = Category.objects.create(
+            name="Category name",
+            author=self.user,
+            description="Category description",
+        )
+        account = Account.objects.create(
+            name="Account name",
+            currency=BGN,
+            owner=self.user,
+            description="Account description",
+        )
+
+        self.settings.default_category = category
+        self.settings.default_account = account
+        self.settings.save()
+
+        url = reverse("settings:update")
+        response = self.client.get(url)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert instance is correct
+        instance = response.context.get("object")
+        self.assertEqual(instance, self.settings)
+
+        # Assert initial form data is correct
+        form = response.context.get("form")
+        form_data = {
+            "default_category": form.initial["default_category"],
+            "default_account": form.initial["default_account"],
+        }
+        expected_data = {
+            "default_category": self.settings.default_category.pk,
+            "default_account": self.settings.default_account.pk,
+        }
+        self.assertDictEqual(form_data, expected_data)
+
     def test_update(self):
         category = Category.objects.create(
             name="Second category name",
