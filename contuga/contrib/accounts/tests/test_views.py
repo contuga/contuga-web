@@ -56,6 +56,13 @@ class AccountsTestCase(TestCase):
         for field in fields:
             self.assertContains(response=response, text=field)
 
+    def test_create_get(self):
+        url = reverse("accounts:create")
+        response = self.client.get(url)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
     def test_create(self):
         data = {
             "name": "New account name",
@@ -91,6 +98,29 @@ class AccountsTestCase(TestCase):
             target_status_code=200,
             fetch_redirect_response=True,
         )
+
+    def test_update_get(self):
+        url = reverse("accounts:update", kwargs={"pk": self.account.pk})
+        response = self.client.get(url)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert instance is correct
+        instance = response.context.get("object")
+        self.assertEqual(instance, self.account)
+
+        # Assert initial form data is correct
+        form = response.context.get("form")
+        form_data = {
+            "name": form.initial["name"],
+            "description": form.initial["description"],
+        }
+        expected_data = {
+            "name": self.account.name,
+            "description": self.account.description,
+        }
+        self.assertDictEqual(form_data, expected_data)
 
     def test_update(self):
         data = {"name": "New account name", "description": "New account description"}
