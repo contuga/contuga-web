@@ -26,3 +26,7 @@
       entry: pipenv run test
       language: python
       pass_filenames: false
+- repo: https://github.com/prettier/prettier
+  rev: master
+  hooks:
+    - id: prettier
