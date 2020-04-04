@@ -1,5 +1,5 @@
 {% extends "base/base.html" %}
-{% load i18n %}
+{% load i18n static widget_tweaks %}
 
 {% block content %}
   <main class="analytics-page">
@@ -13,87 +13,204 @@
         </div>
       </div>
     </header>
-    <div class="container-fluid" id="chartContainer">
+
+    <div class="container-fluid">
+      <section class="row form">
+        <div class="col-12 col-md-11 offset-md-1">
+          <form method="GET" id="filterForm">
+            <div class="row">
+              <div class="col-12 col-md-2">
+                {% include 'contuga/forms/field.html' with field=form.report_unit %}
+              </div>
+              <div class="col-12 col-md-2">
+                {% include 'contuga/forms/field.html' with field=form.start_date|attr:'autocomplete:off' %}
+              </div>
+              <div class="col-12 col-md-2 d-flex align-items-end mb-3">
+                <button type="submit" class="btn btn-primary">
+                  {% trans "Apply" %}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+    {% if reports %}
+      <div class="container-fluid" id="chartContainer">
+    {% else %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-10 offset-md-1">
+          <div class="alert alert-primary" role="alert">
+            {% trans "No data" %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
     </div>
   </main>
 {% endblock %}
 
 {% block js %}
-  <script type="text/javascript">
-    var reports = {{ reports | safe }};
+  {% if reports %}
+    <script type="text/javascript">
+      jQuery(function($) {
+        var reports = {{ reports|safe }};
 
-    Object.keys(reports).forEach(function(key) {
-      var title = '<div class="row"><div class="col"><h2>' + reports[key]["name"] + '</h2></div></div>';
+        Object.keys(reports).forEach(function(key) {
+          var title = '<div class="row"><div class="col"><h2>' + reports[key]["name"] + '</h2></div></div>';
 
-      var barChartId = 'barChart' + key
-      var barChart = '<div class="col-md-5"><canvas id="' + barChartId + '"></canvas></div>';
+          var barChartId = 'barChart' + key
+          var barChart = '<div class="col-md-5"><canvas id="' + barChartId + '"></canvas></div>';
 
-      var lineChartId = 'lineChart' + key
-      var lineChart = '<div class="col-md-5"><canvas id="' + lineChartId + '"></canvas></div>';
+          var lineChartId = 'lineChart' + key
+          var lineChart = '<div class="col-md-5"><canvas id="' + lineChartId + '"></canvas></div>';
 
-      var $row = $('<div class="row">').append(barChart, lineChart)
-      var $col = $('<div class="col-12 col-md-11 offset-md-1">').append(title, $row)
-      var $section = $('<section class="row">').append($col)
+          var $row = $('<div class="row">').append(barChart, lineChart)
+          var $col = $('<div class="col-12 col-md-11 offset-md-1">').append(title, $row)
+          var $section = $('<section class="row">').append($col)
 
-      $('#chartContainer').append($section)
+          $('#chartContainer').append($section)
 
-      var labels = reports[key]["reports"].map((it) => `${it.month}.${it.year}`);
-      var datasets = [
-          {
-              label: '{% trans "Income" %}',
-              data: reports[key]["reports"].map((it) => it.income),
-              backgroundColor: '#28a745'
-          },
-          {
-              label: '{% trans "Expenditures" %}',
-              data: reports[key]["reports"].map((it) => it.expenditures),
-              backgroundColor: '#dc3545'
-          }
-      ]
-
-      createChart('bar', barChartId, labels, datasets, reports[key]["currency"]);
-
-      var lineDatasets = [
-          {
-              label: '{% trans "Balance" %}',
-              data: reports[key]["reports"].map((it) => it.balance),
-              backgroundColor: '#254c7c'
-          }
-      ]
-
-      createChart('line', lineChartId, labels, lineDatasets, reports[key]["currency"]);
-    })
-
-    function createChart(type, element, labels, datasets, currency) {
-      var canvas = document.getElementById(element).getContext('2d');
-      var myChart = new Chart(canvas, {
-        type: type,
-        data: {
-          labels: labels,
-          datasets: datasets,
-        },
-        options: {
-          animation: false,
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          },
-          tooltips: {
-            enabled: true,
-            mode: 'single',
-            callbacks: {
-              label: function(tooltipItems, data) {
-                  return `${tooltipItems.yLabel.toLocaleString()} ${currency}`;
-              }
+          var labels = reports[key]["reports"].map((it) => {
+            if (it.day) {
+              return `${it.day}.${it.month}.${it.year}`
+            } else {
+              return `${it.month}.${it.year}`
             }
-          },
+          });
+          var datasets = [
+              {
+                  label: '{% trans "Income" %}',
+                  data: reports[key]["reports"].map((it) => it.income),
+                  backgroundColor: '#28a745'
+              },
+              {
+                  label: '{% trans "Expenditures" %}',
+                  data: reports[key]["reports"].map((it) => it.expenditures),
+                  backgroundColor: '#dc3545'
+              }
+          ]
+
+          createChart('bar', barChartId, labels, datasets, reports[key]["currency"]);
+
+          var lineDatasets = [
+              {
+                  label: '{% trans "Balance" %}',
+                  data: reports[key]["reports"].map((it) => it.balance),
+                  backgroundColor: '#254c7c'
+              }
+          ]
+
+          createChart('line', lineChartId, labels, lineDatasets, reports[key]["currency"]);
+        })
+
+        function createChart(type, element, labels, datasets, currency) {
+          var canvas = document.getElementById(element).getContext('2d');
+          var myChart = new Chart(canvas, {
+            type: type,
+            data: {
+              labels: labels,
+              datasets: datasets,
+            },
+            options: {
+              animation: false,
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              },
+              tooltips: {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                  label: function(tooltipItems, data) {
+                      return `${tooltipItems.yLabel.toLocaleString()} ${currency}`;
+                  }
+                }
+              },
+            }
+          });
         }
       });
-    }
+    </script>
+  {% endif %}
+  <script type="text/javascript">
+    jQuery(function($) {
+      var today = moment();
+      var dateRangePickerConfig = {
+        singleDatePicker: true,
+        autoUpdateInput: false,
+        showDropdowns: true,
+        ranges: {
+          '{% trans "Today" %}': [today, today],
+          '{% trans "Yesterday" %}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          '{% trans "Last 7 Days" %}': [moment().subtract(6, 'days'), today],
+          '{% trans "Last 30 Days" %}': [moment().subtract(29, 'days'), today],
+          '{% trans "This Month" %}': [moment().startOf('month'), moment().endOf('month')],
+          '{% trans "Last Month" %}': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        alwaysShowCalendars: true,
+        minDate: moment('2019-01-01'),
+        maxDate: today,
+        opens: "left",
+        locale: {
+          format: 'L',
+          applyLabel: '{% trans "Apply" %}',
+          cancelLabel: '{% trans "Clear" %}',
+          fromLabel: '{% trans "From" %}',
+          toLabel: '{% trans "To" %}',
+          customRangeLabel: '{% trans "Custom" %}',
+          daysOfWeek: [
+            '{% trans "Su" context "Day of the week" %}',
+            '{% trans "Mo" context "Day of the week" %}',
+            '{% trans "Tu" context "Day of the week" %}',
+            '{% trans "We" context "Day of the week" %}',
+            '{% trans "Th" context "Day of the week" %}',
+            '{% trans "Fr" context "Day of the week" %}',
+            '{% trans "Sa" context "Day of the week" %}'
+          ],
+          monthNames: [
+            '{% trans "January" %}',
+            '{% trans "February" %}',
+            '{% trans "March" %}',
+            '{% trans "April" %}',
+            '{% trans "May" %}',
+            '{% trans "June" %}',
+            '{% trans "July" %}',
+            '{% trans "August" %}',
+            '{% trans "September" %}',
+            '{% trans "October" %}',
+            '{% trans "November" %}',
+            '{% trans "December" %}'
+          ],
+          firstDay: 1
+        }
+      };
+
+      $('#id_start_date').on('apply.daterangepicker', function(event, picker) {
+        var startDate = picker.startDate.format(dateRangePickerConfig.locale.format);
+        $(this).val(startDate);
+      });
+
+      $('#id_start_date').on('cancel.daterangepicker', function(event, picker) {
+        $(this).val('');
+      });
+
+      $('#id_start_date').daterangepicker(dateRangePickerConfig);
+
+      $("#filterForm").on('submit', function(event){
+        $(this).find(":input").filter(function() {
+          return !this.value;
+        }).attr("disabled", "disabled");
+
+        return true;
+      });
+    });
   </script>
 
 {% endblock js %}
