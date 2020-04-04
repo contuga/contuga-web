@@ -16,7 +16,7 @@ from . import utils as test_utils
 UserModel = get_user_model()
 
 
-class AnalyticsTestCase(TestCase):
+class MonthlyReportsTestCase(TestCase):
     def setUp(self):
         self.now = timezone.now().astimezone()
         self.user = UserModel.objects.create_user(
@@ -35,9 +35,9 @@ class AnalyticsTestCase(TestCase):
             account=self.account, amount=Decimal("100")
         ).amount
 
-        result = utils.get_monthly_reports(self.account.owner)
+        result = utils.generate_reports(user=self.account.owner)
 
-        reports = test_utils.create_empty_reports(last_date=self.now, months=6)
+        reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
             {
                 "month": self.now.month,
@@ -80,11 +80,9 @@ class AnalyticsTestCase(TestCase):
             account=second_account, amount=Decimal("833.25")
         ).amount
 
-        result = utils.get_monthly_reports(self.account.owner)
+        result = utils.generate_reports(user=self.account.owner)
 
-        first_account_reports = test_utils.create_empty_reports(
-            last_date=self.now, months=6
-        )
+        first_account_reports = test_utils.create_empty_reports(last_date=self.now)
         second_account_reports = first_account_reports.copy()
 
         first_account_reports.append(
@@ -129,9 +127,9 @@ class AnalyticsTestCase(TestCase):
             account=self.account, amount=Decimal("100.50")
         ).amount
 
-        result = utils.get_monthly_reports(user=self.account.owner)
+        result = utils.generate_reports(user=self.account.owner)
 
-        reports = test_utils.create_empty_reports(last_date=self.now, months=6)
+        reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
             {
                 "month": self.now.month,
@@ -158,9 +156,9 @@ class AnalyticsTestCase(TestCase):
             account=self.account, amount=Decimal("310.40")
         ).amount
 
-        result = utils.get_monthly_reports(self.account.owner)
+        result = utils.generate_reports(user=self.account.owner)
 
-        reports = test_utils.create_empty_reports(last_date=self.now, months=6)
+        reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
             {
                 "month": self.now.month,
@@ -199,9 +197,9 @@ class AnalyticsTestCase(TestCase):
             account=self.account, amount=Decimal("100.50")
         ).amount
 
-        result = utils.get_monthly_reports(self.account.owner)
+        result = utils.generate_reports(user=self.account.owner)
 
-        reports = test_utils.create_empty_reports(last_date=self.now, months=6)
+        reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
             {
                 "month": self.now.month,
@@ -238,9 +236,9 @@ class AnalyticsTestCase(TestCase):
             account=self.account, amount=Decimal("100")
         ).amount
 
-        result = utils.get_monthly_reports(self.account.owner)
+        result = utils.generate_reports(user=self.account.owner)
 
-        reports = test_utils.create_empty_reports(last_date=self.now, months=6)
+        reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
             {
                 "month": self.now.month,
@@ -297,10 +295,10 @@ class AnalyticsTestCase(TestCase):
                 account=self.account, amount=Decimal("11.32")
             ).amount
 
-        result = utils.get_monthly_reports(self.account.owner)
+        result = utils.generate_reports(user=self.account.owner)
 
         reports = []
-        for count in reversed(range(3, 7)):
+        for count in reversed(range(3, 6)):
             date = self.now - relativedelta(months=count)
             reports.append(
                 {
@@ -391,9 +389,7 @@ class AnalyticsTestCase(TestCase):
                 account=self.account, amount=Decimal("11.32")
             ).amount
 
-        result = utils.get_monthly_reports(
-            self.account.owner, first_day_of_the_last_month
-        )
+        result = utils.generate_reports(self.account.owner, first_day_of_the_last_month)
 
         starting_balance = income_two_months_ago - expenditure_two_months_ago
 
