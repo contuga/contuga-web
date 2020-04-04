@@ -8,18 +8,30 @@ from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 from contuga.contrib.transactions.models import Transaction
+from .constants import DAYS, MONTHS
 
 
-def get_aggregated_data(transactions, start_date):
+REPORTS = {
+    MONTHS: {
+        "default_period": {"months": 5},
+        "query_values": ["created_at__month", "created_at__year"],
+    },
+    DAYS: {
+        "default_period": {"months": 1},
+        "query_values": ["created_at__day", "created_at__month", "created_at__year"],
+    },
+}
+
+
+def get_aggregated_data(transactions, start_date, end_date, query_values):
     return (
-        transactions.filter(created_at__gte=start_date)
+        transactions.filter(created_at__gte=start_date, created_at__lte=end_date)
         .values(
             "account__name",
             "account__pk",
             "account__balance",
             "account__currency",
-            "created_at__month",
-            "created_at__year",
+            *query_values,
         )
         .annotate(
             income=Coalesce(Sum("amount", filter=Q(type="income")), 0),
@@ -31,8 +43,16 @@ def get_aggregated_data(transactions, start_date):
     )
 
 
-def group_reports(aggregated_data):
+def construct_date_string(year, month, day=None):
+    if day:
+        return f"{year}{str(month).zfill(2)}{str(day).zfill(2)}"
+    else:
+        return f"{year}{str(month).zfill(2)}"
+
+
+def group_reports(aggregated_data, report_unit):
     grouped_reports = {}
+
     for item in aggregated_data:
         account = grouped_reports.setdefault(
             item["account__pk"],
@@ -48,17 +68,31 @@ def group_reports(aggregated_data):
         year = item["created_at__year"]
         month = item["created_at__month"]
 
-        account["reports"][f"{year}{str(month).zfill(2)}"] = {
-            "month": item["created_at__month"],
-            "year": item["created_at__year"],
+        report = {
+            "month": month,
+            "year": year,
             "income": item["income"],
             "expenditures": item["expenditures"],
         }
-    return grouped_reports
+
+        if report_unit == DAYS:
+            day = item["created_at__day"]
+            key = construct_date_string(year, month, day)
+            report["day"] = day
+        else:
+            key = construct_date_string(year, month)
+
+        account["reports"][key] = report
+
+    return list(grouped_reports.values())
 
 
 def calculate_balance(report, next_report, account_balance, today):
-    if report["year"] == today.year and report["month"] == today.month:
+    if (
+        report["year"] == today.year
+        and report["month"] == today.month
+        and report.get("day", today.day) == today.day
+    ):
         return account_balance
     else:
         return (
@@ -68,15 +102,16 @@ def calculate_balance(report, next_report, account_balance, today):
         )
 
 
-def process_reports(start_date, grouped_reports):
-    start_date_string = f"{start_date.year}{str(start_date.month).zfill(2)}"
+def process_monthly_reports(reports, start_date):
+    start_date_string = construct_date_string(start_date.year, start_date.month)
 
-    for primary_key, account in grouped_reports.items():
+    for account in reports:
         today = timezone.now().astimezone().date()
         year = today.year
         month = today.month
-        date_string = f"{year}{str(month).zfill(2)}"
-        next_month = date_string
+
+        date_string = construct_date_string(year, month)
+        next_date = date_string
 
         while date_string >= start_date_string:
             report = account["reports"].setdefault(
@@ -86,12 +121,12 @@ def process_reports(start_date, grouped_reports):
 
             report["balance"] = calculate_balance(
                 report=report,
-                next_report=account["reports"][next_month],
+                next_report=account["reports"][next_date],
                 account_balance=account["balance"],
-                today=today
+                today=today,
             )
 
-            next_month = date_string
+            next_date = date_string
 
             month -= 1
 
@@ -99,7 +134,7 @@ def process_reports(start_date, grouped_reports):
                 year -= 1
                 month = 12
 
-            date_string = f"{year}{str(month).zfill(2)}"
+            date_string = construct_date_string(year, month)
 
         del account["balance"]
 
@@ -107,19 +142,88 @@ def process_reports(start_date, grouped_reports):
             account["reports"].values(), key=lambda x: (x["year"], x["month"])
         )
 
-    return grouped_reports
+    return reports
 
 
-def get_monthly_reports(user, start_date=None):
+def process_daily_reports(reports, start_date):
+    start_date_string = construct_date_string(
+        start_date.year, start_date.month, start_date.day
+    )
+
+    for account in reports:
+        today = timezone.now().astimezone().date()
+        date = timezone.now().astimezone().date()
+        date_string = construct_date_string(date.year, date.month, date.day)
+        next_date = date_string
+
+        while date_string >= start_date_string:
+            report = account["reports"].setdefault(
+                date_string,
+                {
+                    "month": date.month,
+                    "year": date.year,
+                    "day": date.day,
+                    "income": 0,
+                    "expenditures": 0,
+                },
+            )
+
+            report["balance"] = calculate_balance(
+                report=report,
+                next_report=account["reports"][next_date],
+                account_balance=account["balance"],
+                today=today,
+            )
+
+            next_date = date_string
+
+            date = date - relativedelta(days=1)
+
+            date_string = construct_date_string(date.year, date.month, date.day)
+
+        del account["balance"]
+
+        account["reports"] = sorted(
+            account["reports"].values(), key=lambda x: (x["year"], x["month"], x["day"])
+        )
+
+    return reports
+
+
+def process_reports(reports, report_unit, start_date):
+    if report_unit == DAYS:
+        return process_daily_reports(reports=reports, start_date=start_date)
+    else:
+        return process_monthly_reports(reports=reports, start_date=start_date)
+
+
+def generate_reports(user, start_date=None, end_date=None, report_unit=MONTHS):
     transactions = Transaction.objects.filter(account__is_active=True, author=user)
 
+    # If empty_string is passed as report_unit
+    if not report_unit:
+        report_unit = MONTHS
+
+    conf = REPORTS[report_unit]
+
+    today = timezone.now().astimezone().date()
     if not start_date:
-        start_date = timezone.now().astimezone().date() - relativedelta(months=6)
+        start_date = today - relativedelta(**conf["default_period"])
+    if not end_date:
+        end_date = today
 
     start_date = datetime.combine(date=start_date, time=time.min, tzinfo=pytz.UTC)
+    end_date = datetime.combine(date=end_date, time=time.max, tzinfo=pytz.UTC)
 
-    aggregated_data = get_aggregated_data(transactions, start_date)
-    grouped_reports = group_reports(aggregated_data)
-    processed_reports = process_reports(start_date, grouped_reports)
+    aggregated_data = get_aggregated_data(
+        transactions=transactions,
+        start_date=start_date,
+        end_date=end_date,
+        query_values=conf["query_values"],
+    )
+    grouped_reports = group_reports(aggregated_data, report_unit=report_unit)
+    processed_reports = process_reports(
+        reports=grouped_reports, start_date=start_date, report_unit=report_unit
+    )
 
-    return list(processed_reports.values())
+    return processed_reports
