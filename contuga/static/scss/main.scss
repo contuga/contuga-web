@@ -55,6 +55,13 @@ section {
   &:nth-child(odd) {
     background: $whitesmoke;
   }
+  &.form {
+    padding: 1rem 0;
+    background: $white;
+    form {
+      margin-bottom: 0;
+    }
+  }
 
   @include media-breakpoint-down(sm) {
     padding: 2rem 0;
