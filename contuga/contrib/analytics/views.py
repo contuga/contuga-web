@@ -1,7 +1,5 @@
 import json
 
-from django import forms
-from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.views.generic.base import TemplateView
 from django.contrib.auth import mixins
@@ -12,8 +10,10 @@ from rest_framework.response import Response
 from contuga.contrib.pages import constants
 from contuga.contrib.pages.models import Page
 from . import utils
-from .serializers import MonthlyReportSerializer
-from .api_filters import MonthlyReportFilterBackend
+from .forms import ReportsFilterForm
+from .constants import MONTHS
+from .serializers import ReportsSerializer
+from .api_filters import ReportsFilterBackend
 
 
 class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
@@ -22,17 +22,36 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        reports = utils.get_monthly_reports(self.request.user)
-        context["reports"] = json.dumps(reports, cls=DjangoJSONEncoder)
+        reports = None
+        if len(self.request.GET):
+            form_data = self.request.GET.copy()
+            report_unit = form_data.get("report_unit")
+            form_data["report_unit"] = report_unit if report_unit else MONTHS
+            form = ReportsFilterForm(form_data)
+        else:
+            form = ReportsFilterForm()
 
+        if form.is_valid():
+            report_unit = form.cleaned_data.get("report_unit")
+            start_date = form.cleaned_data.get("start_date")
+            reports = utils.generate_reports(
+                user=self.request.user, report_unit=report_unit, start_date=start_date
+            )
+        else:
+            reports = utils.generate_reports(user=self.request.user)
+
+        if reports:
+            context["reports"] = json.dumps(reports, cls=DjangoJSONEncoder)
+
+        context["form"] = form
         context["page"] = Page.objects.filter(type=constants.ANALYTICS_TYPE).first()
 
         return context
 
 
 class AnalyticsViewSet(viewsets.ViewSet):
-    serlizer_class = MonthlyReportSerializer
-    filter_backends = (MonthlyReportFilterBackend,)
+    serlizer_class = ReportsSerializer
+    filter_backends = (ReportsFilterBackend,)
 
     def get_permissions(self):
         permission_classes = super().get_permissions()
@@ -40,17 +59,21 @@ class AnalyticsViewSet(viewsets.ViewSet):
         return permission_classes
 
     def list(self, request):
-        date_field = forms.DateField()
-        try:
-            start_date = date_field.clean(self.request.query_params.get("start_date"))
-        except ValidationError:
-            start_date = None
+        if len(self.request.query_params):
+            form = ReportsFilterForm(self.request.GET)
+        else:
+            form = ReportsFilterForm()
 
-        reports = utils.get_monthly_reports(
-            user=self.request.user, start_date=start_date
-        )
+        if form.is_valid():
+            report_unit = form.cleaned_data.get("report_unit")
+            start_date = form.cleaned_data.get("start_date")
+            reports = utils.generate_reports(
+                user=self.request.user, report_unit=report_unit, start_date=start_date
+            )
+        else:
+            reports = utils.generate_reports(user=self.request.user)
 
-        serializer = MonthlyReportSerializer(
+        serializer = ReportsSerializer(
             instance=reports, many=True, context={"request": request}
         )
 
