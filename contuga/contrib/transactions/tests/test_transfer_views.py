@@ -46,7 +46,7 @@ class InternalTransferViewTests(TestCase):
         )
 
         self.assertEqual(response.context["accounts"], expected_account_list)
-        self.assertIsInstance(response.context["form"], InternalTransferForm)
+        self.assertIsInstance(response.context.get("form"), InternalTransferForm)
 
     def test_tansfer_to_account_of_same_currency(self):
         second_account = self.create_account(prefix="Second")
