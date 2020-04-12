@@ -39,8 +39,8 @@
   {{ block.super }}
   <script type="text/javascript">
     jQuery(function($) {
-      var category_groups = {{ category_choices|safe }};
-      var $categoryField = $("#id_category");
+      const category_groups = {{ category_choices|safe }};
+      const $categoryField = $("#id_category");
 
       $("#id_type").on("change", function() {
         $categoryField.empty()
@@ -51,15 +51,15 @@
             .attr("selected", "")
         )
 
-        var categories = category_groups[$(this).val()];
-        categories.forEach(function(category) {
+        const categories = category_groups[$(this).val()];
+        for (category of categories) {
           $categoryField.append(
             $("<option></option>")
               .text(category.name)
               .attr("value", category.id)
               .attr("selected", category.selected)
           );
-        });
+        }
       });
     });
   </script>

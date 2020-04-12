@@ -34,8 +34,8 @@
   {{ block.super }}
   <script type="text/javascript">
     jQuery(function($) {
-      var today = moment();
-      var dateRangePickerConfig = {
+      const today = moment();
+      const dateRangePickerConfig = {
         autoUpdateInput: false,
         showDropdowns: true,
         ranges: {
@@ -85,9 +85,9 @@
       };
 
       $('#id_created_at, #id_updated_at').on('apply.daterangepicker', function(event, picker) {
-        var startDate = picker.startDate.format(dateRangePickerConfig.locale.format);
-        var endDate = picker.endDate.format(dateRangePickerConfig.locale.format);
-        $(this).val(startDate + ' - ' + endDate);
+        const startDate = picker.startDate.format(dateRangePickerConfig.locale.format);
+        const endDate = picker.endDate.format(dateRangePickerConfig.locale.format);
+        $(this).val(`${startDate} - ${endDate}`);
       });
 
       $('#id_created_at, #id_updated_at').on('cancel.daterangepicker', function(event, picker) {
