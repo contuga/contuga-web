@@ -19,6 +19,14 @@
         {% include "contuga/forms/includes/input.html" %}
       {% endif %}
 
+      {% block help_text %}
+        {% if field.help_text %}
+          <small class="form-text text-muted">
+            {{ field.help_text|striptags }}
+          </small>
+        {% endif %}
+      {% endblock %}
+
       {% block errors %}
         {% if field.errors %}
           <small class="text-danger">

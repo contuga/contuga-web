@@ -1,20 +1,22 @@
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 
-from contuga.contrib.transactions.constants import INCOME
+from contuga.mixins import TestMixin
 from contuga.contrib.categories.models import Category
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.accounts import constants as account_constants
 from ..models import Transaction
+from ..constants import INCOME, EXPENDITURE
 from . import utils
 
 UserModel = get_user_model()
 
 
-class TransactionListTestCase(APITestCase):
+class TransactionListTestCase(APITestCase, TestMixin):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
         self.category = Category.objects.create(
@@ -187,3 +189,57 @@ class TransactionListTestCase(APITestCase):
         }
 
         self.assertDictEqual(response.json(), expected_response)
+
+    def test_create_income_with_wrong_category(self):
+        category = self.create_category(transaction_type=EXPENDITURE)
+
+        data = {
+            "type": INCOME,
+            "amount": "200",
+            "author": reverse("user-detail", args=[self.user.pk]),
+            "category": reverse("category-detail", args=[category.pk]),
+            "account": reverse("account-detail", args=[self.account.pk]),
+            "description": "Transaction description",
+        }
+        old_transaction_count = Transaction.objects.count()
+
+        url = reverse("transaction-list")
+        response = self.client.post(url, data=data, follow=True)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 400)
+
+        # Assert correct data is returned
+        expected_message = _("Invalid hyperlink - Object does not exist.")
+        self.assertEqual(response.json(), {"category": [expected_message]})
+
+        # Assert new transaction is not created
+        new_transaction_count = Transaction.objects.count()
+        self.assertEqual(new_transaction_count, old_transaction_count)
+
+    def test_create_expenditure_with_wrong_category(self):
+        category = self.create_category(transaction_type=INCOME)
+
+        data = {
+            "type": EXPENDITURE,
+            "amount": "200",
+            "author": reverse("user-detail", args=[self.user.pk]),
+            "category": reverse("category-detail", args=[category.pk]),
+            "account": reverse("account-detail", args=[self.account.pk]),
+            "description": "Transaction description",
+        }
+        old_transaction_count = Transaction.objects.count()
+
+        url = reverse("transaction-list")
+        response = self.client.post(url, data=data, follow=True)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 400)
+
+        # Assert correct data is returned
+        expected_message = _("Invalid hyperlink - Object does not exist.")
+        self.assertEqual(response.json(), {"category": [expected_message]})
+
+        # Assert new transaction is not created
+        new_transaction_count = Transaction.objects.count()
+        self.assertEqual(new_transaction_count, old_transaction_count)
