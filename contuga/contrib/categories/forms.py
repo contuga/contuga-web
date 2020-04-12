@@ -1,19 +1,17 @@
+from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from rest_framework import serializers
 
 from . import constants
 from .models import Category
 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Category
-        fields = "__all__"
-        extra_kwargs = {"author": {"read_only": True}}
+class CategoryUpdateForm(forms.ModelForm):
+    def clean_transaction_type(self):
+        transaction_type = self.cleaned_data.get("transaction_type")
 
-    def validate_transaction_type(self, transaction_type):
-        if not self.instance or transaction_type == constants.ALL:
+        if transaction_type == constants.ALL:
             return transaction_type
         else:
             other_usages = self.instance.transactions.exclude(type=transaction_type)
@@ -28,5 +26,11 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
                     "Please, fix all transactions before changing the category type."
                 )
 
-                raise serializers.ValidationError(message)
+                self.add_error(
+                    "transaction_type", ValidationError(message=message, code="invalid")
+                )
             return transaction_type
+
+    class Meta:
+        model = Category
+        fields = ("name", "transaction_type", "description")

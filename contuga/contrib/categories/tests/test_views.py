@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 
 from contuga.contrib.categories.models import Category
+from .. import constants
 
 UserModel = get_user_model()
 
@@ -57,7 +58,11 @@ class CategoryViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_create(self):
-        data = {"name": "New category name", "description": "New category description"}
+        data = {
+            "name": "New category name",
+            "transaction_type": constants.EXPENDITURE,
+            "description": "New category description",
+        }
         old_category_count = Category.objects.count()
 
         url = reverse("categories:create")
@@ -72,7 +77,11 @@ class CategoryViewTests(TestCase):
 
         # Assert category is saved correctly
         category = Category.objects.order_by("created_at").last()
-        category_data = {"name": category.name, "description": category.description}
+        category_data = {
+            "name": category.name,
+            "transaction_type": constants.EXPENDITURE,
+            "description": category.description,
+        }
         self.assertDictEqual(category_data, data)
 
         # Assert user is redirected to detail view
@@ -83,52 +92,6 @@ class CategoryViewTests(TestCase):
             target_status_code=200,
             fetch_redirect_response=True,
         )
-
-    def test_update_get(self):
-        url = reverse("categories:update", kwargs={"pk": self.category.pk})
-        response = self.client.get(url)
-
-        # Assert status code is correct
-        self.assertEqual(response.status_code, 200)
-
-        # Assert instance is correct
-        instance = response.context.get("object")
-        self.assertEqual(instance, self.category)
-
-        # Assert initial form data is correct
-        form = response.context.get("form")
-        form_data = {
-            "name": form.initial["name"],
-            "description": form.initial["description"],
-        }
-        expected_data = {
-            "name": self.category.name,
-            "description": self.category.description,
-        }
-        self.assertDictEqual(form_data, expected_data)
-
-    def test_update(self):
-        data = {"name": "New category name", "description": "New category description"}
-
-        url = reverse("categories:update", kwargs={"pk": self.category.pk})
-        response = self.client.post(url, data=data, follow=True)
-
-        # Assert user is redirected to detail view
-        self.assertRedirects(
-            response,
-            reverse("categories:detail", kwargs={"pk": self.category.pk}),
-            status_code=302,
-            target_status_code=200,
-            fetch_redirect_response=True,
-        )
-
-        # Assert category is updated
-        updated_category = Category.objects.get(pk=self.category.pk)
-        category_data = {
-            "name": updated_category.name,
-            "description": updated_category.description,
-        }
-        self.assertDictEqual(category_data, data)
 
     def test_delete(self):
         old_category_count = Category.objects.count()
