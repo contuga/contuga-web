@@ -9,7 +9,8 @@
     <div class="col-12 col-md-6 col-xl-4">
       <form method="POST">
         {% csrf_token %}
-        {% include 'contuga/forms/field.html' with field=form.default_category %}
+        {% include 'contuga/forms/field.html' with field=form.default_incomes_category %}
+        {% include 'contuga/forms/field.html' with field=form.default_expenditures_category %}
         {% include 'contuga/forms/field.html' with field=form.default_account %}
         <button type="submit" class="btn btn-primary">
           {% trans "Save" context "verb" %}
