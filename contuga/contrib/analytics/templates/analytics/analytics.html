@@ -57,59 +57,59 @@
   {% if reports %}
     <script type="text/javascript">
       jQuery(function($) {
-        var reports = {{ reports|safe }};
+        const accounts = {{ reports|safe }};
 
-        Object.keys(reports).forEach(function(key) {
-          var title = '<div class="row"><div class="col"><h2>' + reports[key]["name"] + '</h2></div></div>';
+        for(account of accounts) {
+          const title = `<div class="row"><div class="col"><h2>${account.name}</h2></div></div>`;
 
-          var barChartId = 'barChart' + key
-          var barChart = '<div class="col-md-5"><canvas id="' + barChartId + '"></canvas></div>';
+          const barChartId = `barChart${account.pk}`
+          const barChart = `<div class="col-md-5"><canvas id="${barChartId}"></canvas></div>`;
 
-          var lineChartId = 'lineChart' + key
-          var lineChart = '<div class="col-md-5"><canvas id="' + lineChartId + '"></canvas></div>';
+          const lineChartId = `lineChart${account.pk}`;
+          const lineChart = `<div class="col-md-5"><canvas id="${lineChartId}"></canvas></div>`;
 
-          var $row = $('<div class="row">').append(barChart, lineChart)
-          var $col = $('<div class="col-12 col-md-11 offset-md-1">').append(title, $row)
-          var $section = $('<section class="row">').append($col)
+          const $row = $('<div class="row">').append(barChart, lineChart)
+          const $col = $('<div class="col-12 col-md-11 offset-md-1">').append(title, $row)
+          const $section = $('<section class="row">').append($col)
 
           $('#chartContainer').append($section)
 
-          var labels = reports[key]["reports"].map((it) => {
+          const labels = account.reports.map((it) => {
             if (it.day) {
               return `${it.day}.${it.month}.${it.year}`
             } else {
               return `${it.month}.${it.year}`
             }
           });
-          var datasets = [
+          const datasets = [
               {
                   label: '{% trans "Income" %}',
-                  data: reports[key]["reports"].map((it) => it.income),
+                  data: account.reports.map((it) => it.income),
                   backgroundColor: '#28a745'
               },
               {
                   label: '{% trans "Expenditures" %}',
-                  data: reports[key]["reports"].map((it) => it.expenditures),
+                  data: account.reports.map((it) => it.expenditures),
                   backgroundColor: '#dc3545'
               }
           ]
 
-          createChart('bar', barChartId, labels, datasets, reports[key]["currency"]);
+          createChart('bar', barChartId, labels, datasets, account.currency);
 
-          var lineDatasets = [
+          const lineDatasets = [
               {
                   label: '{% trans "Balance" %}',
-                  data: reports[key]["reports"].map((it) => it.balance),
+                  data: account.reports.map((it) => it.balance),
                   backgroundColor: '#254c7c'
               }
           ]
 
-          createChart('line', lineChartId, labels, lineDatasets, reports[key]["currency"]);
-        })
+          createChart('line', lineChartId, labels, lineDatasets, account.currency);
+        }
 
         function createChart(type, element, labels, datasets, currency) {
-          var canvas = document.getElementById(element).getContext('2d');
-          var myChart = new Chart(canvas, {
+          const canvas = document.getElementById(element).getContext('2d');
+          const myChart = new Chart(canvas, {
             type: type,
             data: {
               labels: labels,
@@ -141,8 +141,8 @@
   {% endif %}
   <script type="text/javascript">
     jQuery(function($) {
-      var today = moment();
-      var dateRangePickerConfig = {
+      const today = moment();
+      const dateRangePickerConfig = {
         singleDatePicker: true,
         autoUpdateInput: false,
         showDropdowns: true,
@@ -193,7 +193,7 @@
       };
 
       $('#id_start_date').on('apply.daterangepicker', function(event, picker) {
-        var startDate = picker.startDate.format(dateRangePickerConfig.locale.format);
+        const startDate = picker.startDate.format(dateRangePickerConfig.locale.format);
         $(this).val(startDate);
       });
 
