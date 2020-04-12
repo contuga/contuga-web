@@ -5,7 +5,8 @@ from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 
-from contuga.contrib.categories.models import Category
+from contuga.mixins import TestMixin
+from contuga.contrib.categories.constants import INCOME, EXPENDITURE
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.accounts.constants import BGN
 from ..models import Settings
@@ -13,7 +14,7 @@ from ..models import Settings
 UserModel = get_user_model()
 
 
-class SettingsDetailTestCase(APITestCase):
+class SettingsDetailTestCase(APITestCase, TestMixin):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
         self.settings = self.user.settings
@@ -37,7 +38,8 @@ class SettingsDetailTestCase(APITestCase):
             "user": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
-            "default_category": None,
+            "default_incomes_category": None,
+            "default_expenditures_category": None,
             "default_account": None,
         }
 
@@ -46,16 +48,16 @@ class SettingsDetailTestCase(APITestCase):
     def test_get_with_default_values_changed(self):
         url = reverse("settings-detail", args=[self.settings.pk])
 
-        category = Category.objects.create(
-            name="Category name", author=self.user, description="Category description"
-        )
+        incomes_category = self.create_category(transaction_type=INCOME)
+        expenditures_category = self.create_category(transaction_type=EXPENDITURE)
         account = Account.objects.create(
             name="Account name",
             currency=BGN,
             owner=self.user,
             description="Account description",
         )
-        self.settings.default_category = category
+        self.settings.default_incomes_category = incomes_category
+        self.settings.default_expenditures_category = expenditures_category
         self.settings.default_account = account
         self.settings.save()
 
@@ -72,8 +74,11 @@ class SettingsDetailTestCase(APITestCase):
             "user": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
-            "default_category": response.wsgi_request.build_absolute_uri(
-                reverse("category-detail", args=[category.pk])
+            "default_incomes_category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[incomes_category.pk])
+            ),
+            "default_expenditures_category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[expenditures_category.pk])
             ),
             "default_account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[account.pk])
@@ -100,9 +105,8 @@ class SettingsDetailTestCase(APITestCase):
     def test_patch(self):
         url = reverse("settings-detail", args=[self.settings.pk])
 
-        category = Category.objects.create(
-            name="Category name", author=self.user, description="Category description"
-        )
+        incomes_category = self.create_category(transaction_type=INCOME)
+        expenditures_category = self.create_category(transaction_type=EXPENDITURE)
         account = Account.objects.create(
             name="Account name",
             currency=BGN,
@@ -111,7 +115,12 @@ class SettingsDetailTestCase(APITestCase):
         )
 
         data = {
-            "default_category": reverse("category-detail", args=[category.pk]),
+            "default_incomes_category": reverse(
+                "category-detail", args=[incomes_category.pk]
+            ),
+            "default_expenditures_category": reverse(
+                "category-detail", args=[expenditures_category.pk]
+            ),
             "default_account": reverse("account-detail", args=[account.pk]),
         }
 
@@ -130,8 +139,11 @@ class SettingsDetailTestCase(APITestCase):
             "user": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
-            "default_category": response.wsgi_request.build_absolute_uri(
-                reverse("category-detail", args=[category.pk])
+            "default_incomes_category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[incomes_category.pk])
+            ),
+            "default_expenditures_category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[expenditures_category.pk])
             ),
             "default_account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[account.pk])
@@ -145,9 +157,8 @@ class SettingsDetailTestCase(APITestCase):
 
         url = reverse("settings-detail", args=[user.settings.pk])
 
-        category = Category.objects.create(
-            name="Category name", author=user, description="Category description"
-        )
+        incomes_category = self.create_category(transaction_type=INCOME)
+        expenditures_category = self.create_category(transaction_type=EXPENDITURE)
         account = Account.objects.create(
             name="Account name",
             currency=BGN,
@@ -156,7 +167,12 @@ class SettingsDetailTestCase(APITestCase):
         )
 
         data = {
-            "default_category": reverse("category-detail", args=[category.pk]),
+            "default_incomes_category": reverse(
+                "category-detail", args=[incomes_category.pk]
+            ),
+            "default_expenditures_category": reverse(
+                "category-detail", args=[expenditures_category.pk]
+            ),
             "default_account": reverse("account-detail", args=[account.pk]),
         }
 
@@ -168,7 +184,13 @@ class SettingsDetailTestCase(APITestCase):
         # Assert settings are not updated
         settings = Settings.objects.get(pk=user.pk)
 
-        self.assertEqual(user.settings.default_category, settings.default_category)
+        self.assertEqual(
+            user.settings.default_incomes_category, settings.default_incomes_category
+        )
+        self.assertEqual(
+            user.settings.default_expenditures_category,
+            settings.default_expenditures_category,
+        )
         self.assertEqual(user.settings.default_account, settings.default_account)
 
         # Assert correct data is returned

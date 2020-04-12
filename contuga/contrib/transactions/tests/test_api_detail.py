@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 
+from contuga.mixins import TestMixin
 from contuga.contrib.categories.models import Category
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.accounts import constants as account_constants
@@ -15,7 +16,7 @@ from . import utils
 UserModel = get_user_model()
 
 
-class TransactionDetailTestCase(APITestCase):
+class TransactionDetailTestCase(APITestCase, TestMixin):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
         self.category = Category.objects.create(
@@ -216,6 +217,62 @@ class TransactionDetailTestCase(APITestCase):
         }
 
         self.assertDictEqual(response.json(), expected_response)
+
+    def test_patch_to_income_with_wrong_category(self):
+        category = self.create_category(transaction_type=constants.EXPENDITURE)
+        transaction = self.create_transaction(category=category)
+
+        url = reverse("transaction-detail", args=[transaction.pk])
+
+        data = {
+            "type": constants.INCOME,
+            "amount": transaction.amount,
+            "category": reverse("category-detail", args=[category.pk]),
+            "account": reverse("account-detail", args=[self.account.pk]),
+            "description": transaction.description,
+        }
+
+        response = self.client.patch(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 400)
+
+        transaction = Transaction.objects.get(pk=self.transaction.pk)
+
+        # Assert transaction is not updated
+        self.assertEqual(transaction.updated_at, self.transaction.updated_at)
+
+        # Assert correct data is returned
+        expected_message = _("Invalid hyperlink - Object does not exist.")
+        self.assertEqual(response.json(), {"category": [expected_message]})
+
+    def test_patch_to_expenditure_with_wrong_category(self):
+        category = self.create_category(transaction_type=constants.INCOME)
+        transaction = self.create_transaction(category=category)
+
+        url = reverse("transaction-detail", args=[transaction.pk])
+
+        data = {
+            "type": constants.EXPENDITURE,
+            "amount": transaction.amount,
+            "category": reverse("category-detail", args=[category.pk]),
+            "account": reverse("account-detail", args=[self.account.pk]),
+            "description": transaction.description,
+        }
+
+        response = self.client.patch(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 400)
+
+        transaction = Transaction.objects.get(pk=self.transaction.pk)
+
+        # Assert transaction is updated
+        self.assertEqual(transaction.updated_at, self.transaction.updated_at)
+
+        # Assert correct data is returned
+        expected_message = _("Invalid hyperlink - Object does not exist.")
+        self.assertEqual(response.json(), {"category": [expected_message]})
 
     def test_delete(self):
         old_transaction_count = Transaction.objects.count()

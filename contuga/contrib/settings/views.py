@@ -4,6 +4,7 @@ from django.contrib.auth import mixins
 
 from rest_framework import viewsets, permissions
 
+from contuga.contrib.categories import constants as category_constants
 from . import models, serializers
 
 
@@ -26,14 +27,30 @@ class SettingsUpdateView(
     BaseSettingsViewMixin, mixins.LoginRequiredMixin, generic.UpdateView
 ):
     model = models.Settings
-    fields = ("default_category", "default_account")
+    fields = (
+        "default_incomes_category",
+        "default_expenditures_category",
+        "default_account",
+    )
 
     def get_form(self):
         form = super().get_form()
 
-        default_category_field = form.fields["default_category"]
-        default_category_field.queryset = default_category_field.queryset.filter(
-            author=self.request.user
+        default_incomes_category_field = form.fields["default_incomes_category"]
+        default_incomes_category_field.queryset = default_incomes_category_field.queryset.filter(
+            author=self.request.user,
+            transaction_type__in=[category_constants.ALL, category_constants.INCOME],
+        )
+
+        default_expenditures_category_field = form.fields[
+            "default_expenditures_category"
+        ]
+        default_expenditures_category_field.queryset = default_expenditures_category_field.queryset.filter(
+            author=self.request.user,
+            transaction_type__in=[
+                category_constants.ALL,
+                category_constants.EXPENDITURE,
+            ],
         )
 
         default_account_field = form.fields["default_account"]

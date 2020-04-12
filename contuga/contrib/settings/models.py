@@ -13,11 +13,19 @@ class Settings(models.Model):
     user = models.OneToOneField(
         UserModel, related_name="settings", on_delete=models.CASCADE, primary_key=True
     )
-    default_category = models.ForeignKey(
+    default_incomes_category = models.ForeignKey(
         Category,
-        related_name="default_usages",
+        related_name="default_usages_for_incomes",
         on_delete=models.SET_NULL,
-        verbose_name=_("Default category"),
+        verbose_name=_("Default category for incomes"),
+        blank=True,
+        null=True,
+    )
+    default_expenditures_category = models.ForeignKey(
+        Category,
+        related_name="default_usages_for_expenditures",
+        on_delete=models.SET_NULL,
+        verbose_name=_("Default category for expenditures"),
         blank=True,
         null=True,
     )

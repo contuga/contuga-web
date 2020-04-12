@@ -34,3 +34,33 @@
   </div>
 </main>
 {% endblock %}
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript">
+    jQuery(function($) {
+      var category_groups = {{ category_choices|safe }};
+      var $categoryField = $("#id_category");
+
+      $("#id_type").on("change", function() {
+        $categoryField.empty()
+        $categoryField.append(
+          $("<option></option>")
+            .text("{{ form.fields.category.empty_label }}")
+            .attr("value", "")
+            .attr("selected", "")
+        )
+
+        var categories = category_groups[$(this).val()];
+        categories.forEach(function(category) {
+          $categoryField.append(
+            $("<option></option>")
+              .text(category.name)
+              .attr("value", category.id)
+              .attr("selected", category.selected)
+          );
+        });
+      });
+    });
+  </script>
+{% endblock %}

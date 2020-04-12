@@ -6,12 +6,12 @@ from django.urls import reverse_lazy
 from rest_framework import viewsets, permissions
 
 from contuga.mixins import OnlyAuthoredByCurrentUserMixin
-from . import models, serializers
+from . import models, serializers, forms
 
 
 class CategoryCreateView(mixins.LoginRequiredMixin, generic.CreateView):
     model = models.Category
-    fields = ("name", "description")
+    fields = ("name", "transaction_type", "description")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -43,7 +43,7 @@ class CategoryUpdateView(
     OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.UpdateView
 ):
     model = models.Category
-    fields = ("name", "description")
+    form_class = forms.CategoryUpdateForm
     template_name = "categories/category_update_form.html"
 
     def form_valid(self, form):

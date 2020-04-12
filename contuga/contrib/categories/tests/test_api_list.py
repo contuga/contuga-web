@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 
 from ..models import Category
+from .. import constants
 from . import utils
 
 UserModel = get_user_model()
@@ -45,6 +46,7 @@ class CategoryListTestCase(APITestCase):
                     "author": response.wsgi_request.build_absolute_uri(
                         reverse("user-detail", args=[self.user.pk])
                     ),
+                    "transaction_type": category.transaction_type,
                     "description": category.description,
                     "updated_at": category.updated_at.astimezone().isoformat(),
                     "created_at": category.created_at.astimezone().isoformat(),
@@ -58,7 +60,11 @@ class CategoryListTestCase(APITestCase):
     def test_post(self):
         url = reverse("category-list")
 
-        data = {"name": "New category name", "description": "New category description"}
+        data = {
+            "name": "New category name",
+            "transaction_type": constants.EXPENDITURE,
+            "description": "New category description",
+        }
 
         response = self.client.post(url, data=data, format="json")
 
@@ -76,6 +82,7 @@ class CategoryListTestCase(APITestCase):
             "author": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
+            "transaction_type": data["transaction_type"],
             "description": data["description"],
             "updated_at": category.updated_at.astimezone().isoformat(),
             "created_at": category.created_at.astimezone().isoformat(),
@@ -110,6 +117,7 @@ class CategoryListTestCase(APITestCase):
             "author": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
+            "transaction_type": category.transaction_type,
             "description": data["description"],
             "updated_at": category.updated_at.astimezone().isoformat(),
             "created_at": category.created_at.astimezone().isoformat(),

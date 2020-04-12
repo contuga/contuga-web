@@ -10,6 +10,7 @@
       <form method="POST">
         {% csrf_token %}
         {% include 'contuga/forms/field.html' with field=form.name %}
+        {% include 'contuga/forms/field.html' with field=form.transaction_type %}
         {% include 'contuga/forms/field.html' with field=form.description %}
         <button type="submit" class="btn btn-primary">
           {% trans "Save" context "verb" %}
