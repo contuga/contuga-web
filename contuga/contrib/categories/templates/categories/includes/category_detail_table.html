@@ -7,6 +7,10 @@
       <td>{{ category.name }}</td>
     </tr>
     <tr>
+      <th scope="row">{% trans "Transaction type" %}</th>
+      <td>{{ category.transaction_type }}</td>
+    </tr>
+    <tr>
       <th scope="row">{% trans "Created at" %}</th>
       <td>{{ category.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
     </tr>
