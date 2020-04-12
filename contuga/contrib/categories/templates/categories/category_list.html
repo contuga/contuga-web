@@ -25,6 +25,7 @@
               <tr>
                 <th scope="col" class="d-none d-md-table-cell">#</th>
                 <th scope="col">{% trans "Name" %}</th>
+                <th scope="col">{% trans "Transaction type" %}</th>
                 <th scope="col">{% trans "Created at" %}</th>
                 <th scope="col" class="d-none d-md-table-cell">
                   {% trans "Description" %}
@@ -43,6 +44,9 @@
                   <a href="{{ category.get_absolute_url }}">
                     {{ category.name }}
                   </a>
+                </td>
+                <td>
+                  {{ category.get_transaction_type_display }}
                 </td>
                 <td>
                   {{ category.created_at|date:"SHORT_DATETIME_FORMAT" }}
