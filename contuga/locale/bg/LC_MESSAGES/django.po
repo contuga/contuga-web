@@ -42,6 +42,10 @@ msgstr "Швейцарски франк"
 msgid "Russian ruble"
 msgstr "Руска рубла"
 
+#: contuga/contrib/accounts/constants.py:18
+msgid "Chinese yuan"
+msgstr "Китайски юан"
+
 #: contuga/contrib/accounts/models.py:15
 #: contuga/contrib/accounts/templates/accounts/account_list.html:27
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:6
