@@ -43,6 +43,7 @@ class Migration(migrations.Migration):
                             ("GBP", "British pound"),
                             ("CHF", "Swiss franc"),
                             ("RUB", "Russian ruble"),
+                            ("CNY", "Chinese yuan"),
                         ],
                         max_length=3,
                         verbose_name="Currency",

@@ -6,6 +6,7 @@ USD = "USD"
 GBP = "GBP"
 CHF = "CHF"
 RUB = "RUB"
+CNY = "CNY"
 
 CURRENCY_CHOICES = (
     (BGN, _("Bulgarian lev")),
@@ -14,4 +15,5 @@ CURRENCY_CHOICES = (
     (GBP, _("British pound")),
     (CHF, _("Swiss franc")),
     (RUB, _("Russian ruble")),
+    (CNY, _("Chinese yuan")),
 )
