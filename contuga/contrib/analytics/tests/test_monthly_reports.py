@@ -35,7 +35,8 @@ class MonthlyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("100")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner)
 
         reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
@@ -80,7 +81,8 @@ class MonthlyReportsTestCase(TestCase):
             account=second_account, amount=Decimal("833.25")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner)
 
         first_account_reports = test_utils.create_empty_reports(last_date=self.now)
         second_account_reports = first_account_reports.copy()
@@ -127,7 +129,8 @@ class MonthlyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("100.50")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner)
 
         reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
@@ -156,7 +159,8 @@ class MonthlyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("310.40")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner)
 
         reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
@@ -197,7 +201,8 @@ class MonthlyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("100.50")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner)
 
         reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
@@ -236,7 +241,8 @@ class MonthlyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("100")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner)
 
         reports = test_utils.create_empty_reports(last_date=self.now)
         reports.append(
@@ -295,7 +301,8 @@ class MonthlyReportsTestCase(TestCase):
                 account=self.account, amount=Decimal("11.32")
             ).amount
 
-        result = utils.generate_reports(user=self.account.owner)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner)
 
         reports = []
         for count in reversed(range(3, 6)):
@@ -389,7 +396,10 @@ class MonthlyReportsTestCase(TestCase):
                 account=self.account, amount=Decimal("11.32")
             ).amount
 
-        result = utils.generate_reports(self.account.owner, first_day_of_the_last_month)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(
+                self.account.owner, first_day_of_the_last_month
+            )
 
         starting_balance = income_two_months_ago - expenditure_two_months_ago
 
