@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-12 16:10+0300\n"
+"POT-Creation-Date: 2020-04-22 23:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -656,6 +656,14 @@ msgstr "Последно променена"
 #: contuga/contrib/transactions/filters.py:52
 msgid "Ordering"
 msgstr "Сортиране"
+
+#: contuga/contrib/transactions/filters.py:54
+msgid "Minimum amount"
+msgstr "Минимална сума"
+
+#: contuga/contrib/transactions/filters.py:55
+msgid "Maximum amount"
+msgstr "Максимална сума"
 
 #: contuga/contrib/transactions/filters.py:62
 msgid "Descripton"
