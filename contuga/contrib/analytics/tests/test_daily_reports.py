@@ -36,7 +36,8 @@ class DailyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("100")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
 
         reports = test_utils.create_empty_reports(last_date=self.now, report_unit=DAYS)
         reports.append(
@@ -82,7 +83,8 @@ class DailyReportsTestCase(TestCase):
             account=second_account, amount=Decimal("833.25")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
 
         first_account_reports = test_utils.create_empty_reports(
             last_date=self.now, report_unit=DAYS
@@ -133,7 +135,8 @@ class DailyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("100.50")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
 
         reports = test_utils.create_empty_reports(last_date=self.now, report_unit=DAYS)
         reports.append(
@@ -163,7 +166,8 @@ class DailyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("310.40")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
 
         reports = test_utils.create_empty_reports(last_date=self.now, report_unit=DAYS)
         reports.append(
@@ -205,7 +209,8 @@ class DailyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("100.50")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
 
         reports = test_utils.create_empty_reports(last_date=self.now, report_unit=DAYS)
         reports.append(
@@ -245,7 +250,8 @@ class DailyReportsTestCase(TestCase):
             account=self.account, amount=Decimal("100")
         ).amount
 
-        result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
 
         reports = test_utils.create_empty_reports(last_date=self.now, report_unit=DAYS)
         reports.append(
@@ -304,7 +310,8 @@ class DailyReportsTestCase(TestCase):
                 account=self.account, amount=Decimal("11.32")
             ).amount
 
-        result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner, report_unit=DAYS)
 
         reports = []
         days = (self.now - (self.now - relativedelta(months=1))).days
@@ -397,9 +404,10 @@ class DailyReportsTestCase(TestCase):
                 account=self.account, amount=Decimal("11.32")
             ).amount
 
-        result = utils.generate_reports(
-            user=self.account.owner, start_date=yesterday, report_unit=DAYS
-        )
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(
+                user=self.account.owner, start_date=yesterday, report_unit=DAYS
+            )
 
         starting_balance = income_two_days_ago - expenditure_two_days_ago
 
