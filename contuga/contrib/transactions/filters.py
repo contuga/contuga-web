@@ -51,13 +51,11 @@ class TransactionFilterSet(filterset.FilterSet):
     ordering = filters.OrderingFilter(
         fields=ORDERING_FIELDS, field_labels=ORDERING_LABELS, label=_("Ordering")
     )
-    amount = filters.LookupChoiceFilter(
-        field_class=forms.DecimalField,
-        lookup_choices=[
-            ("exact", "Equals"),
-            ("gt", "Greater than"),
-            ("lt", "Less than"),
-        ],
+    min_amount = filters.NumberFilter(
+        field_name="amount", lookup_expr="gte", label=_("Minimum amount")
+    )
+    max_amount = filters.NumberFilter(
+        field_name="amount", lookup_expr="lte", label=_("Maximum amount")
     )
     description = filters.CharFilter(lookup_expr="icontains", label=_("Descripton"))
 
