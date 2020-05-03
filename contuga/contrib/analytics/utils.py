@@ -4,34 +4,33 @@ from dateutil.relativedelta import relativedelta
 import pytz
 
 from django.db.models import Sum, Q
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, TruncDay, TruncMonth
 from django.utils import timezone
+from django.conf import settings
 
 from contuga.contrib.transactions.models import Transaction
 from .constants import DAYS, MONTHS
 
 
 REPORTS = {
-    MONTHS: {
-        "default_period": {"months": 5},
-        "query_values": ["created_at__month", "created_at__year"],
-    },
-    DAYS: {
-        "default_period": {"months": 1},
-        "query_values": ["created_at__day", "created_at__month", "created_at__year"],
-    },
+    MONTHS: {"default_period": {"months": 5}, "truncClass": TruncMonth},
+    DAYS: {"default_period": {"months": 1}, "truncClass": TruncDay},
 }
 
 
-def get_aggregated_data(transactions, start_date, end_date, query_values):
+def get_aggregated_data(transactions, start_date, end_date, truncClass):
     return (
-        transactions.filter(created_at__gte=start_date, created_at__lte=end_date)
+        transactions.filter(
+            created_at__gte=start_date.astimezone(pytz.UTC),
+            created_at__lte=end_date.astimezone(pytz.UTC),
+        )
+        .annotate(created_on=truncClass("created_at", tzinfo=start_date.tzinfo))
         .values(
             "account__name",
             "account__pk",
             "account__balance",
             "account__currency",
-            *query_values,
+            "created_on",
         )
         .annotate(
             income=Coalesce(Sum("amount", filter=Q(type="income")), 0),
@@ -65,8 +64,8 @@ def group_reports(aggregated_data, report_unit):
             },
         )
 
-        year = item["created_at__year"]
-        month = item["created_at__month"]
+        year = item["created_on"].year
+        month = item["created_on"].month
 
         report = {
             "month": month,
@@ -76,7 +75,7 @@ def group_reports(aggregated_data, report_unit):
         }
 
         if report_unit == DAYS:
-            day = item["created_at__day"]
+            day = item["created_on"].day
             key = construct_date_string(year, month, day)
             report["day"] = day
         else:
@@ -212,14 +211,17 @@ def generate_reports(user, start_date=None, end_date=None, report_unit=MONTHS):
     if not end_date:
         end_date = today
 
-    start_date = datetime.combine(date=start_date, time=time.min, tzinfo=pytz.UTC)
-    end_date = datetime.combine(date=end_date, time=time.max, tzinfo=pytz.UTC)
+    # TODO: Let users specify their timezone and use it below
+    tzinfo = pytz.timezone(settings.TIME_ZONE)
+
+    start_date = datetime.combine(date=start_date, time=time.min, tzinfo=tzinfo)
+    end_date = datetime.combine(date=end_date, time=time.max, tzinfo=tzinfo)
 
     aggregated_data = get_aggregated_data(
         transactions=transactions,
         start_date=start_date,
         end_date=end_date,
-        query_values=conf["query_values"],
+        truncClass=conf["truncClass"],
     )
     grouped_reports = group_reports(aggregated_data, report_unit=report_unit)
     processed_reports = process_reports(

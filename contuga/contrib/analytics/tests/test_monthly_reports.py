@@ -267,17 +267,32 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_reports_for_multiple_months(self):
-
-        income_current_month = test_utils.create_income(
+        income_now = test_utils.create_income(
             account=self.account, amount=Decimal("310.15")
         ).amount
 
-        expenditure_current_month = test_utils.create_expenditure(
+        expenditure_now = test_utils.create_expenditure(
             account=self.account, amount=Decimal("100.10")
         ).amount
 
         first_day_of_the_current_month = self.now.replace(day=1)
         one_month_ago = first_day_of_the_current_month - relativedelta(months=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            if self.now.day == 1:
+                different_date_in_the_same_month = self.now.replace(day=10)
+            else:
+                different_date_in_the_same_month = first_day_of_the_current_month
+
+            mocked_now.return_value = different_date_in_the_same_month
+
+            income_first_day_of_current_month = test_utils.create_income(
+                account=self.account, amount=Decimal("20.25")
+            ).amount
+
+            expenditure_first_day_of_current_month = test_utils.create_expenditure(
+                account=self.account, amount=Decimal("32.50")
+            ).amount
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = one_month_ago
@@ -317,6 +332,10 @@ class MonthlyReportsTestCase(TestCase):
                 }
             )
 
+        income_current_month = income_now + income_first_day_of_current_month
+        expenditure_current_month = (
+            expenditure_now + expenditure_first_day_of_current_month
+        )
         report_two_months_ago = {
             "month": two_months_ago.month,
             "year": two_months_ago.year,
