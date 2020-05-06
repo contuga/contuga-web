@@ -7,6 +7,7 @@ from contuga.mixins import TestMixin
 from contuga.contrib.transactions.models import Transaction
 from contuga.contrib.transactions.constants import INCOME, EXPENDITURE
 from contuga.contrib.settings.models import Settings
+from contuga.contrib.categories.models import Category
 from contuga.contrib.accounts.models import Account
 
 UserModel = get_user_model()
@@ -76,6 +77,26 @@ class TransactionViewTests(TestCase, TestMixin):
         queryset = form.fields["account"].queryset
         self.assertQuerysetEqual(
             expected_account_queryset, queryset, transform=lambda x: x
+        )
+
+    def test_create_get_category_queryset(self):
+        self.create_category(name="Second category name")
+        self.create_category(name="Third category name")
+
+        other_user = UserModel.objects.create_user(
+            "richard.roe@example.com", "password"
+        )
+        self.create_category(name="Fourth category name", author=other_user)
+
+        url = reverse("transactions:create")
+        response = self.client.get(url)
+
+        expected_category_queryset = Category.objects.filter(author=self.user)
+
+        form = response.context.get("form")
+        queryset = form.fields["category"].queryset
+        self.assertQuerysetEqual(
+            expected_category_queryset, queryset, transform=lambda x: x
         )
 
     def test_create(self):
