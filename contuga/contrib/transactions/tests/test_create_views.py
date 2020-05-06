@@ -8,7 +8,6 @@ from contuga.contrib.transactions.models import Transaction
 from contuga.contrib.transactions.constants import INCOME, EXPENDITURE
 from contuga.contrib.settings.models import Settings
 from contuga.contrib.accounts.models import Account
-from contuga.contrib.accounts.constants import BGN
 
 UserModel = get_user_model()
 
@@ -16,12 +15,7 @@ UserModel = get_user_model()
 class TransactionViewTests(TestCase, TestMixin):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.account = Account.objects.create(
-            name="Account name",
-            currency=BGN,
-            owner=self.user,
-            description="Account description",
-        )
+        self.account = self.create_account()
         self.client.force_login(self.user)
 
     def test_create_get_with_default_settings(self):
@@ -65,6 +59,24 @@ class TransactionViewTests(TestCase, TestMixin):
 
         account_field = form.fields["account"]
         self.assertEqual(account_field.initial, settings.default_account)
+
+    def test_create_get_account_queryset(self):
+        self.create_account(name="Second account name")
+        self.create_account(name="Third account name")
+
+        # Fourth account should not be in the queryset because it's not active
+        self.create_account(name="Fourth account name", is_active=False)
+
+        url = reverse("transactions:create")
+        response = self.client.get(url)
+
+        expected_account_queryset = Account.objects.active()
+
+        form = response.context.get("form")
+        queryset = form.fields["account"].queryset
+        self.assertQuerysetEqual(
+            expected_account_queryset, queryset, transform=lambda x: x
+        )
 
     def test_create(self):
         category = self.create_category()
