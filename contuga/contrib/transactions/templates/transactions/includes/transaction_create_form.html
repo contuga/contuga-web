@@ -1,0 +1,28 @@
+
+{% load i18n %}
+
+<div class="collapse" id="createFormContainer" data-parent="#actionGroup">
+  <form method="POST" action="{% url 'transactions:create' %}">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-12 col-md-6">
+        {% include 'contuga/forms/field.html' with field=form.type %}
+      </div>
+      <div class="col-12 col-md-6">
+        {% include 'contuga/forms/field.html' with field=form.amount %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        {% include 'contuga/forms/field.html' with field=form.account %}
+      </div>
+      <div class="col-12 col-md-6">
+        {% include 'contuga/forms/field.html' with field=form.category %}
+      </div>
+    </div>
+    {% include 'contuga/forms/field.html' with field=form.description %}
+    <button type="submit" class="btn btn-primary">
+      {% trans "Save" context "verb" %}
+    </button>
+  </form>
+</div>

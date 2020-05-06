@@ -164,6 +164,68 @@ class TransactionListView(
     def get_queryset(self):
         return super().get_queryset().select_related("category", "account")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = forms.TransactionCreateForm(user=self.request.user)
+        context["create_form"] = form
+
+        settings = (
+            settings_models.Settings.objects.filter(user=self.request.user)
+            .select_related(
+                "default_expenditures_category",
+                "default_incomes_category",
+                "default_account",
+            )
+            .first()
+        )
+
+        account_field = form.fields["account"]
+        account_field.initial = settings.default_account
+
+        category_field = form.fields["category"]
+        category_field.initial = settings.default_expenditures_category
+
+        categories = category_models.Category.objects.filter(author=self.request.user)
+
+        grouped_categories = defaultdict(list)
+
+        for category in categories:
+            if category.transaction_type == category_constants.INCOME:
+                grouped_categories[constants.INCOME].append(
+                    {
+                        "id": category.pk,
+                        "name": category.name,
+                        "selected": category == settings.default_incomes_category,
+                    }
+                )
+            elif category.transaction_type == category_constants.EXPENDITURE:
+                grouped_categories[constants.EXPENDITURE].append(
+                    {
+                        "id": category.pk,
+                        "name": category.name,
+                        "selected": category == settings.default_expenditures_category,
+                    }
+                )
+            else:
+                grouped_categories[constants.INCOME].append(
+                    {
+                        "id": category.pk,
+                        "name": category.name,
+                        "selected": category == settings.default_incomes_category,
+                    }
+                )
+                grouped_categories[constants.EXPENDITURE].append(
+                    {
+                        "id": category.pk,
+                        "name": category.name,
+                        "selected": category == settings.default_expenditures_category,
+                    }
+                )
+
+        context["category_choices"] = json.dumps(grouped_categories)
+
+        return context
+
 
 class TransactionDetailView(
     OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.DetailView
