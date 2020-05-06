@@ -30,9 +30,11 @@ class TestMixin:
             description=description,
         )
 
-    def create_account(self, name="Account name", currency=BGN, owner=None):
+    def create_account(
+        self, name="Account name", currency=BGN, owner=None, is_active=True
+    ):
         return Account.objects.create(
-            name=name, currency=currency, owner=owner or self.user
+            name=name, currency=currency, owner=owner or self.user, is_active=is_active
         )
 
     def create_transaction(
