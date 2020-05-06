@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+from contuga.mixins import TestMixin
 from contuga.contrib.transactions.models import Transaction
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.forms import InternalTransferForm
@@ -14,25 +15,15 @@ from contuga.contrib.accounts.constants import BGN, EUR
 UserModel = get_user_model()
 
 
-class InternalTransferViewTests(TestCase):
+class InternalTransferViewTests(TestCase, TestMixin):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
         self.account = self.create_account()
         self.client.force_login(self.user)
 
-    def create_account(self, prefix="First", currency=BGN, user=None):
-        if not user:
-            user = self.user
-        return Account.objects.create(
-            name=f"{prefix} account name",
-            currency=currency,
-            owner=user,
-            description=f"{prefix} account description",
-        )
-
     def test_transfer_get(self):
-        second_account = self.create_account(prefix="Second")
-        third_account = self.create_account(prefix="Third", currency=EUR)
+        second_account = self.create_account(name="Second account name")
+        third_account = self.create_account(name="Third account name", currency=EUR)
 
         url = reverse("transactions:internal_transfer_form")
         response = self.client.get(url)
@@ -49,7 +40,7 @@ class InternalTransferViewTests(TestCase):
         self.assertIsInstance(response.context.get("form"), InternalTransferForm)
 
     def test_tansfer_to_account_of_same_currency(self):
-        second_account = self.create_account(prefix="Second")
+        second_account = self.create_account(name="Second account name")
 
         data = {
             "from_account": self.account.pk,
@@ -147,7 +138,7 @@ class InternalTransferViewTests(TestCase):
         self.assertDictEqual(response.context["income"], expected_context_income)
 
     def test_tansfer_to_account_of_different_currency(self):
-        second_account = self.create_account(prefix="Second", currency=EUR)
+        second_account = self.create_account(name="Second account name", currency=EUR)
 
         data = {
             "from_account": self.account.pk,
@@ -218,7 +209,7 @@ class InternalTransferViewTests(TestCase):
         self.assertIsNone(session.get("income"))
 
     def test_session_data(self):
-        second_account = self.create_account(prefix="Second")
+        second_account = self.create_account(name="Second account name")
 
         data = {
             "from_account": self.account.pk,
