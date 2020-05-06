@@ -8,10 +8,10 @@
   <div class="row" id="actionGroup">
     <div class="col-12">
       <div class="d-flex justify-content-end">
-        <a class="btn btn-primary btn-action" href="{% url 'transactions:create' %}" role="button">
+        <button class="btn btn-primary btn-action" type="button" data-toggle="collapse" data-target="#createFormContainer">
           <i class="fa fa-plus"></i>
           <span class="d-none d-sm-inline">{% trans "Add new" %}</span>
-        </a>
+        </button>
         <button class="btn btn-dark btn-action" type="button" data-toggle="collapse" data-target="#exportFormContainer">
           <i class="fa fa-download"></i>
           <span class="d-none d-sm-inline">{% trans "Export" %}</span>
@@ -21,6 +21,7 @@
           <span class="d-none d-sm-inline">{% trans "Filters" %}</span>
         </button>
       </div>
+      {% include "transactions/includes/transaction_create_form.html" with form=create_form %}
       {% include "transactions/includes/transaction_export_form.html" %}
       {% include "transactions/includes/transaction_filter_form.html" %}
     </div>

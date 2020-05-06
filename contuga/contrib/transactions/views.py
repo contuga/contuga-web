@@ -145,6 +145,11 @@ class TransactionListView(
     def get_queryset(self):
         return super().get_queryset().select_related("category", "account")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["create_form"] = forms.TransactionCreateForm(user=self.request.user)
+        return context
+
 
 class TransactionDetailView(
     OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.DetailView
