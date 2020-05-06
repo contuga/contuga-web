@@ -16,13 +16,19 @@ UserModel = get_user_model()
 class TransactionViewTests(TestCase, TestMixin):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.account = Account.objects.create(
-            name="Account name",
-            currency=BGN,
-            owner=self.user,
-            description="Account description",
-        )
+        self.account = self.create_account()
         self.client.force_login(self.user)
+
+    def create_account(self, prefix="First", currency=BGN, user=None, is_active=True):
+        if not user:
+            user = self.user
+        return Account.objects.create(
+            name=f"{prefix} account name",
+            currency=currency,
+            owner=user,
+            description=f"{prefix} account description",
+            is_active=is_active
+        )
 
     def test_create_get_with_default_settings(self):
         url = reverse("transactions:create")
@@ -65,6 +71,22 @@ class TransactionViewTests(TestCase, TestMixin):
 
         account_field = form.fields["account"]
         self.assertEqual(account_field.initial, settings.default_account)
+
+    def test_create_get_account_queryset(self):
+        self.create_account(prefix="Second")
+        self.create_account(prefix="Third")
+
+        # Fourth account should not be in the queryset because it's not active
+        self.create_account(prefix="Fourth", is_active=False)
+
+        url = reverse("transactions:create")
+        response = self.client.get(url)
+
+        expected_account_queryset = Account.objects.active()
+
+        form = response.context["form"]
+        queryset = form.fields["account"].queryset
+        self.assertQuerysetEqual(expected_account_queryset, queryset, transform=lambda x: x,)
 
     def test_create(self):
         category = self.create_category()

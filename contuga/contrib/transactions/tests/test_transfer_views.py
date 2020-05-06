@@ -20,7 +20,7 @@ class InternalTransferViewTests(TestCase):
         self.account = self.create_account()
         self.client.force_login(self.user)
 
-    def create_account(self, prefix="First", currency=BGN, user=None):
+    def create_account(self, prefix="First", currency=BGN, user=None, is_active=True):
         if not user:
             user = self.user
         return Account.objects.create(
@@ -28,25 +28,38 @@ class InternalTransferViewTests(TestCase):
             currency=currency,
             owner=user,
             description=f"{prefix} account description",
+            is_active=is_active
         )
 
     def test_transfer_get(self):
-        second_account = self.create_account(prefix="Second")
-        third_account = self.create_account(prefix="Third", currency=EUR)
+        self.create_account(prefix="Second")
+        self.create_account(prefix="Third", currency=EUR)
+
+        # Fourth account should not be used because it's not active
+        self.create_account(prefix="Fourth", is_active=False)
 
         url = reverse("transactions:internal_transfer_form")
         response = self.client.get(url)
 
+        expected_account_queryset = Account.objects.active()
+
+        form = response.context["form"]
+        self.assertIsInstance(form, InternalTransferForm)
+
+        from_account = form.fields["from_account"]
+        to_account = form.fields["to_account"]
+
+        self.assertQuerysetEqual(expected_account_queryset, from_account.queryset, transform=lambda x: x,)
+        self.assertQuerysetEqual(expected_account_queryset, to_account.queryset, transform=lambda x: x,)
+
         expected_account_list = json.dumps(
             {
-                self.account.pk: self.account.currency,
-                second_account.pk: second_account.currency,
-                third_account.pk: third_account.currency,
+                account.pk: account.currency
+                for account in expected_account_queryset
             }
         )
 
         self.assertEqual(response.context["accounts"], expected_account_list)
-        self.assertIsInstance(response.context["form"], InternalTransferForm)
 
     def test_tansfer_to_account_of_same_currency(self):
         second_account = self.create_account(prefix="Second")
