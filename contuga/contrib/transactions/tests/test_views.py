@@ -2,8 +2,10 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+from contuga.mixins import TestMixin
 from contuga.contrib.transactions.models import Transaction
-from contuga.contrib.transactions.constants import EXPENDITURE
+from contuga.contrib.transactions.constants import INCOME, EXPENDITURE
+from contuga.contrib.settings.models import Settings
 from contuga.contrib.categories.models import Category
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.accounts.constants import BGN
@@ -11,7 +13,7 @@ from contuga.contrib.accounts.constants import BGN
 UserModel = get_user_model()
 
 
-class TransactionViewTests(TestCase):
+class TransactionViewTests(TestCase, TestMixin):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
         self.category = Category.objects.create(
@@ -36,6 +38,18 @@ class TransactionViewTests(TestCase):
         self.client.force_login(self.user)
 
     def test_list(self):
+        self.create_account(name="Second account name")
+        self.create_account(name="Third account name")
+        self.create_account(name="Fourth account name", is_active=False)
+
+        self.create_category(name="Second category name")
+        self.create_category(name="Third category name")
+
+        other_user = UserModel.objects.create_user(
+            "richard.roe@example.com", "password"
+        )
+        self.create_category(name="Fourth category name", author=other_user)
+
         url = reverse("transactions:list")
         response = self.client.get(url, follow=True)
 
@@ -58,6 +72,57 @@ class TransactionViewTests(TestCase):
         ]
         for field in fields:
             self.assertContains(response=response, text=field)
+
+        # Assert create form is correct
+        form = response.context.get("create_form")
+
+        expected_account_queryset = Account.objects.active()
+        queryset = form.fields["account"].queryset
+        self.assertQuerysetEqual(
+            expected_account_queryset, queryset, transform=lambda x: x
+        )
+
+        expected_category_queryset = Category.objects.filter(author=self.user)
+        queryset = form.fields["category"].queryset
+        self.assertQuerysetEqual(
+            expected_category_queryset, queryset, transform=lambda x: x
+        )
+
+    def test_list_create_form_with_default_settings(self):
+        url = reverse("transactions:list")
+        response = self.client.get(url, follow=True)
+
+        # Assert initial create form data is correct
+        form = response.context.get("create_form")
+
+        category_field = form.fields["category"]
+        self.assertEqual(category_field.initial, None)
+
+        account_field = form.fields["account"]
+        self.assertEqual(account_field.initial, None)
+
+    def test_list_create_form_with_custom_settings(self):
+        settings = Settings.objects.last()
+        settings.default_expenditures_category = self.create_category(
+            transaction_type=EXPENDITURE
+        )
+        settings.default_incomes_category = self.create_category(
+            transaction_type=INCOME
+        )
+        settings.default_account = self.account
+        settings.save()
+
+        url = reverse("transactions:list")
+        response = self.client.get(url, follow=True)
+
+        # Assert initial create form data is correct
+        form = response.context.get("create_form")
+
+        category_field = form.fields["category"]
+        self.assertEqual(category_field.initial, settings.default_expenditures_category)
+
+        account_field = form.fields["account"]
+        self.assertEqual(account_field.initial, settings.default_account)
 
     def test_detail(self):
         url = reverse("transactions:detail", kwargs={"pk": self.transaction.pk})

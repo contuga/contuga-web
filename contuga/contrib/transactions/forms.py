@@ -2,7 +2,27 @@ from django import forms
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 
+from . import models
 from contuga.contrib.accounts.models import Account
+from contuga.contrib.categories.models import Category
+from contuga.contrib.categories import constants as category_constants
+
+
+class TransactionCreateForm(forms.ModelForm):
+    class Meta:
+        model = models.Transaction
+        fields = ("type", "amount", "account", "category", "description")
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["account"].queryset = Account.objects.active(owner=user)
+        self.fields["category"].queryset = Category.objects.filter(
+            author=user,
+            transaction_type__in=[
+                category_constants.ALL,
+                category_constants.EXPENDITURE,
+            ],
+        )
 
 
 class TransactionFilterForm(forms.Form):
