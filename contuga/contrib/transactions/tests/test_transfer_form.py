@@ -14,9 +14,9 @@ UserModel = get_user_model()
 class InternalTransferFormTests(TestCase):
     def setUp(self):
         self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.account = self.create_acount()
+        self.account = self.create_account()
 
-    def create_acount(self, prefix="First", currency=BGN, user=None):
+    def create_account(self, prefix="First", currency=BGN, user=None):
         if not user:
             user = self.user
         return Account.objects.create(
@@ -27,7 +27,7 @@ class InternalTransferFormTests(TestCase):
         )
 
     def test_tansfer(self):
-        second_account = self.create_acount(prefix="Second")
+        second_account = self.create_account(prefix="Second")
 
         data = {
             "from_account": self.account.pk,
@@ -50,7 +50,7 @@ class InternalTransferFormTests(TestCase):
         self.assertDictEqual(form.cleaned_data, expected_cleaned_data)
 
     def test_tansfer_to_account_of_different_currency(self):
-        second_account = self.create_acount(prefix="Second", currency=EUR)
+        second_account = self.create_account(prefix="Second", currency=EUR)
 
         data = {
             "from_account": self.account.pk,
@@ -74,7 +74,7 @@ class InternalTransferFormTests(TestCase):
         self.assertDictEqual(form.cleaned_data, expected_cleaned_data)
 
     def test_tansfer_with_negative_amount(self):
-        second_account = self.create_acount(prefix="Second")
+        second_account = self.create_account(prefix="Second")
 
         data = {
             "from_account": self.account.pk,
@@ -92,7 +92,7 @@ class InternalTransferFormTests(TestCase):
         )
 
     def test_tansfer_to_account_of_different_currency_with_rate_missing(self):
-        second_account = self.create_acount(prefix="Second", currency=EUR)
+        second_account = self.create_account(prefix="Second", currency=EUR)
 
         data = {
             "from_account": self.account.pk,
@@ -133,7 +133,7 @@ class InternalTransferFormTests(TestCase):
 
     def test_tansfer_from_wrong_account(self):
         user = UserModel.objects.create_user("john.roe@example.com", "password")
-        wrong_account = self.create_acount(prefix="Wrong", user=user)
+        wrong_account = self.create_account(prefix="Wrong", user=user)
 
         data = {
             "from_account": wrong_account.pk,
@@ -159,7 +159,7 @@ class InternalTransferFormTests(TestCase):
 
     def test_tansfer_to_wrong_account(self):
         user = UserModel.objects.create_user("john.roe@example.com", "password")
-        wrong_account = self.create_acount(prefix="Wrong", user=user)
+        wrong_account = self.create_account(prefix="Wrong", user=user)
 
         data = {
             "from_account": self.account.pk,

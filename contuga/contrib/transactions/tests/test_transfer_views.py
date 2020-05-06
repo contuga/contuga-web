@@ -20,7 +20,7 @@ class InternalTransferViewTests(TestCase):
         self.account = self.create_acount()
         self.client.force_login(self.user)
 
-    def create_acount(self, prefix="First", currency=BGN, user=None):
+    def create_account(self, prefix="First", currency=BGN, user=None):
         if not user:
             user = self.user
         return Account.objects.create(
@@ -31,8 +31,8 @@ class InternalTransferViewTests(TestCase):
         )
 
     def test_transfer_get(self):
-        second_account = self.create_acount(prefix="Second")
-        third_account = self.create_acount(prefix="Third", currency=EUR)
+        second_account = self.create_account(prefix="Second")
+        third_account = self.create_account(prefix="Third", currency=EUR)
 
         url = reverse("transactions:internal_transfer_form")
         response = self.client.get(url)
@@ -49,7 +49,7 @@ class InternalTransferViewTests(TestCase):
         self.assertIsInstance(response.context["form"], InternalTransferForm)
 
     def test_tansfer_to_account_of_same_currency(self):
-        second_account = self.create_acount(prefix="Second")
+        second_account = self.create_account(prefix="Second")
 
         data = {
             "from_account": self.account.pk,
@@ -147,7 +147,7 @@ class InternalTransferViewTests(TestCase):
         self.assertDictEqual(response.context["income"], expected_context_income)
 
     def test_tansfer_to_account_of_different_currency(self):
-        second_account = self.create_acount(prefix="Second", currency=EUR)
+        second_account = self.create_account(prefix="Second", currency=EUR)
 
         data = {
             "from_account": self.account.pk,
@@ -218,7 +218,7 @@ class InternalTransferViewTests(TestCase):
         self.assertIsNone(session.get("income"))
 
     def test_session_data(self):
-        second_account = self.create_acount(prefix="Second")
+        second_account = self.create_account(prefix="Second")
 
         data = {
             "from_account": self.account.pk,
