@@ -1,0 +1,61 @@
+{% load i18n %}
+
+{% if object_list %}
+  <div class="row">
+    <div class="col-12">
+      <h2>{% trans "Additional details" %}</h2>
+    </div>
+  </div>
+
+  <div class="row table-row">
+    <div class="col-12">
+      <div class="table-responsive details-table">
+        <table class="table table-striped" id="transactions">
+          <thead>
+            <tr>
+              <th scope="col">{% trans "Currency" %}</th>
+              <th scope="col">{% trans "Transactions" %}</th>
+              <th scope="col">{% trans "Income" %}</th>
+              <th scope="col">{% trans "Expenditure" %}</th>
+              <th scope="col">{% trans "Balance" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for statistics_row in filter_statistics.currency_statistics %}
+            <tr>
+              <td>
+                {{ statistics_row.currency }}
+              </td>
+              <td>
+                {{ statistics_row.count }}
+              </td>
+              <td>
+               {{ statistics_row.income|floatformat:2 }}
+              </td>
+              <td>
+                {{ statistics_row.expenditure|floatformat:2 }}
+              </td>
+              <td>
+                {{ statistics_row.balance|floatformat:2 }}
+              </td>
+            </tr>
+            {% endfor %}
+            {% if filter_statistics.currency_count > 1 %}
+              <tr>
+                <td>
+                  {% trans "Total" %}
+                </td>
+                <td>
+                  {{ filter_statistics.transaction_count }}
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endif %}

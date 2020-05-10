@@ -8,7 +8,7 @@ from contuga.contrib.transactions.constants import INCOME, EXPENDITURE
 from contuga.contrib.settings.models import Settings
 from contuga.contrib.categories.models import Category
 from contuga.contrib.accounts.models import Account
-from contuga.contrib.accounts.constants import BGN
+from contuga.contrib.accounts.constants import BGN, EUR
 
 UserModel = get_user_model()
 
@@ -63,30 +63,51 @@ class TransactionViewTests(TestCase, TestMixin):
             transform=lambda x: x,
         )
 
-        # Assert transaction fields are used
-        fields = [
-            self.transaction.type_icon_class,
-            self.transaction.amount,
-            self.transaction.category.name,
-            self.transaction.description,
-        ]
-        for field in fields:
-            self.assertContains(response=response, text=field)
-
-        # Assert create form is correct
-        form = response.context.get("create_form")
-
-        expected_account_queryset = Account.objects.active()
-        queryset = form.fields["account"].queryset
-        self.assertQuerysetEqual(
-            expected_account_queryset, queryset, transform=lambda x: x
+    def test_filter_statistics(self):
+        eur_account = self.create_account(name="Second account name", currency=EUR)
+        income_transaction = self.create_transaction(
+            type=INCOME, author=self.user, category=self.category, account=eur_account
+        )
+        expenditure_transaction = self.create_transaction(
+            type=EXPENDITURE,
+            author=self.user,
+            category=self.category,
+            account=eur_account,
         )
 
-        expected_category_queryset = Category.objects.filter(author=self.user)
-        queryset = form.fields["category"].queryset
-        self.assertQuerysetEqual(
-            expected_category_queryset, queryset, transform=lambda x: x
+        url = reverse("transactions:list")
+        response = self.client.get(url, follow=True)
+
+        actual_statistics = response.context["filter_statistics"]
+
+        # Evaluate the currency_statistics to allow comparison later
+        actual_statistics["currency_statistics"] = list(
+            actual_statistics["currency_statistics"]
         )
+
+        expected_statistics = {
+            "transaction_count": self.user.transactions.count(),
+            "currency_count": 2,
+            "currency_statistics": [
+                {
+                    "currency": self.account.currency,
+                    "income": 0,
+                    "expenditure": self.transaction.amount,
+                    "balance": -(self.transaction.amount),
+                    "count": self.account.transactions.count(),
+                },
+                {
+                    "currency": eur_account.currency,
+                    "income": income_transaction.amount,
+                    "expenditure": expenditure_transaction.amount,
+                    "balance": income_transaction.amount
+                    - expenditure_transaction.amount,
+                    "count": eur_account.transactions.count(),
+                },
+            ],
+        }
+
+        self.assertEqual(actual_statistics, expected_statistics)
 
     def test_list_create_form_with_default_settings(self):
         url = reverse("transactions:list")

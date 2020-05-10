@@ -6,6 +6,8 @@ from django.views import generic
 from django.contrib.auth import mixins
 from django.urls import reverse_lazy
 from django.db import transaction
+from django.db.models import Sum, Count, Q, F
+from django.db.models.functions import Coalesce
 
 from import_export.mixins import ExportViewFormMixin
 from rest_framework import viewsets, permissions
@@ -75,7 +77,35 @@ class TransactionListView(
         context["category_choices"] = json.dumps(self.get_category_choices(settings))
         self.apply_initial_values(form, settings)
 
+        # context["object_list"] cannot be used due to the pagination which makes
+        # the use of order_by impossible. Cannot reorder a query once a slice has been taken.
+        queryset = self.get_queryset()
+        context["filter_statistics"] = self.get_filter_statistics(
+            queryset, context.get("paginator")
+        )
+
         return context
+
+    def get_filter_statistics(self, queryset, paginator):
+        currency_statistics = (
+            queryset.values("account__currency")
+            .annotate(
+                currency=F("account__currency"),
+                income=Coalesce(Sum("amount", filter=Q(type="income")), 0),
+                expenditure=Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
+                balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
+                - Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
+                count=Count("id"),
+            )
+            .values("currency", "income", "expenditure", "balance", "count")
+            .order_by()
+        )
+
+        return {
+            "transaction_count": paginator.count,
+            "currency_count": len(currency_statistics),
+            "currency_statistics": currency_statistics,
+        }
 
     def apply_initial_values(self, form, settings):
         category_field = form.fields["category"]
