@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-22 23:53+0300\n"
+"POT-Creation-Date: 2020-05-10 17:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -711,6 +711,14 @@ msgstr "Трансакции"
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:17
 msgid "Export"
 msgstr "Експортиране"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_statistics.html:6
+msgid "Additional details"
+msgstr "Допълнителна информация"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_statistics.html:46
+msgid "Total"
+msgstr "Общо"
 
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:24
 msgctxt "transaction"
