@@ -169,3 +169,49 @@ class AccountSignalsTestCase(TestCase):
 
         second_updated_account = Account.objects.get(pk=second_account.pk)
         self.assertEqual(second_updated_account.balance, transaction.amount)
+
+    def test_unrelated_accounts_are_not_updated(self):
+        unrelated_account = create_user_and_account(email="john.doe@example.com")
+
+        transaction = Transaction.objects.create(
+            type=transaction_constants.INCOME,
+            amount=Decimal("100.50"),
+            author=self.account.owner,
+            account=self.account,
+        )
+
+        retrieved_unrelated_account = Account.objects.get(pk=unrelated_account.pk)
+        self.assertEqual(
+            unrelated_account.updated_at, retrieved_unrelated_account.updated_at
+        )
+
+        transaction.amount = Decimal("50.50")
+        transaction.save(update_fields=["amount"])
+
+        retrieved_unrelated_account = Account.objects.get(pk=unrelated_account.pk)
+        self.assertEqual(
+            unrelated_account.updated_at, retrieved_unrelated_account.updated_at
+        )
+
+        second_account = Account.objects.create(
+            name="Second account name",
+            currency=self.account.currency,
+            owner=self.account.owner,
+            description="Second account description",
+        )
+
+        with self.assertNumQueries(2):
+            transaction.account = second_account
+            transaction.save(update_fields=["account"])
+
+        retrieved_unrelated_account = Account.objects.get(pk=unrelated_account.pk)
+        self.assertEqual(
+            unrelated_account.updated_at, retrieved_unrelated_account.updated_at
+        )
+
+        transaction.delete()
+
+        retrieved_unrelated_account = Account.objects.get(pk=unrelated_account.pk)
+        self.assertEqual(
+            unrelated_account.updated_at, retrieved_unrelated_account.updated_at
+        )
