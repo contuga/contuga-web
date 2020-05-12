@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from rest_framework import viewsets, permissions
 
 from contuga.mixins import OnlyOwnedByCurrentUserMixin
-from . import models, serializers
+from contuga import views
+from . import models, serializers, filters
 
 
 class AccountCreateView(mixins.LoginRequiredMixin, generic.CreateView):
@@ -20,10 +21,11 @@ class AccountCreateView(mixins.LoginRequiredMixin, generic.CreateView):
 
 
 class AccountListView(
-    OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, generic.ListView
+    OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, views.FilteredListView
 ):
     model = models.Account
     paginate_by = 20
+    filterset_class = filters.AccountFilterSet
 
 
 class AccountDetailView(
