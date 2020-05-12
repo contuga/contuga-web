@@ -5,6 +5,34 @@
 
 {% block content %}
 <main class="container list-page">
+  <div class="row" id="actionGroup">
+    <div class="col-12">
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-dark btn-action" type="button" data-toggle="collapse" data-target="#filterFormContainer">
+          <i class="fa fa-filter"></i>
+          <span class="d-none d-sm-inline">{% trans "Filters" %}</span>
+        </button>
+      </div>
+      <div class="collapse" id="filterFormContainer" data-parent="#actionGroup">
+        <form id="filterForm" method="GET">
+          <div class="row">
+            <div class="col-12 col-md-2">
+              {% include 'contuga/forms/field.html' with field=filterset.form.currency %}
+            </div>
+            <div class="col-12 col-md-2">
+              {% include 'contuga/forms/field.html' with field=filterset.form.is_active %}
+            </div>
+            <div class="col-12 col-md-2 d-flex align-items-end mb-3">
+              <button type="submit" class="btn btn-primary">
+                {% trans "Apply" %}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-12">
       <h1>{% trans "Accounts" %}</h1>
