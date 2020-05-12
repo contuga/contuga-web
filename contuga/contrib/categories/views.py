@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from rest_framework import viewsets, permissions
 
 from contuga.mixins import OnlyAuthoredByCurrentUserMixin
-from . import models, serializers, forms
+from contuga import views
+from . import models, serializers, forms, filters
 
 
 class CategoryCreateView(mixins.LoginRequiredMixin, generic.CreateView):
@@ -20,10 +21,11 @@ class CategoryCreateView(mixins.LoginRequiredMixin, generic.CreateView):
 
 
 class CategoryListView(
-    OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, generic.ListView
+    OnlyAuthoredByCurrentUserMixin, mixins.LoginRequiredMixin, views.FilteredListView
 ):
     model = models.Category
     paginate_by = 20
+    filterset_class = filters.CategoryFilterSet
 
 
 class CategoryDetailView(
