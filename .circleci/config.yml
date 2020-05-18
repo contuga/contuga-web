@@ -45,6 +45,9 @@ jobs:
           name: Run flake8
           command: |
             pipenv run flake8 . --statistic --exclude .venv
-
+      - run:
+          name: Run isort
+          command: |
+            pipenv run isort **/*.py --check-only --verbose
       - store_artifacts:
           path: htmlcov
