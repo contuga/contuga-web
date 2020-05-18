@@ -3,12 +3,10 @@ from collections import defaultdict
 
 from django import forms as django_forms
 
-
-from contuga.contrib.categories import (
-    constants as category_constants,
-    models as category_models,
-)
+from contuga.contrib.categories import constants as category_constants
+from contuga.contrib.categories import models as category_models
 from contuga.contrib.settings import models as settings_models
+
 from . import constants
 
 

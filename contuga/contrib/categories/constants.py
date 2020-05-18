@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 
-from contuga.contrib.transactions.constants import INCOME, EXPENDITURE
+from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 
 ALL = "all"
 

@@ -1,14 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
-
-from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
+from rest_framework.test import APIClient, APITestCase
 
-from contuga.mixins import TestMixin
-from contuga.contrib.categories.constants import INCOME, EXPENDITURE
-from contuga.contrib.accounts.models import Account
 from contuga.contrib.accounts.constants import BGN
+from contuga.contrib.accounts.models import Account
+from contuga.contrib.categories.constants import EXPENDITURE, INCOME
+from contuga.mixins import TestMixin
 
 UserModel = get_user_model()
 

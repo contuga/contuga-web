@@ -1,13 +1,13 @@
-from django.http import HttpResponseRedirect
-from django.views import generic
 from django.contrib.auth import mixins
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.views import generic
+from rest_framework import permissions, viewsets
 
-from rest_framework import viewsets, permissions
-
-from contuga.mixins import OnlyOwnedByCurrentUserMixin
 from contuga import views
-from . import models, serializers, filters
+from contuga.mixins import OnlyOwnedByCurrentUserMixin
+
+from . import filters, models, serializers
 
 
 class AccountCreateView(mixins.LoginRequiredMixin, generic.CreateView):

@@ -1,7 +1,7 @@
-from django.views.generic.base import TemplateView, RedirectView
 from django.urls import reverse
+from django.views.generic.base import RedirectView, TemplateView
 
-from . import models, constants
+from . import constants, models
 
 
 class PageRedirectView(RedirectView):

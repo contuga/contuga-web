@@ -1,6 +1,5 @@
 from django_filters import filterset
 
-
 from .models import Category
 
 

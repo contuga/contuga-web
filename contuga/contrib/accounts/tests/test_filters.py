@@ -1,10 +1,10 @@
-from django.test import TestCase, RequestFactory
-from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.test import RequestFactory, TestCase
+from django.urls import reverse
 
+from contuga.contrib.accounts.constants import BGN, EUR
 from contuga.contrib.accounts.filters import AccountFilterSet
 from contuga.contrib.accounts.models import Account
-from contuga.contrib.accounts.constants import BGN, EUR
 
 UserModel = get_user_model()
 

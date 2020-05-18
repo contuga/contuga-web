@@ -1,15 +1,15 @@
 from decimal import Decimal
 
-from django.utils import timezone
-from django.urls import reverse
 from django.contrib.auth import get_user_model
-
-from rest_framework.test import APITestCase, APIClient
+from django.urls import reverse
+from django.utils import timezone
 from rest_framework.authtoken.models import Token
+from rest_framework.test import APIClient, APITestCase
 
 from contuga.contrib.accounts import constants as account_constants
 from contuga.contrib.accounts.models import Account
-from .. import utils, constants
+
+from .. import constants, utils
 from . import utils as test_utils
 
 UserModel = get_user_model()

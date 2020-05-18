@@ -1,10 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
 
-from contuga.mixins import TestMixin
 from contuga.contrib.categories import constants as category_constants
+from contuga.mixins import TestMixin
 
 from ..models import Settings
 

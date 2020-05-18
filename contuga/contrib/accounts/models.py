@@ -1,12 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Q, Sum
+from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
-from django.db.models import Sum, Q
-from django.db.models.functions import Coalesce
+
+from contuga.models import TimestampModel
 
 from . import constants, managers
-from contuga.models import TimestampModel
 
 UserModel = get_user_model()
 

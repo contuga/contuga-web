@@ -1,17 +1,15 @@
 from datetime import datetime, time
 
 import pytz
-
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-
-from django_filters import filters
-from django_filters import filterset
+from django_filters import filters, filterset
 
 from contuga.contrib.accounts import models as account_models
 from contuga.contrib.categories import models as category_models
-from .models import Transaction
+
 from .forms import TransactionFilterForm
+from .models import Transaction
 
 
 def category_queryset(request):

@@ -1,10 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
 
-from contuga.contrib.categories.models import Category
 from contuga.contrib.accounts.models import Account
+from contuga.contrib.categories.models import Category
 
 UserModel = get_user_model()
 

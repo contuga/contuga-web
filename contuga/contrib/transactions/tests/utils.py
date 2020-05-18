@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 
-from contuga.contrib.categories.models import Category
-from contuga.contrib.accounts.models import Account
 from contuga.contrib.accounts import constants as account_constants
-from ..models import Transaction
+from contuga.contrib.accounts.models import Account
+from contuga.contrib.categories.models import Category
 
+from ..models import Transaction
 
 UserModel = get_user_model()
 

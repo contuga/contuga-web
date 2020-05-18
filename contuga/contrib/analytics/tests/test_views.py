@@ -1,19 +1,19 @@
 import json
-from decimal import Decimal
 from datetime import date
+from decimal import Decimal
 
+from django.contrib.auth import get_user_model
+from django.core.serializers.json import DjangoJSONEncoder
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.urls import reverse
-from django.core.serializers.json import DjangoJSONEncoder
-from django.contrib.auth import get_user_model
 
 from contuga.contrib.accounts import constants as account_constants
 from contuga.contrib.accounts.models import Account
-from .. import utils, constants
-from . import utils as test_utils
 
+from .. import constants, utils
+from . import utils as test_utils
 
 UserModel = get_user_model()
 

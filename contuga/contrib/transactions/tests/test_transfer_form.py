@@ -1,12 +1,12 @@
 from decimal import Decimal
 
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from contuga.contrib.transactions.forms import InternalTransferForm
-from contuga.contrib.accounts.models import Account
 from contuga.contrib.accounts.constants import BGN, EUR
+from contuga.contrib.accounts.models import Account
+from contuga.contrib.transactions.forms import InternalTransferForm
 
 UserModel = get_user_model()
 
