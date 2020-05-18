@@ -13,25 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.urls import path, include
 from django.conf import settings
-from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
+from django.conf.urls.static import static
 from django.contrib import admin
+from django.urls import include, path
 from django.views import generic
-from . import views
-
-from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views as authtoken_views
 from rest_framework.documentation import include_docs_urls
+from rest_framework.routers import DefaultRouter
 
-from contuga.contrib.transactions.views import TransactionViewSet
 from contuga.contrib.accounts.views import AccountViewSet
-from contuga.contrib.categories.views import CategoryViewSet
-from contuga.contrib.users.views import UserViewSet
-from contuga.contrib.settings.views import SettingsViewSet
 from contuga.contrib.analytics.views import AnalyticsViewSet
+from contuga.contrib.categories.views import CategoryViewSet
+from contuga.contrib.settings.views import SettingsViewSet
+from contuga.contrib.transactions.views import TransactionViewSet
+from contuga.contrib.users.views import UserViewSet
 
+from . import views
 
 router = DefaultRouter()
 router.register(r"transactions", TransactionViewSet, basename="transaction")

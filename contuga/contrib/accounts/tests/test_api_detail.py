@@ -1,14 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
-
-from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
+from rest_framework.test import APIClient, APITestCase
 
-from ..models import Account
 from .. import constants
+from ..models import Account
 from . import utils
-
 
 UserModel = get_user_model()
 

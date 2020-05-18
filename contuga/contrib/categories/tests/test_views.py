@@ -1,8 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 
 from contuga.contrib.categories.models import Category
+
 from .. import constants
 
 UserModel = get_user_model()

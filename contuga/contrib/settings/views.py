@@ -1,10 +1,10 @@
+from django.contrib.auth import mixins
 from django.http import HttpResponseRedirect
 from django.views import generic
-from django.contrib.auth import mixins
-
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, viewsets
 
 from contuga.contrib.categories import constants as category_constants
+
 from . import models, serializers
 
 

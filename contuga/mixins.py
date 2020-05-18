@@ -1,8 +1,8 @@
-from contuga.contrib.categories.models import Category
-from contuga.contrib.accounts.models import Account
 from contuga.contrib.accounts.constants import BGN
-from contuga.contrib.transactions.models import Transaction
+from contuga.contrib.accounts.models import Account
+from contuga.contrib.categories.models import Category
 from contuga.contrib.transactions.constants import EXPENDITURE
+from contuga.contrib.transactions.models import Transaction
 
 
 class OnlyAuthoredByCurrentUserMixin:
