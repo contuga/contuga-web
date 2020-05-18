@@ -30,6 +30,7 @@ coreapi = "==2.3.*"
 python-dateutil = "==2.8.*"
 django-parler = "==2.0.*"
 django-debug-toolbar = "==2.2.*"
+isort = "==4.3.*"
 
 [requires]
 python_version = "3.7"
