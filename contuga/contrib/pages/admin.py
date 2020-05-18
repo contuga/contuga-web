@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from parler.admin import TranslatableAdmin, TranslatableStackedInline
 
 from . import models

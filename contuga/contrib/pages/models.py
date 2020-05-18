@@ -1,11 +1,10 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from parler.models import TranslatableModel, TranslatedFields
 
 from contuga.models import TimestampModel
-from . import constants
 
+from . import constants
 
 # TODO: Make sure there is only one home page
 

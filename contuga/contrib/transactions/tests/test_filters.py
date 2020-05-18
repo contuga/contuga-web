@@ -1,15 +1,15 @@
 from datetime import timedelta
 
-from django.test import TestCase, RequestFactory
-from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.test import RequestFactory, TestCase
+from django.urls import reverse
 
-from contuga.contrib.transactions.models import Transaction
+from contuga.contrib.accounts.constants import BGN
+from contuga.contrib.accounts.models import Account
+from contuga.contrib.categories.models import Category
 from contuga.contrib.transactions.constants import INCOME
 from contuga.contrib.transactions.filters import TransactionFilterSet
-from contuga.contrib.categories.models import Category
-from contuga.contrib.accounts.models import Account
-from contuga.contrib.accounts.constants import BGN
+from contuga.contrib.transactions.models import Transaction
 
 UserModel = get_user_model()
 

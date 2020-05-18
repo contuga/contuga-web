@@ -10,8 +10,9 @@ To change settings file:
 `DJANGO_ENV=production python manage.py runserver`
 """
 
-from split_settings.tools import optional, include
 from os import environ
+
+from split_settings.tools import include, optional
 
 ENV = environ.get("DJANGO_ENV") or "development"
 
