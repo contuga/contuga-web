@@ -11,6 +11,7 @@ pre-commit = "*"
 wily = "*"
 bandit = "*"
 coverage = "*"
+isort = "==4.3.*"
 
 [packages]
 django = "==2.2.*"
