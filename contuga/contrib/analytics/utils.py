@@ -1,16 +1,15 @@
 from datetime import datetime, time
 
-from dateutil.relativedelta import relativedelta
 import pytz
-
-from django.db.models import Sum, Q
+from dateutil.relativedelta import relativedelta
+from django.conf import settings
+from django.db.models import Q, Sum
 from django.db.models.functions import Coalesce, TruncDay, TruncMonth
 from django.utils import timezone
-from django.conf import settings
 
 from contuga.contrib.transactions.models import Transaction
-from .constants import DAYS, MONTHS
 
+from .constants import DAYS, MONTHS
 
 REPORTS = {
     MONTHS: {"default_period": {"months": 5}, "truncClass": TruncMonth},
