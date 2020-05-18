@@ -8,7 +8,14 @@
   hooks:
     - id: flake8
 - repo: local
+
   hooks:
+    - id: isort
+      name: isort
+      entry: isort
+      require_serial: true
+      language: python
+      types: [python]
     - id: wily
       name: wily
       entry: wily diff
