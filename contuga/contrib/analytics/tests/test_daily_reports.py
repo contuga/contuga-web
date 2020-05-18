@@ -1,18 +1,18 @@
-from unittest import mock
-from decimal import Decimal
 from datetime import timedelta
-from dateutil.relativedelta import relativedelta
+from decimal import Decimal
+from unittest import mock
 
+from dateutil.relativedelta import relativedelta
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
-from django.contrib.auth import get_user_model
 
 from contuga.contrib.accounts import constants as account_constants
 from contuga.contrib.accounts.models import Account
-from ..constants import DAYS
-from .. import utils
-from . import utils as test_utils
 
+from .. import utils
+from ..constants import DAYS
+from . import utils as test_utils
 
 UserModel = get_user_model()
 

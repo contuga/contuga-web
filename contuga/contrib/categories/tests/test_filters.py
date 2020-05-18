@@ -1,10 +1,10 @@
-from django.test import TestCase, RequestFactory
-from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.test import RequestFactory, TestCase
+from django.urls import reverse
 
+from contuga.contrib.categories.constants import ALL, EXPENDITURE, INCOME
 from contuga.contrib.categories.filters import CategoryFilterSet
 from contuga.contrib.categories.models import Category
-from contuga.contrib.categories.constants import INCOME, EXPENDITURE, ALL
 
 UserModel = get_user_model()
 

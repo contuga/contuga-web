@@ -1,12 +1,13 @@
+from django.contrib.auth import get_user_model
+from django.core import validators
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
-from django.core import validators
+
+from contuga.contrib.categories.models import Category
+from contuga.models import TimestampModel
 
 from . import constants, managers
-from contuga.models import TimestampModel
-from contuga.contrib.categories.models import Category
 
 UserModel = get_user_model()
 

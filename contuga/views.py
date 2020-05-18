@@ -1,7 +1,7 @@
-from django.views import generic
-from django.http import JsonResponse
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.http import JsonResponse
 from django.utils.translation import ugettext_lazy as _
+from django.views import generic
 
 
 class FilteredListView(generic.ListView):

@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from .constants import REPORT_UNIT_CHOICES, MONTHS
+from .constants import MONTHS, REPORT_UNIT_CHOICES
 
 
 class ReportsFilterForm(forms.Form):

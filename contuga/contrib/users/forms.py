@@ -1,8 +1,7 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
-from django_registration.forms import RegistrationForm
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV3
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django_registration.forms import RegistrationForm
 
 from . import models
 
