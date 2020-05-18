@@ -1,15 +1,17 @@
-from django.views import generic
 from django.conf import settings
+from django.contrib.auth import get_user_model, mixins
+from django.contrib.auth import views as auth_views
 from django.http import HttpResponseRedirect
 from django.shortcuts import resolve_url
-from django.contrib.auth import mixins, get_user_model, views as auth_views
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.views import generic
 from django_registration.backends.activation import views as registration_views
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, viewsets
 
-from . import forms, serializers, permissions as custom_permissions
+from . import forms
+from . import permissions as custom_permissions
+from . import serializers
 
 UserModel = get_user_model()
 
