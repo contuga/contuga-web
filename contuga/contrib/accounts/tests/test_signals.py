@@ -1,10 +1,11 @@
 from decimal import Decimal
 
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 
-from contuga.contrib.transactions.models import Transaction
 from contuga.contrib.transactions import constants as transaction_constants
+from contuga.contrib.transactions.models import Transaction
+
 from ..models import Account
 from .utils import create_user_and_account
 

@@ -1,16 +1,16 @@
 import json
 from decimal import Decimal
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 
-from contuga.mixins import TestMixin
-from contuga.contrib.transactions.models import Transaction
+from contuga.contrib.accounts.constants import EUR
+from contuga.contrib.accounts.models import Account
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.forms import InternalTransferForm
-from contuga.contrib.accounts.models import Account
-from contuga.contrib.accounts.constants import EUR
+from contuga.contrib.transactions.models import Transaction
+from contuga.mixins import TestMixin
 
 UserModel = get_user_model()
 

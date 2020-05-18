@@ -1,19 +1,19 @@
 import json
 
+from django.contrib.auth import mixins
 from django.core.serializers.json import DjangoJSONEncoder
 from django.views.generic.base import TemplateView
-from django.contrib.auth import mixins
-
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 
 from contuga.contrib.pages import constants
 from contuga.contrib.pages.models import Page
+
 from . import utils
-from .forms import ReportsFilterForm
-from .constants import MONTHS
-from .serializers import ReportsSerializer
 from .api_filters import ReportsFilterBackend
+from .constants import MONTHS
+from .forms import ReportsFilterForm
+from .serializers import ReportsSerializer
 
 
 class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):

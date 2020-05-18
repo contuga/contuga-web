@@ -1,9 +1,10 @@
-from django.db.models import OuterRef, Subquery, Sum, Q
+from django.db.models import OuterRef, Q, Subquery, Sum
 from django.db.models.functions import Coalesce
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from contuga.contrib.transactions.models import Transaction
+
 from .models import Account
 
 
