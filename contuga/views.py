@@ -94,3 +94,8 @@ class ManifestView(generic.View):
             "display": "standalone",
         }
         return JsonResponse(manifest)
+
+
+class SitemapView(generic.TemplateView):
+    template_name = "contuga/sitemap.xml"
+    content_type = "text/xml"

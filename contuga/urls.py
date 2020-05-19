@@ -65,6 +65,8 @@ urlpatterns = i18n_patterns(
     path("", include(("contuga.contrib.pages.urls", "pages"))),
 )
 
+urlpatterns += [path("sitemap.xml", views.SitemapView.as_view(), name="sitemap")]
+
 
 if settings.DEBUG:
     import debug_toolbar  # NOQA
