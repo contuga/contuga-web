@@ -1,6 +1,7 @@
 import json
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
+from unittest import mock
 
 from django.contrib.auth import get_user_model
 from django.core.serializers.json import DjangoJSONEncoder
@@ -76,7 +77,8 @@ class AnalyticsTestCase(TestCase):
         # Assert form is correct
         form = response.context.get("form")
         self.assertEqual(
-            form.cleaned_data, {"report_unit": constants.MONTHS, "start_date": None}
+            form.cleaned_data,
+            {"report_unit": constants.MONTHS, "start_date": None, "end_date": None},
         )
 
     def test_get_monthly_reports_with_invalid_unit(self):
@@ -128,7 +130,8 @@ class AnalyticsTestCase(TestCase):
         # Assert form is correct
         form = response.context.get("form")
         self.assertEqual(
-            form.cleaned_data, {"report_unit": constants.MONTHS, "start_date": today}
+            form.cleaned_data,
+            {"report_unit": constants.MONTHS, "start_date": today, "end_date": None},
         )
 
     def test_get_monthly_reports_with_invalid_start_date(self):
@@ -187,6 +190,158 @@ class AnalyticsTestCase(TestCase):
             form.errors, {"start_date": [_("The start date cannot be before 2019.")]}
         )
 
+    def test_get_monthly_reports_with_end_date(self):
+        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+
+        first_day_of_the_current_month = timezone.now().astimezone().replace(day=1)
+        one_month_ago = first_day_of_the_current_month - timedelta(days=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = one_month_ago
+            test_utils.create_income(
+                account=self.account, amount=Decimal("412.20")
+            ).amount
+
+            test_utils.create_expenditure(
+                account=self.account, amount=Decimal("111.50")
+            ).amount
+
+        url = reverse("analytics:list")
+        date_string = one_month_ago.strftime("%m/%d/%Y")
+        response = self.client.get(url, {"end_date": date_string}, follow=True)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert reports are correct
+        expected_reports = utils.generate_reports(
+            user=self.account.owner,
+            report_unit=constants.MONTHS,
+            end_date=one_month_ago.date(),
+        )
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        # Assert form is correct
+        form = response.context.get("form")
+        self.assertEqual(
+            form.cleaned_data,
+            {
+                "report_unit": constants.MONTHS,
+                "start_date": None,
+                "end_date": one_month_ago.date(),
+            },
+        )
+
+    def test_get_monthly_reports_with_end_date_before_2019(self):
+        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+
+        url = reverse("analytics:list")
+        response = self.client.get(
+            url, {"end_date": date(year=2018, month=12, day=31)}, follow=True
+        )
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert reports are correct
+        expected_reports = utils.generate_reports(
+            user=self.account.owner, report_unit=constants.MONTHS
+        )
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        # Assert form is correct
+        form = response.context.get("form")
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors, {"end_date": [_("The end date cannot be before 2019.")]}
+        )
+
+    def test_get_monthly_reports_with_end_date_in_the_future(self):
+        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+
+        tomorow = timezone.now().astimezone() + timedelta(days=1)
+
+        date_string = tomorow.strftime("%m/%d/%Y")
+        url = reverse("analytics:list")
+        response = self.client.get(url, {"end_date": date_string}, follow=True)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert reports are correct
+        expected_reports = utils.generate_reports(
+            user=self.account.owner, report_unit=constants.MONTHS
+        )
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        # Assert form is correct
+        form = response.context.get("form")
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors, {"end_date": [_("The end date cannot be in the future.")]}
+        )
+
+    def test_get_monthly_reports_with_start_and_end_date(self):
+        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+
+        first_day_of_the_current_month = timezone.now().astimezone().replace(day=1)
+        one_month_ago = first_day_of_the_current_month - timedelta(days=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = one_month_ago
+            test_utils.create_income(
+                account=self.account, amount=Decimal("412.20")
+            ).amount
+
+            test_utils.create_expenditure(
+                account=self.account, amount=Decimal("111.50")
+            ).amount
+
+        url = reverse("analytics:list")
+        date_string = one_month_ago.strftime("%m/%d/%Y")
+        response = self.client.get(
+            url, {"start_date": date_string, "end_date": date_string}, follow=True
+        )
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert reports are correct
+        expected_reports = utils.generate_reports(
+            user=self.account.owner,
+            report_unit=constants.MONTHS,
+            start_date=one_month_ago.date(),
+            end_date=one_month_ago.date(),
+        )
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        # Assert form is correct
+        form = response.context.get("form")
+        self.assertEqual(
+            form.cleaned_data,
+            {
+                "report_unit": constants.MONTHS,
+                "start_date": one_month_ago.date(),
+                "end_date": one_month_ago.date(),
+            },
+        )
+
     def test_get_daily_reports(self):
         test_utils.create_income(account=self.account, amount=Decimal("310"))
 
@@ -210,7 +365,8 @@ class AnalyticsTestCase(TestCase):
         # Assert form is correct
         form = response.context.get("form")
         self.assertEqual(
-            form.cleaned_data, {"report_unit": constants.DAYS, "start_date": None}
+            form.cleaned_data,
+            {"report_unit": constants.DAYS, "start_date": None, "end_date": None},
         )
 
     def test_get_daily_reports_with_start_date(self):
@@ -240,5 +396,107 @@ class AnalyticsTestCase(TestCase):
         # Assert form is correct
         form = response.context.get("form")
         self.assertEqual(
-            form.cleaned_data, {"report_unit": constants.DAYS, "start_date": today}
+            form.cleaned_data,
+            {"report_unit": constants.DAYS, "start_date": today, "end_date": None},
+        )
+
+    def test_get_daily_reports_with_end_date(self):
+        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+
+        yesterday = timezone.now().astimezone() - timedelta(days=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = yesterday
+            test_utils.create_income(
+                account=self.account, amount=Decimal("412.20")
+            ).amount
+
+            test_utils.create_expenditure(
+                account=self.account, amount=Decimal("111.50")
+            ).amount
+
+        url = reverse("analytics:list")
+        date_string = yesterday.strftime("%m/%d/%Y")
+        response = self.client.get(
+            url, {"report_unit": constants.DAYS, "end_date": date_string}, follow=True
+        )
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert reports are correct
+        expected_reports = utils.generate_reports(
+            user=self.account.owner,
+            report_unit=constants.DAYS,
+            end_date=yesterday.date(),
+        )
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        # Assert form is correct
+        form = response.context.get("form")
+        self.assertEqual(
+            form.cleaned_data,
+            {
+                "report_unit": constants.DAYS,
+                "start_date": None,
+                "end_date": yesterday.date(),
+            },
+        )
+
+    def test_get_daily_reports_with_start_and_end_date(self):
+        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+
+        yesterday = timezone.now().astimezone() - timedelta(days=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = yesterday
+            test_utils.create_income(
+                account=self.account, amount=Decimal("412.20")
+            ).amount
+
+            test_utils.create_expenditure(
+                account=self.account, amount=Decimal("111.50")
+            ).amount
+
+        url = reverse("analytics:list")
+        date_string = yesterday.strftime("%m/%d/%Y")
+        response = self.client.get(
+            url,
+            {
+                "report_unit": constants.DAYS,
+                "start_date": date_string,
+                "end_date": date_string,
+            },
+            follow=True,
+        )
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert reports are correct
+        expected_reports = utils.generate_reports(
+            user=self.account.owner,
+            report_unit=constants.DAYS,
+            start_date=yesterday.date(),
+            end_date=yesterday.date(),
+        )
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        # Assert form is correct
+        form = response.context.get("form")
+        self.assertEqual(
+            form.cleaned_data,
+            {
+                "report_unit": constants.DAYS,
+                "start_date": yesterday.date(),
+                "end_date": yesterday.date(),
+            },
         )

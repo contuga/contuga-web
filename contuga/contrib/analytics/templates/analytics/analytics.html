@@ -22,8 +22,11 @@
               <div class="col-12 col-md-2">
                 {% include 'contuga/forms/field.html' with field=form.report_unit %}
               </div>
-              <div class="col-12 col-md-2">
+              <div class="col-12 col-md-2 col-lg-2">
                 {% include 'contuga/forms/field.html' with field=form.start_date|attr:'autocomplete:off' %}
+              </div>
+              <div class="col-12 col-md-2 col-lg-2">
+                {% include 'contuga/forms/field.html' with field=form.end_date|attr:'autocomplete:off' %}
               </div>
               <div class="col-12 col-md-2 d-flex align-items-end mb-3">
                 <button type="submit" class="btn btn-primary">
@@ -202,6 +205,17 @@
       });
 
       $('#id_start_date').daterangepicker(dateRangePickerConfig);
+
+      $('#id_end_date').on('apply.daterangepicker', function(event, picker) {
+        const startDate = picker.startDate.format(dateRangePickerConfig.locale.format);
+        $(this).val(startDate);
+      });
+
+      $('#id_end_date').on('cancel.daterangepicker', function(event, picker) {
+        $(this).val('');
+      });
+
+      $('#id_end_date').daterangepicker(dateRangePickerConfig);
 
       $("#filterForm").on('submit', function(event){
         $(this).find(":input").filter(function() {
