@@ -50,8 +50,13 @@ class Account(TimestampModel):
     def latest_transactions(self, count=20):
         return self.transactions.all()[:count]
 
-    def calculate_balance(self):
-        return self.transactions.aggregate(
+    def calculate_balance(self, date=None):
+        if date:
+            queryset = self.transactions.filter(created_at__lte=date)
+        else:
+            queryset = self.transactions
+
+        return queryset.aggregate(
             balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
             - Coalesce(Sum("amount", filter=Q(type="expenditure")), 0)
         )["balance"]

@@ -454,3 +454,150 @@ class MonthlyReportsTestCase(TestCase):
         ]
 
         self.assertListEqual(result, expected_result)
+
+    def test_reports_for_multiple_months_with_end_date(self):
+        test_utils.create_income(account=self.account, amount=Decimal("310.15")).amount
+
+        test_utils.create_expenditure(
+            account=self.account, amount=Decimal("100.10")
+        ).amount
+
+        first_day_of_the_current_month = self.now.replace(day=1)
+        one_month_ago = first_day_of_the_current_month - timedelta(days=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = one_month_ago
+            income_one_month_ago = test_utils.create_income(
+                account=self.account, amount=Decimal("412.20")
+            ).amount
+
+            expenditure_one_month_ago = test_utils.create_expenditure(
+                account=self.account, amount=Decimal("111.50")
+            ).amount
+
+        first_day_of_the_last_month = one_month_ago.replace(day=1)
+        two_months_ago = first_day_of_the_last_month - timedelta(days=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = two_months_ago
+            income_two_months_ago = test_utils.create_income(
+                account=self.account, amount=Decimal("65.43")
+            ).amount
+
+            expenditure_two_months_ago = test_utils.create_expenditure(
+                account=self.account, amount=Decimal("11.32")
+            ).amount
+
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(
+                user=self.account.owner, end_date=one_month_ago
+            )
+
+        reports = []
+        for count in reversed(range(3, 6)):
+            date = self.now - relativedelta(months=count)
+            reports.append(
+                {
+                    "month": date.month,
+                    "year": date.year,
+                    "income": 0,
+                    "expenditures": 0,
+                    "balance": 0,
+                }
+            )
+
+        report_two_months_ago = {
+            "month": two_months_ago.month,
+            "year": two_months_ago.year,
+            "income": income_two_months_ago,
+            "expenditures": expenditure_two_months_ago,
+            "balance": income_two_months_ago - expenditure_two_months_ago,
+        }
+
+        report_one_month_ago = {
+            "month": one_month_ago.month,
+            "year": one_month_ago.year,
+            "income": income_one_month_ago,
+            "expenditures": expenditure_one_month_ago,
+            "balance": report_two_months_ago["balance"]
+            + income_one_month_ago
+            - expenditure_one_month_ago,
+        }
+
+        reports.extend([report_two_months_ago, report_one_month_ago])
+
+        expected_result = [
+            {
+                "pk": self.account.pk,
+                "name": self.account.name,
+                "currency": self.account.currency,
+                "reports": reports,
+            }
+        ]
+
+        self.assertListEqual(result, expected_result)
+
+    def test_reports_for_multiple_months_with_start_and_end_date(self):
+        test_utils.create_income(account=self.account, amount=Decimal("310.15")).amount
+
+        test_utils.create_expenditure(
+            account=self.account, amount=Decimal("100.10")
+        ).amount
+
+        first_day_of_the_current_month = self.now.replace(day=1)
+        one_month_ago = first_day_of_the_current_month - timedelta(days=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = one_month_ago
+            income_one_month_ago = test_utils.create_income(
+                account=self.account, amount=Decimal("412.20")
+            ).amount
+
+            expenditure_one_month_ago = test_utils.create_expenditure(
+                account=self.account, amount=Decimal("111.50")
+            ).amount
+
+        first_day_of_the_last_month = one_month_ago.replace(day=1)
+        two_months_ago = first_day_of_the_last_month - timedelta(days=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = two_months_ago
+            income_two_months_ago = test_utils.create_income(
+                account=self.account, amount=Decimal("65.43")
+            ).amount
+
+            expenditure_two_months_ago = test_utils.create_expenditure(
+                account=self.account, amount=Decimal("11.32")
+            ).amount
+
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(
+                user=self.account.owner,
+                start_date=first_day_of_the_last_month,
+                end_date=one_month_ago,
+            )
+
+        starting_balance = income_two_months_ago - expenditure_two_months_ago
+
+        report_one_month_ago = {
+            "month": one_month_ago.month,
+            "year": one_month_ago.year,
+            "income": income_one_month_ago,
+            "expenditures": expenditure_one_month_ago,
+            "balance": starting_balance
+            + income_one_month_ago
+            - expenditure_one_month_ago,
+        }
+
+        reports = [report_one_month_ago]
+
+        expected_result = [
+            {
+                "pk": self.account.pk,
+                "name": self.account.name,
+                "currency": self.account.currency,
+                "reports": reports,
+            }
+        ]
+
+        self.assertListEqual(result, expected_result)

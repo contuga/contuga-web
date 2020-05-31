@@ -3,7 +3,7 @@ from datetime import datetime, time
 import pytz
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
-from django.db.models import Q, Sum
+from django.db.models import DecimalField, OuterRef, Q, Subquery, Sum
 from django.db.models.functions import Coalesce, TruncDay, TruncMonth
 from django.utils import timezone
 
@@ -18,12 +18,33 @@ REPORTS = {
 
 
 def get_aggregated_data(transactions, start_date, end_date, truncClass):
-    return (
-        transactions.filter(
-            created_at__gte=start_date.astimezone(pytz.UTC),
-            created_at__lte=end_date.astimezone(pytz.UTC),
+    queryset = transactions.filter(
+        created_at__gte=start_date.astimezone(pytz.UTC),
+        created_at__lte=end_date.astimezone(pytz.UTC),
+    )
+
+    if end_date:
+        # Calculte the account balance until the selected end_date
+        account__balance = (
+            transactions.filter(
+                account__pk=OuterRef("account__pk"),
+                created_at__lte=end_date.astimezone(pytz.UTC),
+            )
+            .annotate(created_on=truncClass("created_at", tzinfo=start_date.tzinfo))
+            .values("account__pk")
+            .annotate(
+                balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
+                - Coalesce(Sum("amount", filter=Q(type="expenditure")), 0)
+            )
+            .values("balance")
+            .order_by()
         )
-        .annotate(created_on=truncClass("created_at", tzinfo=start_date.tzinfo))
+
+    return (
+        queryset.annotate(created_on=truncClass("created_at", tzinfo=start_date.tzinfo))
+        .annotate(
+            account__balance=Subquery(account__balance, output_field=DecimalField())
+        )
         .values(
             "account__name",
             "account__pk",
@@ -85,11 +106,11 @@ def group_reports(aggregated_data, report_unit):
     return list(grouped_reports.values())
 
 
-def calculate_balance(report, next_report, account_balance, today):
+def calculate_balance(report, next_report, account_balance, end_date):
     if (
-        report["year"] == today.year
-        and report["month"] == today.month
-        and report.get("day", today.day) == today.day
+        report["year"] == end_date.year
+        and report["month"] == end_date.month
+        and report.get("day", end_date.day) == end_date.day
     ):
         return account_balance
     else:
@@ -100,13 +121,12 @@ def calculate_balance(report, next_report, account_balance, today):
         )
 
 
-def process_monthly_reports(reports, start_date):
+def process_monthly_reports(reports, start_date, end_date):
     start_date_string = construct_date_string(start_date.year, start_date.month)
 
     for account in reports:
-        today = timezone.now().astimezone().date()
-        year = today.year
-        month = today.month
+        year = end_date.year
+        month = end_date.month
 
         date_string = construct_date_string(year, month)
         next_date = date_string
@@ -121,7 +141,7 @@ def process_monthly_reports(reports, start_date):
                 report=report,
                 next_report=account["reports"][next_date],
                 account_balance=account["balance"],
-                today=today,
+                end_date=end_date,
             )
 
             next_date = date_string
@@ -143,14 +163,13 @@ def process_monthly_reports(reports, start_date):
     return reports
 
 
-def process_daily_reports(reports, start_date):
+def process_daily_reports(reports, start_date, end_date):
     start_date_string = construct_date_string(
         start_date.year, start_date.month, start_date.day
     )
 
     for account in reports:
-        today = timezone.now().astimezone().date()
-        date = timezone.now().astimezone().date()
+        date = end_date.date()
         date_string = construct_date_string(date.year, date.month, date.day)
         next_date = date_string
 
@@ -170,7 +189,7 @@ def process_daily_reports(reports, start_date):
                 report=report,
                 next_report=account["reports"][next_date],
                 account_balance=account["balance"],
-                today=today,
+                end_date=end_date,
             )
 
             next_date = date_string
@@ -188,11 +207,15 @@ def process_daily_reports(reports, start_date):
     return reports
 
 
-def process_reports(reports, report_unit, start_date):
+def process_reports(reports, report_unit, start_date, end_date):
     if report_unit == DAYS:
-        return process_daily_reports(reports=reports, start_date=start_date)
+        return process_daily_reports(
+            reports=reports, start_date=start_date, end_date=end_date
+        )
     else:
-        return process_monthly_reports(reports=reports, start_date=start_date)
+        return process_monthly_reports(
+            reports=reports, start_date=start_date, end_date=end_date
+        )
 
 
 def generate_reports(user, start_date=None, end_date=None, report_unit=MONTHS):
@@ -224,7 +247,10 @@ def generate_reports(user, start_date=None, end_date=None, report_unit=MONTHS):
     )
     grouped_reports = group_reports(aggregated_data, report_unit=report_unit)
     processed_reports = process_reports(
-        reports=grouped_reports, start_date=start_date, report_unit=report_unit
+        reports=grouped_reports,
+        start_date=start_date,
+        end_date=end_date,
+        report_unit=report_unit,
     )
 
     return processed_reports

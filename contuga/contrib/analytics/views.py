@@ -34,8 +34,12 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
         if form.is_valid():
             report_unit = form.cleaned_data.get("report_unit")
             start_date = form.cleaned_data.get("start_date")
+            end_date = form.cleaned_data.get("end_date")
             reports = utils.generate_reports(
-                user=self.request.user, report_unit=report_unit, start_date=start_date
+                user=self.request.user,
+                report_unit=report_unit,
+                start_date=start_date,
+                end_date=end_date,
             )
         else:
             reports = utils.generate_reports(user=self.request.user)
@@ -67,8 +71,12 @@ class AnalyticsViewSet(viewsets.ViewSet):
         if form.is_valid():
             report_unit = form.cleaned_data.get("report_unit")
             start_date = form.cleaned_data.get("start_date")
+            end_date = form.cleaned_data.get("end_date")
             reports = utils.generate_reports(
-                user=self.request.user, report_unit=report_unit, start_date=start_date
+                user=self.request.user,
+                report_unit=report_unit,
+                start_date=start_date,
+                end_date=end_date,
             )
         else:
             reports = utils.generate_reports(user=self.request.user)
