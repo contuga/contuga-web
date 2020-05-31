@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-10 17:18+0300\n"
+"POT-Creation-Date: 2020-05-31 11:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -258,10 +258,24 @@ msgstr "Отчетна единица"
 msgid "Start date"
 msgstr "Начална дата"
 
+#: contuga/contrib/analytics/forms.py:19
+msgid "End date"
+msgstr "Крайна дата"
+
 #: contuga/contrib/analytics/forms.py:28
 #: contuga/contrib/analytics/tests/test_views.py:187
 msgid "The start date cannot be before 2019."
 msgstr "Началната дата не може да бъде преди 2019."
+
+#: contuga/contrib/analytics/forms.py:47
+#: contuga/contrib/analytics/tests/test_views.py:293
+msgid "The end date cannot be in the future."
+msgstr "Крайната дата не може да бъде в бъдещето"
+
+#: contuga/contrib/analytics/forms.py:54
+#: contuga/contrib/analytics/tests/test_views.py:264
+msgid "The end date cannot be before 2019."
+msgstr "Крайната дата не може да бъде преди 2019."
 
 #: contuga/contrib/analytics/templates/analytics/analytics.html:10
 #: contuga/templates/base/includes/footer.html:98
