@@ -49,8 +49,7 @@ PIPELINE = {
             "output_filename": "js/main.js",
         }
     },
-    "COMPILERS": ("pipeline.compilers.sass.SASSCompiler",),
-    "SASS_BINARY": "/usr/bin/env sassc",
+    "COMPILERS": ("libsasscompiler.LibSassCompiler",),
     # Yuglify breaks the background image of `.navbar-toggler-icon`
     "CSS_COMPRESSOR": "pipeline.compressors.cssmin.CSSMinCompressor",
 }
