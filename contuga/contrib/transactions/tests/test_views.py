@@ -1,40 +1,19 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from contuga.contrib.accounts.constants import BGN, EUR
-from contuga.contrib.accounts.models import Account
-from contuga.contrib.categories.models import Category
+from contuga.contrib.accounts.constants import EUR
 from contuga.contrib.settings.models import Settings
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.models import Transaction
 from contuga.mixins import TestMixin
 
-UserModel = get_user_model()
-
 
 class TransactionViewTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.category = Category.objects.create(
-            name="Category name",
-            author=self.user,
-            transaction_type=EXPENDITURE,
-            description="Category description",
-        )
-        self.account = Account.objects.create(
-            name="Account name",
-            currency=BGN,
-            owner=self.user,
-            description="Account description",
-        )
-        self.transaction = Transaction.objects.create(
-            amount=100,
-            author=self.user,
-            category=self.category,
-            account=self.account,
-            description="Transaction description",
-        )
+        self.user = self.create_user()
+        self.category = self.create_category()
+        self.account = self.create_account()
+        self.transaction = self.create_transaction()
         self.client.force_login(self.user)
 
     def test_list(self):
@@ -45,9 +24,7 @@ class TransactionViewTests(TestCase, TestMixin):
         self.create_category(name="Second category name")
         self.create_category(name="Third category name")
 
-        other_user = UserModel.objects.create_user(
-            "richard.roe@example.com", "password"
-        )
+        other_user = self.create_user("richard.roe@example.com", "password")
         self.create_category(name="Fourth category name", author=other_user)
 
         url = reverse("transactions:list")

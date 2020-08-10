@@ -1,17 +1,16 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
 
+from contuga.mixins import TestMixin
+
 from ..models import User
 
-UserModel = get_user_model()
 
-
-class UserDetailTestCase(APITestCase):
+class UserDetailTestCase(APITestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
+        self.user = self.create_user()
 
         token, created = Token.objects.get_or_create(user=self.user)
         self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
@@ -38,7 +37,7 @@ class UserDetailTestCase(APITestCase):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_cannot_get_other_users(self):
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
+        user = self.create_user(email="richard.roe@example.com", password="password")
 
         url = reverse("user-detail", args=[user.pk])
 
@@ -79,7 +78,7 @@ class UserDetailTestCase(APITestCase):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_cannot_patch_other_users(self):
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
+        user = self.create_user(email="richard.roe@example.com", password="password")
 
         url = reverse("user-detail", args=[user.pk])
 
@@ -146,7 +145,7 @@ class UserDetailTestCase(APITestCase):
             User.objects.get(pk=self.user.pk)
 
     def test_cannot_delete_other_users(self):
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
+        user = self.create_user(email="richard.roe@example.com", password="password")
         old_user_count = User.objects.count()
 
         url = reverse("user-detail", args=[user.pk])

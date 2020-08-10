@@ -1,34 +1,22 @@
-from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from contuga.contrib.categories.constants import ALL, EXPENDITURE, INCOME
 from contuga.contrib.categories.filters import CategoryFilterSet
-from contuga.contrib.categories.models import Category
-
-UserModel = get_user_model()
+from contuga.mixins import TestMixin
 
 
-class CategoryFilterTests(TestCase):
+class CategoryFilterTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.income_type_category = Category.objects.create(
-            name="Category transaction type INCOME",
-            author=self.user,
-            transaction_type=INCOME,
-            description="First category description",
+        self.user = self.create_user()
+        self.income_type_category = self.create_category(
+            name="Category transaction type INCOME", transaction_type=INCOME
         )
-        self.expenditure_type_category = Category.objects.create(
-            name="Category transaction type EXPENDITURE",
-            author=self.user,
-            transaction_type=EXPENDITURE,
-            description="First category description",
+        self.expenditure_type_category = self.create_category(
+            name="Category transaction type EXPENDITURE", transaction_type=EXPENDITURE
         )
-        self.all_type_category = Category.objects.create(
-            name="Category transaction type ALL",
-            author=self.user,
-            transaction_type=ALL,
-            description="First category description",
+        self.all_type_category = self.create_category(
+            name="Category transaction type ALL", transaction_type=ALL
         )
 
         request_factory = RequestFactory()

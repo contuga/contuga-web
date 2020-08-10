@@ -1,22 +1,17 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
 
-from contuga.contrib.accounts.constants import BGN
-from contuga.contrib.accounts.models import Account
 from contuga.contrib.categories.constants import EXPENDITURE, INCOME
 from contuga.mixins import TestMixin
 
 from ..models import Settings
 
-UserModel = get_user_model()
-
 
 class SettingsDetailTestCase(APITestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
+        self.user = self.create_user()
         self.settings = self.user.settings
 
         token, created = Token.objects.get_or_create(user=self.user)
@@ -50,12 +45,7 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
 
         incomes_category = self.create_category(transaction_type=INCOME)
         expenditures_category = self.create_category(transaction_type=EXPENDITURE)
-        account = Account.objects.create(
-            name="Account name",
-            currency=BGN,
-            owner=self.user,
-            description="Account description",
-        )
+        account = self.create_account()
         self.settings.default_incomes_category = incomes_category
         self.settings.default_expenditures_category = expenditures_category
         self.settings.default_account = account
@@ -88,7 +78,7 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_cannot_get_settings_of_other_users(self):
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
+        user = self.create_user(email="richard.roe@example.com", password="password")
 
         url = reverse("settings-detail", args=[user.settings.pk])
 
@@ -107,12 +97,7 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
 
         incomes_category = self.create_category(transaction_type=INCOME)
         expenditures_category = self.create_category(transaction_type=EXPENDITURE)
-        account = Account.objects.create(
-            name="Account name",
-            currency=BGN,
-            owner=self.user,
-            description="Account description",
-        )
+        account = self.create_account()
 
         data = {
             "default_incomes_category": reverse(
@@ -153,18 +138,13 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_cannot_patch_settings_of_other_users(self):
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
+        user = self.create_user(email="richard.roe@example.com", password="password")
 
         url = reverse("settings-detail", args=[user.settings.pk])
 
         incomes_category = self.create_category(transaction_type=INCOME)
         expenditures_category = self.create_category(transaction_type=EXPENDITURE)
-        account = Account.objects.create(
-            name="Account name",
-            currency=BGN,
-            owner=user,
-            description="Account description",
-        )
+        account = self.create_account(owner=user)
 
         data = {
             "default_incomes_category": reverse(

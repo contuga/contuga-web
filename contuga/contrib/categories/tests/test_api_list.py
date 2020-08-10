@@ -1,18 +1,16 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
 
+from contuga.mixins import TestMixin
+
 from .. import constants
 from ..models import Category
-from . import utils
-
-UserModel = get_user_model()
 
 
-class CategoryListTestCase(APITestCase):
+class CategoryListTestCase(APITestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
+        self.user = self.create_user()
 
         token, created = Token.objects.get_or_create(user=self.user)
         self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
@@ -22,7 +20,8 @@ class CategoryListTestCase(APITestCase):
 
         # Creating another user and category to make sure the currently
         # logged in user cannot see the categories of other users
-        utils.create_user_and_category()
+        user = self.create_user(email="richard.roe@example.com", password="password")
+        self.create_category(author=user)
 
         response = self.client.get(url, format="json")
 
@@ -92,7 +91,7 @@ class CategoryListTestCase(APITestCase):
     def test_author_field_is_ignored_on_post(self):
         url = reverse("category-list")
 
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
+        user = self.create_user(email="richard.roe@example.com", password="password")
 
         data = {
             "name": "New category name",

@@ -1,25 +1,20 @@
 from decimal import Decimal
 
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
 from contuga.contrib.accounts.constants import BGN, EUR
-from contuga.contrib.accounts.models import Account
 from contuga.contrib.transactions.forms import InternalTransferForm
+from contuga.mixins import TestMixin
 
-UserModel = get_user_model()
 
-
-class InternalTransferFormTests(TestCase):
+class InternalTransferFormTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.account = self.create_account()
+        self.user = self.create_user()
+        self.account = self.create_prefixed_account()
 
-    def create_account(self, prefix="First", currency=BGN, user=None):
-        if not user:
-            user = self.user
-        return Account.objects.create(
+    def create_prefixed_account(self, prefix="First", currency=BGN, user=None):
+        return self.create_account(
             name=f"{prefix} account name",
             currency=currency,
             owner=user,
@@ -27,7 +22,7 @@ class InternalTransferFormTests(TestCase):
         )
 
     def test_tansfer(self):
-        second_account = self.create_account(prefix="Second")
+        second_account = self.create_prefixed_account(prefix="Second")
 
         data = {
             "from_account": self.account.pk,
@@ -50,7 +45,7 @@ class InternalTransferFormTests(TestCase):
         self.assertDictEqual(form.cleaned_data, expected_cleaned_data)
 
     def test_tansfer_to_account_of_different_currency(self):
-        second_account = self.create_account(prefix="Second", currency=EUR)
+        second_account = self.create_prefixed_account(prefix="Second", currency=EUR)
 
         data = {
             "from_account": self.account.pk,
@@ -74,7 +69,7 @@ class InternalTransferFormTests(TestCase):
         self.assertDictEqual(form.cleaned_data, expected_cleaned_data)
 
     def test_tansfer_with_negative_amount(self):
-        second_account = self.create_account(prefix="Second")
+        second_account = self.create_prefixed_account(prefix="Second")
 
         data = {
             "from_account": self.account.pk,
@@ -92,7 +87,7 @@ class InternalTransferFormTests(TestCase):
         )
 
     def test_tansfer_to_account_of_different_currency_with_rate_missing(self):
-        second_account = self.create_account(prefix="Second", currency=EUR)
+        second_account = self.create_prefixed_account(prefix="Second", currency=EUR)
 
         data = {
             "from_account": self.account.pk,
@@ -132,8 +127,8 @@ class InternalTransferFormTests(TestCase):
         )
 
     def test_tansfer_from_wrong_account(self):
-        user = UserModel.objects.create_user("john.roe@example.com", "password")
-        wrong_account = self.create_account(prefix="Wrong", user=user)
+        user = self.create_user(email="richard.roe@example.com", password="password")
+        wrong_account = self.create_prefixed_account(prefix="Wrong", user=user)
 
         data = {
             "from_account": wrong_account.pk,
@@ -158,8 +153,8 @@ class InternalTransferFormTests(TestCase):
         )
 
     def test_tansfer_to_wrong_account(self):
-        user = UserModel.objects.create_user("john.roe@example.com", "password")
-        wrong_account = self.create_account(prefix="Wrong", user=user)
+        user = self.create_user(email="richard.roe@example.com", password="password")
+        wrong_account = self.create_prefixed_account(prefix="Wrong", user=user)
 
         data = {
             "from_account": self.account.pk,

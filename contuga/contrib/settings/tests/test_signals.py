@@ -1,15 +1,14 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
+
+from contuga.mixins import TestMixin
 
 from ..models import Settings
 
-UserModel = get_user_model()
 
-
-class SettingsSignalsTests(TestCase):
+class SettingsSignalsTests(TestCase, TestMixin):
     def test_signals(self):
         old_settings_count = Settings.objects.count()
-        user = UserModel.objects.create_user("john.doe@example.com", "password")
+        user = self.create_user()
         new_settings_count = Settings.objects.count()
 
         # Assert new settings instance is created
