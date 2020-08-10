@@ -1,27 +1,21 @@
-from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from contuga.contrib.accounts.constants import BGN, EUR
 from contuga.contrib.accounts.filters import AccountFilterSet
-from contuga.contrib.accounts.models import Account
-
-UserModel = get_user_model()
+from contuga.mixins import TestMixin
 
 
-class AccountFilterTests(TestCase):
+class AccountFilterTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.first_account = Account.objects.create(
-            name="First account",
-            currency=BGN,
-            owner=self.user,
-            description="First account description",
+        self.user = self.create_user()
+        self.first_account = self.create_account(
+            name="First account", currency=BGN, description="First account description"
         )
-        self.second_account = Account.objects.create(
+
+        self.second_account = self.create_account(
             name="Second account",
             currency=EUR,
-            owner=self.user,
             description="Second account description",
             is_active=False,
         )

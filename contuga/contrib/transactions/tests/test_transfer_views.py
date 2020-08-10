@@ -1,7 +1,6 @@
 import json
 from decimal import Decimal
 
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -12,12 +11,10 @@ from contuga.contrib.transactions.forms import InternalTransferForm
 from contuga.contrib.transactions.models import Transaction
 from contuga.mixins import TestMixin
 
-UserModel = get_user_model()
-
 
 class InternalTransferViewTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
+        self.user = self.create_user()
         self.account = self.create_account()
         self.client.force_login(self.user)
 
