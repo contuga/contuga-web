@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -10,12 +9,10 @@ from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.models import Transaction
 from contuga.mixins import TestMixin
 
-UserModel = get_user_model()
-
 
 class TransactionViewTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
+        self.user = self.create_user()
         self.account = self.create_account()
         self.client.force_login(self.user)
 
@@ -83,9 +80,7 @@ class TransactionViewTests(TestCase, TestMixin):
         self.create_category(name="Second category name")
         self.create_category(name="Third category name")
 
-        other_user = UserModel.objects.create_user(
-            "richard.roe@example.com", "password"
-        )
+        other_user = self.create_user("richard.roe@example.com", "password")
         self.create_category(name="Fourth category name", author=other_user)
 
         url = reverse("transactions:create")
