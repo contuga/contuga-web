@@ -1,25 +1,25 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
 
+from contuga.mixins import TestMixin
+
 from .. import constants
 from ..models import Category
-from . import utils
-
-UserModel = get_user_model()
 
 
-class CategoryDetailTestCase(APITestCase):
+class CategoryDetailTestCase(APITestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.category = Category.objects.create(
-            name="Category name", author=self.user, description="Category description"
-        )
+        self.user = self.create_user()
+        self.category = self.create_category()
 
         token, created = Token.objects.get_or_create(user=self.user)
         self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
+
+    def create_user_and_category(self):
+        user = self.create_user(email="richard.roe@example.com", password="password")
+        return self.create_category(author=user)
 
     def test_get(self):
         url = reverse("category-detail", args=[self.category.pk])
@@ -44,7 +44,7 @@ class CategoryDetailTestCase(APITestCase):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_cannot_get_categories_of_other_users(self):
-        category = utils.create_user_and_category()
+        category = self.create_user_and_category()
 
         url = reverse("category-detail", args=[category.pk])
         response = self.client.get(url, format="json")
@@ -92,7 +92,7 @@ class CategoryDetailTestCase(APITestCase):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_cannot_patch_categories_of_other_users(self):
-        category = utils.create_user_and_category()
+        category = self.create_user_and_category()
 
         url = reverse("category-detail", args=[category.pk])
 
@@ -120,7 +120,7 @@ class CategoryDetailTestCase(APITestCase):
     def test_author_field_is_ignored_on_patch(self):
         url = reverse("category-detail", args=[self.category.pk])
 
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
+        user = self.create_user(email="richard.roe@example.com", password="password")
 
         data = {
             "author": reverse("user-detail", args=[user.pk]),
@@ -156,8 +156,8 @@ class CategoryDetailTestCase(APITestCase):
 
     def test_patch_to_all(self):
         url = reverse("category-detail", args=[self.category.pk])
-        account = utils.create_account(self.category.author)
-        utils.create_transaction(category=self.category, account=account)
+        account = self.create_account()
+        self.create_transaction(account=account)
 
         data = {
             "name": "New category name",
@@ -191,11 +191,11 @@ class CategoryDetailTestCase(APITestCase):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_patch_to_income_when_still_in_use(self):
-        category = utils.create_category(self.user, constants.EXPENDITURE)
+        category = self.create_category(transaction_type=constants.EXPENDITURE)
 
         url = reverse("category-detail", args=[category.pk])
-        account = utils.create_account(category.author)
-        utils.create_transaction(category=category, account=account)
+        account = self.create_account()
+        self.create_transaction(category=category, account=account)
 
         data = {
             "name": "New category name",
@@ -222,11 +222,13 @@ class CategoryDetailTestCase(APITestCase):
         self.assertEqual(retrieved_category.updated_at, category.updated_at)
 
     def test_patch_to_expenditure_when_still_in_use(self):
-        category = utils.create_category(self.user, constants.INCOME)
+        category = self.create_category(transaction_type=constants.INCOME)
 
         url = reverse("category-detail", args=[category.pk])
-        account = utils.create_account(category.author)
-        utils.create_transaction(category=category, account=account)
+        account = self.create_account()
+        self.create_transaction(
+            type=category.transaction_type, category=category, account=account
+        )
 
         data = {
             "name": "New category name",
@@ -268,7 +270,7 @@ class CategoryDetailTestCase(APITestCase):
             Category.objects.get(pk=self.category.pk)
 
     def test_cannot_delete_categories_of_other_users(self):
-        category = utils.create_user_and_category()
+        category = self.create_user_and_category()
         old_category_count = Category.objects.count()
 
         url = reverse("category-detail", args=[category.pk])

@@ -1,15 +1,14 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from contuga.mixins import TestMixin
+
 from ..models import Settings
 
-UserModel = get_user_model()
 
-
-class SettingsViewTests(TestCase):
+class SettingsViewTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
+        self.user = self.create_user()
         self.settings = Settings.objects.last()
         self.client.force_login(self.user)
 

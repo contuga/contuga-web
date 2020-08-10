@@ -3,36 +3,27 @@ from datetime import date, timedelta
 from decimal import Decimal
 from unittest import mock
 
-from django.contrib.auth import get_user_model
 from django.core.serializers.json import DjangoJSONEncoder
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from contuga.contrib.accounts import constants as account_constants
-from contuga.contrib.accounts.models import Account
+from contuga.mixins import TestMixin
 
 from .. import constants, utils
-from . import utils as test_utils
-
-UserModel = get_user_model()
 
 
-class AnalyticsTestCase(TestCase):
+class AnalyticsTestCase(TestCase, TestMixin):
     def setUp(self):
-        user = UserModel.objects.create_user(
-            email="john.doe@example.com", password="password"
-        )
-        self.account = Account.objects.create(
-            name="Account name", currency=account_constants.BGN, owner=user
-        )
-        self.client.force_login(user)
+        self.user = self.create_user(email="john.doe@example.com", password="password")
+        self.account = self.create_account()
+        self.client.force_login(self.user)
 
     def test_get_monthly_reports_without_query_params(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        self.create_income(amount=Decimal("310"))
 
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         response = self.client.get(url, follow=True)
@@ -55,9 +46,9 @@ class AnalyticsTestCase(TestCase):
         self.assertEqual(unit_field.initial, constants.MONTHS)
 
     def test_get_monthly_reports_with_unit(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        self.create_income(amount=Decimal("310"))
 
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         response = self.client.get(url, {"report_unit": constants.MONTHS}, follow=True)
@@ -82,9 +73,9 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_monthly_reports_with_invalid_unit(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        self.create_income(amount=Decimal("310"))
 
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         response = self.client.get(
@@ -106,9 +97,9 @@ class AnalyticsTestCase(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_get_monthly_reports_with_start_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        self.create_income(amount=Decimal("310"))
 
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         today = timezone.now().astimezone().date()
@@ -135,9 +126,9 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_monthly_reports_with_invalid_start_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        self.create_income(amount=Decimal("310"))
 
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         response = self.client.get(
@@ -162,9 +153,9 @@ class AnalyticsTestCase(TestCase):
         self.assertEqual(form.errors, {"start_date": [_("Enter a valid date.")]})
 
     def test_get_monthly_reports_with_start_date_before_2019(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        self.create_income(amount=Decimal("310"))
 
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         response = self.client.get(
@@ -191,21 +182,17 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_monthly_reports_with_end_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
 
         first_day_of_the_current_month = timezone.now().astimezone().replace(day=1)
         one_month_ago = first_day_of_the_current_month - timedelta(days=1)
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = one_month_ago
-            test_utils.create_income(
-                account=self.account, amount=Decimal("412.20")
-            ).amount
+            self.create_income(amount=Decimal("412.20")).amount
 
-            test_utils.create_expenditure(
-                account=self.account, amount=Decimal("111.50")
-            ).amount
+            self.create_expenditure(amount=Decimal("111.50")).amount
 
         url = reverse("analytics:list")
         date_string = one_month_ago.strftime("%m/%d/%Y")
@@ -237,8 +224,8 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_monthly_reports_with_end_date_before_2019(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         response = self.client.get(
@@ -265,8 +252,8 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_monthly_reports_with_end_date_in_the_future(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
 
         tomorow = timezone.now().astimezone() + timedelta(days=1)
 
@@ -294,21 +281,17 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_monthly_reports_with_start_and_end_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
 
         first_day_of_the_current_month = timezone.now().astimezone().replace(day=1)
         one_month_ago = first_day_of_the_current_month - timedelta(days=1)
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = one_month_ago
-            test_utils.create_income(
-                account=self.account, amount=Decimal("412.20")
-            ).amount
+            self.create_income(amount=Decimal("412.20")).amount
 
-            test_utils.create_expenditure(
-                account=self.account, amount=Decimal("111.50")
-            ).amount
+            self.create_expenditure(amount=Decimal("111.50")).amount
 
         url = reverse("analytics:list")
         date_string = one_month_ago.strftime("%m/%d/%Y")
@@ -343,9 +326,9 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_daily_reports(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        self.create_income(amount=Decimal("310"))
 
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         response = self.client.get(url, {"report_unit": constants.DAYS}, follow=True)
@@ -370,9 +353,9 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_daily_reports_with_start_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
+        self.create_income(amount=Decimal("310"))
 
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_expenditure(amount=Decimal("100"))
 
         url = reverse("analytics:list")
         today = timezone.now().astimezone().date()
@@ -401,20 +384,16 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_daily_reports_with_end_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
 
         yesterday = timezone.now().astimezone() - timedelta(days=1)
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = yesterday
-            test_utils.create_income(
-                account=self.account, amount=Decimal("412.20")
-            ).amount
+            self.create_income(amount=Decimal("412.20")).amount
 
-            test_utils.create_expenditure(
-                account=self.account, amount=Decimal("111.50")
-            ).amount
+            self.create_expenditure(amount=Decimal("111.50")).amount
 
         url = reverse("analytics:list")
         date_string = yesterday.strftime("%m/%d/%Y")
@@ -448,20 +427,16 @@ class AnalyticsTestCase(TestCase):
         )
 
     def test_get_daily_reports_with_start_and_end_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310"))
-        test_utils.create_expenditure(account=self.account, amount=Decimal("100"))
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
 
         yesterday = timezone.now().astimezone() - timedelta(days=1)
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = yesterday
-            test_utils.create_income(
-                account=self.account, amount=Decimal("412.20")
-            ).amount
+            self.create_income(amount=Decimal("412.20")).amount
 
-            test_utils.create_expenditure(
-                account=self.account, amount=Decimal("111.50")
-            ).amount
+            self.create_expenditure(amount=Decimal("111.50")).amount
 
         url = reverse("analytics:list")
         date_string = yesterday.strftime("%m/%d/%Y")

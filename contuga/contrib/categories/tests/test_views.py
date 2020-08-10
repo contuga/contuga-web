@@ -1,21 +1,17 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
 from contuga.contrib.categories.models import Category
+from contuga.mixins import TestMixin
 
 from .. import constants
 
-UserModel = get_user_model()
 
-
-class CategoryViewTests(TestCase):
+class CategoryViewTests(TestCase, TestMixin):
     def setUp(self):
-        user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.category = Category.objects.create(
-            name="Category name", author=user, description="Category description"
-        )
-        self.client.force_login(user)
+        self.user = self.create_user()
+        self.category = self.create_category()
+        self.client.force_login(self.user)
 
     def test_list(self):
         url = reverse("categories:list")

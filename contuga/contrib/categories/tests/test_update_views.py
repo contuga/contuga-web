@@ -1,23 +1,19 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from contuga.contrib.categories import constants
 from contuga.contrib.categories.models import Category
-
-from . import utils
-
-UserModel = get_user_model()
+from contuga.mixins import TestMixin
 
 
-class CategoryViewTests(TestCase):
+class CategoryViewTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
+        self.user = self.create_user()
         self.client.force_login(self.user)
 
     def test_update_get(self):
-        category = utils.create_category(self.user, constants.ALL)
+        category = self.create_category()
         url = reverse("categories:update", kwargs={"pk": category.pk})
         response = self.client.get(url)
 
@@ -43,7 +39,7 @@ class CategoryViewTests(TestCase):
         self.assertDictEqual(form_data, expected_data)
 
     def test_update(self):
-        category = utils.create_category(self.user, constants.ALL)
+        category = self.create_category()
         data = {
             "name": "New category name",
             "transaction_type": constants.EXPENDITURE,
@@ -72,9 +68,9 @@ class CategoryViewTests(TestCase):
         self.assertDictEqual(category_data, data)
 
     def test_update_to_all(self):
-        category = utils.create_category(self.user, constants.EXPENDITURE)
-        account = utils.create_account(self.user)
-        utils.create_transaction(category=category, account=account)
+        category = self.create_category(transaction_type=constants.EXPENDITURE)
+        account = self.create_account()
+        self.create_transaction(category=category, account=account)
 
         data = {
             "name": category.name,
@@ -104,9 +100,11 @@ class CategoryViewTests(TestCase):
         self.assertDictEqual(category_data, data)
 
     def test_update_to_income_when_still_in_use(self):
-        category = utils.create_category(self.user, constants.EXPENDITURE)
-        account = utils.create_account(self.user)
-        utils.create_transaction(category=category, account=account)
+        category = self.create_category(transaction_type=constants.EXPENDITURE)
+        account = self.create_account()
+        self.create_transaction(
+            type=category.transaction_type, category=category, account=account
+        )
 
         data = {
             "name": category.name,
@@ -136,9 +134,11 @@ class CategoryViewTests(TestCase):
         self.assertEqual(retrieved_category.updated_at, category.updated_at)
 
     def test_update_to_expenditure_when_still_in_use(self):
-        category = utils.create_category(self.user, constants.INCOME)
-        account = utils.create_account(self.user)
-        utils.create_transaction(category=category, account=account)
+        category = self.create_category(transaction_type=constants.INCOME)
+        account = self.create_account()
+        self.create_transaction(
+            type=category.transaction_type, category=category, account=account
+        )
 
         data = {
             "name": category.name,

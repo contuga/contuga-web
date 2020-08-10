@@ -1,29 +1,31 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
 
+from contuga.mixins import TestMixin
+
 from .. import constants
 from ..models import Account
-from . import utils
-
-UserModel = get_user_model()
 
 
-class AccountDetailTestCase(APITestCase):
+class AccountDetailTestCase(APITestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.account = Account.objects.create(
-            name="Account name",
-            currency=constants.BGN,
-            owner=self.user,
-            description="Account description",
-            is_active=True,
-        )
+        self.user = self.create_user()
+        self.account = self.create_account()
 
         token, created = Token.objects.get_or_create(user=self.user)
         self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
+
+    def create_user_and_account(self, email="richard.roe@example.com"):
+        user = self.create_user(email, "password")
+
+        return self.create_account(
+            name="Other account name",
+            currency=constants.EUR,
+            owner=user,
+            description="Other account description",
+        )
 
     def test_get(self):
         url = reverse("account-detail", args=[self.account.pk])
@@ -50,7 +52,7 @@ class AccountDetailTestCase(APITestCase):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_cannot_get_accounts_of_other_users(self):
-        account = utils.create_user_and_account()
+        account = self.create_user_and_account()
 
         url = reverse("account-detail", args=[account.pk])
         response = self.client.get(url, format="json")
@@ -100,7 +102,7 @@ class AccountDetailTestCase(APITestCase):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_cannot_patch_accounts_of_other_users(self):
-        account = utils.create_user_and_account()
+        account = self.create_user_and_account()
 
         url = reverse("account-detail", args=[account.pk])
 
@@ -127,7 +129,7 @@ class AccountDetailTestCase(APITestCase):
     def test_owner_field_is_ignored_on_patch(self):
         url = reverse("account-detail", args=[self.account.pk])
 
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
+        user = self.create_user(email="richard.roe@example.com", password="password")
 
         data = {
             "owner": reverse("user-detail", args=[user.pk]),
@@ -217,7 +219,7 @@ class AccountDetailTestCase(APITestCase):
             Account.objects.get(pk=self.account.pk)
 
     def test_cannot_delete_accounts_of_other_users(self):
-        account = utils.create_user_and_account()
+        account = self.create_user_and_account()
         old_account_count = Account.objects.count()
 
         url = reverse("account-detail", args=[account.pk])

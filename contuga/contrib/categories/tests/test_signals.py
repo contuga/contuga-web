@@ -1,16 +1,14 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from contuga.contrib.categories.models import Category
+from contuga.mixins import TestMixin
 
-UserModel = get_user_model()
 
-
-class CategorySignalsTests(TestCase):
+class CategorySignalsTests(TestCase, TestMixin):
     def test_signals(self):
         old_categories_count = Category.objects.count()
-        user = UserModel.objects.create_user("john.doe@example.com", "password")
+        user = self.create_user()
         new_categories_count = Category.objects.count()
         default_categories_len = len(settings.DEFAULT_CATEGORIES)
 

@@ -1,27 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from contuga.contrib.transactions import constants as transaction_constants
-from contuga.contrib.transactions.models import Transaction
-
 from ..constants import DAYS, MONTHS
-
-
-def create_income(account, amount):
-    return Transaction.objects.create(
-        type=transaction_constants.INCOME,
-        amount=amount,
-        author=account.owner,
-        account=account,
-    )
-
-
-def create_expenditure(account, amount):
-    return Transaction.objects.create(
-        type=transaction_constants.EXPENDITURE,
-        amount=amount,
-        author=account.owner,
-        account=account,
-    )
 
 
 def create_empty_reports(last_date, report_unit=MONTHS):
