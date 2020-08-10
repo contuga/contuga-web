@@ -1,50 +1,49 @@
 from decimal import Decimal
 
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from contuga.contrib.transactions import constants as transaction_constants
-from contuga.contrib.transactions.models import Transaction
+from contuga.mixins import TestMixin
 
 from ..models import Account
-from .utils import create_user_and_account
-
-UserModel = get_user_model()
+from .. import constants
 
 
-class AccountSignalsTestCase(TestCase):
+class AccountSignalsTestCase(TestCase, TestMixin):
     def setUp(self):
-        self.account = create_user_and_account()
+        self.user = self.create_user()
+        self.account = self.create_account()
+
+    def create_user_and_account(self, email="richard.roe@example.com"):
+        user = self.create_user(email, "password")
+
+        return self.create_account(
+            name="Other account name",
+            currency=constants.EUR,
+            owner=user,
+            description="Other account description",
+        )
 
     def test_balance_update_after_transaction_create(self):
         self.assertEqual(self.account.balance, 0)
 
         # The following transaction and the signal
         with self.assertNumQueries(2):
-            Transaction.objects.create(
-                type=transaction_constants.INCOME,
-                amount=Decimal("100.50"),
-                author=self.account.owner,
-                account=self.account,
+            self.create_transaction(
+                type=transaction_constants.INCOME, amount=Decimal("100.50")
             )
 
         # The following transaction and the signal
         with self.assertNumQueries(2):
-            Transaction.objects.create(
-                type=transaction_constants.EXPENDITURE,
-                amount=Decimal("50.25"),
-                author=self.account.owner,
-                account=self.account,
+            self.create_transaction(
+                type=transaction_constants.EXPENDITURE, amount=Decimal("50.25")
             )
 
     def test_balance_update_after_income_transaction_update(self):
         self.assertEqual(self.account.balance, 0)
 
-        income = Transaction.objects.create(
-            type=transaction_constants.INCOME,
-            amount=Decimal("100.50"),
-            author=self.account.owner,
-            account=self.account,
+        income = self.create_transaction(
+            type=transaction_constants.INCOME, amount=Decimal("100.50")
         )
 
         # Test with update of income transaction
@@ -59,11 +58,8 @@ class AccountSignalsTestCase(TestCase):
     def test_balance_update_after_expenditure_transaction_update(self):
         self.assertEqual(self.account.balance, 0)
 
-        expenditure = Transaction.objects.create(
-            type=transaction_constants.EXPENDITURE,
-            amount=Decimal("50.25"),
-            author=self.account.owner,
-            account=self.account,
+        expenditure = self.create_transaction(
+            type=transaction_constants.EXPENDITURE, amount=Decimal("50.25")
         )
 
         with self.assertNumQueries(2):
@@ -76,11 +72,8 @@ class AccountSignalsTestCase(TestCase):
     def test_balance_update_after_transaction_type_update_to_income(self):
         self.assertEqual(self.account.balance, 0)
 
-        transaction = Transaction.objects.create(
-            type=transaction_constants.EXPENDITURE,
-            amount=Decimal("50.25"),
-            author=self.account.owner,
-            account=self.account,
+        transaction = self.create_transaction(
+            type=transaction_constants.EXPENDITURE, amount=Decimal("50.25")
         )
 
         with self.assertNumQueries(2):
@@ -93,11 +86,8 @@ class AccountSignalsTestCase(TestCase):
     def test_balance_update_after_transaction_type_update_to_expenditure(self):
         self.assertEqual(self.account.balance, 0)
 
-        transaction = Transaction.objects.create(
-            type=transaction_constants.INCOME,
-            amount=Decimal("100.50"),
-            author=self.account.owner,
-            account=self.account,
+        transaction = self.create_transaction(
+            type=transaction_constants.INCOME, amount=Decimal("100.50")
         )
 
         with self.assertNumQueries(2):
@@ -108,18 +98,12 @@ class AccountSignalsTestCase(TestCase):
         self.assertEqual(updated_account.balance, -transaction.amount)
 
     def test_balance_update_after_transaction_delete(self):
-        income = Transaction.objects.create(
-            type=transaction_constants.INCOME,
-            amount=Decimal("100.50"),
-            author=self.account.owner,
-            account=self.account,
+        income = self.create_transaction(
+            type=transaction_constants.INCOME, amount=Decimal("100.50")
         )
 
-        expenditure = Transaction.objects.create(
-            type=transaction_constants.EXPENDITURE,
-            amount=Decimal("50.25"),
-            author=self.account.owner,
-            account=self.account,
+        expenditure = self.create_transaction(
+            type=transaction_constants.EXPENDITURE, amount=Decimal("50.25")
         )
 
         with self.assertNumQueries(2):
@@ -131,11 +115,8 @@ class AccountSignalsTestCase(TestCase):
     def test_balance_update_after_last_transaction_is_deleted(self):
         self.assertEqual(self.account.balance, 0)
 
-        transaction = Transaction.objects.create(
-            type=transaction_constants.INCOME,
-            amount=Decimal("100.50"),
-            author=self.account.owner,
-            account=self.account,
+        transaction = self.create_transaction(
+            type=transaction_constants.INCOME, amount=Decimal("100.50")
         )
 
         with self.assertNumQueries(2):
@@ -147,18 +128,12 @@ class AccountSignalsTestCase(TestCase):
     def test_balance_update_after_trasaction_account_is_changed(self):
         self.assertEqual(self.account.balance, 0)
 
-        transaction = Transaction.objects.create(
-            type=transaction_constants.INCOME,
-            amount=Decimal("100.50"),
-            author=self.account.owner,
-            account=self.account,
+        transaction = self.create_transaction(
+            type=transaction_constants.INCOME, amount=Decimal("100.50")
         )
 
-        second_account = Account.objects.create(
-            name="Second account name",
-            currency=self.account.currency,
-            owner=self.account.owner,
-            description="Second account description",
+        second_account = self.create_account(
+            name="Second account name", description="Second account description"
         )
 
         with self.assertNumQueries(2):
@@ -172,13 +147,10 @@ class AccountSignalsTestCase(TestCase):
         self.assertEqual(second_updated_account.balance, transaction.amount)
 
     def test_unrelated_accounts_are_not_updated(self):
-        unrelated_account = create_user_and_account(email="john.doe@example.com")
+        unrelated_account = self.create_user_and_account()
 
-        transaction = Transaction.objects.create(
-            type=transaction_constants.INCOME,
-            amount=Decimal("100.50"),
-            author=self.account.owner,
-            account=self.account,
+        transaction = self.create_transaction(
+            type=transaction_constants.INCOME, amount=Decimal("100.50")
         )
 
         retrieved_unrelated_account = Account.objects.get(pk=unrelated_account.pk)
@@ -194,11 +166,8 @@ class AccountSignalsTestCase(TestCase):
             unrelated_account.updated_at, retrieved_unrelated_account.updated_at
         )
 
-        second_account = Account.objects.create(
-            name="Second account name",
-            currency=self.account.currency,
-            owner=self.account.owner,
-            description="Second account description",
+        second_account = self.create_account(
+            name="Second account name", description="Second account description"
         )
 
         with self.assertNumQueries(2):

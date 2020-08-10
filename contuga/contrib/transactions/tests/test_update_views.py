@@ -1,28 +1,18 @@
 from decimal import Decimal
 
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from contuga.contrib.accounts.constants import BGN
-from contuga.contrib.accounts.models import Account
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.models import Transaction
 from contuga.mixins import TestMixin
 
-UserModel = get_user_model()
-
 
 class TransactionViewTests(TestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.account = Account.objects.create(
-            name="Account name",
-            currency=BGN,
-            owner=self.user,
-            description="Account description",
-        )
+        self.user = self.create_user()
+        self.account = self.create_account()
         self.client.force_login(self.user)
 
     def test_update_get(self):
@@ -62,11 +52,8 @@ class TransactionViewTests(TestCase, TestMixin):
         transaction = self.create_transaction(category=category)
 
         new_category = self.create_category(transaction_type=INCOME)
-        new_account = Account.objects.create(
-            name="Second account name",
-            currency=BGN,
-            owner=self.user,
-            description="Second account description",
+        new_account = self.create_account(
+            name="Second account name", description="Second account description"
         )
         data = {
             "type": INCOME,

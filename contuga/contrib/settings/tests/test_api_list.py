@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
@@ -9,12 +8,10 @@ from contuga.contrib.accounts.models import Account
 from contuga.contrib.categories.constants import EXPENDITURE, INCOME
 from contuga.mixins import TestMixin
 
-UserModel = get_user_model()
-
 
 class SettingsListTestCase(APITestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
+        self.user = self.create_user()
 
         self.settings = self.user.settings
 
@@ -26,7 +23,7 @@ class SettingsListTestCase(APITestCase, TestMixin):
 
         # Creating another user to make sure the currently logged in user
         # cannot see the settings of other users
-        UserModel.objects.create_user("richard.roe@example.com", "password")
+        self.create_user(email="richard.roe@example.com", password="password")
 
         response = self.client.get(url, format="json")
 
@@ -73,7 +70,7 @@ class SettingsListTestCase(APITestCase, TestMixin):
 
         # Creating another user to make sure the currently logged in user
         # cannot see the settings of other users
-        UserModel.objects.create_user("richard.roe@example.com", "password")
+        self.create_user(email="richard.roe@example.com", password="password")
 
         response = self.client.get(url, format="json")
 

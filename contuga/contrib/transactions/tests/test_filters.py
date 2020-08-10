@@ -1,20 +1,14 @@
 from datetime import timedelta
 
-from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
-from contuga.contrib.accounts.constants import BGN
-from contuga.contrib.accounts.models import Account
-from contuga.contrib.categories.models import Category
-from contuga.contrib.transactions.constants import INCOME
+from contuga.mixins import TestMixin
 from contuga.contrib.transactions.filters import TransactionFilterSet
-from contuga.contrib.transactions.models import Transaction
-
-UserModel = get_user_model()
 
 
-class TransactionFilterTests(TestCase):
+
+class TransactionFilterTests(TestCase, TestMixin):
     def setUp(self):
         self.data_john = self.create_test_data(name="John")
         self.data_richard = self.create_test_data(name="Richard")
@@ -24,22 +18,11 @@ class TransactionFilterTests(TestCase):
         self.request.user = self.data_john["user"]
 
     def create_test_data(self, name):
-        user = UserModel.objects.create_user(f"{name}@example.com", "password")
-        category = Category.objects.create(
-            name=f"{name}'s category", author=user, description="Category description"
-        )
-        account = Account.objects.create(
-            name=f"{name}'s account",
-            currency=BGN,
-            owner=user,
-            description="Account description",
-        )
-        transaction = Transaction.objects.create(
-            amount=100,
-            author=user,
-            category=category,
-            account=account,
-            description="Transaction description",
+        user = self.create_user(f"{name}@example.com", "password")
+        category = self.create_category(author=user, name=f"{name}'s category")
+        account = self.create_account(owner=user, name=f"{name}'s account")
+        transaction = self.create_transaction(
+            author=user, category=category, account=account
         )
 
         return {
@@ -69,9 +52,7 @@ class TransactionFilterTests(TestCase):
 
     def test_created_at_filter(self):
         transaction = self.data_john["transaction"]
-        second_transaction = Transaction.objects.create(
-            amount=100,
-            type=INCOME,
+        second_transaction = self.create_income(
             author=self.data_john["user"],
             category=self.data_john["category"],
             account=self.data_john["account"],
@@ -92,9 +73,7 @@ class TransactionFilterTests(TestCase):
 
     def test_updated_at_filter(self):
         transaction = self.data_john["transaction"]
-        second_transaction = Transaction.objects.create(
-            amount=100,
-            type=INCOME,
+        second_transaction = self.create_income(
             author=self.data_john["user"],
             category=self.data_john["category"],
             account=self.data_john["account"],

@@ -1,22 +1,19 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+
+from contuga.mixins import TestMixin
 
 from .. import constants as account_constants
 from ..models import Account
 
-UserModel = get_user_model()
 
-
-class AccountsTestCase(TestCase):
+class AccountsTestCase(TestCase, TestMixin):
     def setUp(self):
-        user = UserModel.objects.create_user(
+        self.user = self.create_user(
             email="john.doe@example.com", password="password"
         )
-        self.account = Account.objects.create(
-            name="Account name", currency=account_constants.BGN, owner=user
-        )
-        self.client.force_login(user)
+        self.account = self.create_account()
+        self.client.force_login(self.user)
 
     def test_list(self):
         url = reverse("accounts:list")
@@ -33,10 +30,7 @@ class AccountsTestCase(TestCase):
         )
 
         # Assert account fields are used
-        fields = [
-            self.account.name,
-            self.account.get_currency_display(),
-        ]
+        fields = [self.account.name, self.account.get_currency_display()]
         for field in fields:
             self.assertContains(response=response, text=field)
 

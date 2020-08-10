@@ -1,40 +1,21 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
 
-from contuga.contrib.accounts import constants as account_constants
-from contuga.contrib.accounts.models import Account
-from contuga.contrib.categories.models import Category
 from contuga.mixins import TestMixin
 
 from ..constants import EXPENDITURE, INCOME
 from ..models import Transaction
 from . import utils
 
-UserModel = get_user_model()
-
 
 class TransactionListTestCase(APITestCase, TestMixin):
     def setUp(self):
-        self.user = UserModel.objects.create_user("john.doe@example.com", "password")
-        self.category = Category.objects.create(
-            name="Category name", author=self.user, description="Category description"
-        )
-        self.account = Account.objects.create(
-            name="Account name",
-            currency=account_constants.BGN,
-            owner=self.user,
-            description="Account description",
-        )
-        self.transaction = Transaction.objects.create(
-            amount="100.10",
-            author=self.user,
-            category=self.category,
-            account=self.account,
-            description="Transaction description",
-        )
+        self.user = self.create_user()
+        self.category = self.create_category()
+        self.account = self.create_account()
+        self.transaction = self.create_transaction(amount="100.10")
 
         token, created = Token.objects.get_or_create(user=self.user)
         self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
@@ -85,16 +66,11 @@ class TransactionListTestCase(APITestCase, TestMixin):
     def test_post(self):
         url = reverse("transaction-list")
 
-        category = Category.objects.create(
-            name="Second category name",
-            author=self.user,
-            description="Second category description",
+        category = self.create_category(
+            name="Second category name", description="Second category description"
         )
-        account = Account.objects.create(
-            name="Second account name",
-            currency=account_constants.BGN,
-            owner=self.user,
-            description="Second account description",
+        account = self.create_account(
+            name="Second account name", description="Second account description"
         )
 
         data = {
@@ -138,17 +114,14 @@ class TransactionListTestCase(APITestCase, TestMixin):
     def test_author_field_is_ignored_on_post(self):
         url = reverse("transaction-list")
 
-        user = UserModel.objects.create_user("richard.roe@example.com", "password")
-        category = Category.objects.create(
+        user = self.create_user(email="richard.roe@example.com", password="password")
+        category = self.create_category(
             name="Second category name",
             author=self.user,
             description="Second category description",
         )
-        account = Account.objects.create(
-            name="Second account name",
-            currency=account_constants.BGN,
-            owner=self.user,
-            description="Second account description",
+        account = self.create_account(
+            name="Second account name", description="Second account description"
         )
 
         data = {

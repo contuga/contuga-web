@@ -3,37 +3,27 @@ from decimal import Decimal
 from unittest import mock
 
 from dateutil.relativedelta import relativedelta
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
-from contuga.contrib.accounts import constants as account_constants
-from contuga.contrib.accounts.models import Account
+from contuga.mixins import TestMixin
 
 from .. import utils
 from . import utils as test_utils
 
-UserModel = get_user_model()
 
-
-class MonthlyReportsTestCase(TestCase):
+class MonthlyReportsTestCase(TestCase, TestMixin):
     def setUp(self):
         self.now = timezone.now().astimezone()
-        self.user = UserModel.objects.create_user(
+        self.user = self.create_user(
             email="john.doe@example.com", password="password"
         )
-        self.account = Account.objects.create(
-            name="Account name", currency=account_constants.BGN, owner=self.user
-        )
+        self.account = self.create_account()
 
     def test_report_with_single_account(self):
-        income = test_utils.create_income(
-            account=self.account, amount=Decimal("310")
-        ).amount
+        income = self.create_income(amount=Decimal("310")).amount
 
-        expenditure = test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100")
-        ).amount
+        expenditure = self.create_expenditure(amount=Decimal("100")).amount
 
         with self.assertNumQueries(1):
             result = utils.generate_reports(user=self.account.owner)
@@ -61,23 +51,19 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_report_with_multiple_accounts(self):
-        first_account_income = test_utils.create_income(
-            account=self.account, amount=Decimal("310.40")
+        first_account_income = self.create_income(amount=Decimal("310.40")).amount
+
+        first_account_expenditure = self.create_expenditure(
+            amount=Decimal("100.50")
         ).amount
 
-        first_account_expenditure = test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100.50")
-        ).amount
+        second_account = self.create_account()
 
-        second_account = Account.objects.create(
-            name="Second account name", currency=account_constants.BGN, owner=self.user
-        )
-
-        second_account_income = test_utils.create_income(
+        second_account_income = self.create_income(
             account=second_account, amount=Decimal("1034.44")
         ).amount
 
-        second_account_expenditure = test_utils.create_expenditure(
+        second_account_expenditure = self.create_expenditure(
             account=second_account, amount=Decimal("833.25")
         ).amount
 
@@ -125,9 +111,7 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_report_with_no_income(self):
-        expenditure = test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100.50")
-        ).amount
+        expenditure = self.create_expenditure(amount=Decimal("100.50")).amount
 
         with self.assertNumQueries(1):
             result = utils.generate_reports(user=self.account.owner)
@@ -155,9 +139,7 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_report_with_no_expenditures(self):
-        income = test_utils.create_income(
-            account=self.account, amount=Decimal("310.40")
-        ).amount
+        income = self.create_income(amount=Decimal("310.40")).amount
 
         with self.assertNumQueries(1):
             result = utils.generate_reports(user=self.account.owner)
@@ -185,21 +167,13 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_report_with_multiple_income_and_expenditures(self):
-        first_income = test_utils.create_income(
-            account=self.account, amount=Decimal("310.40")
-        ).amount
+        first_income = self.create_income(amount=Decimal("310.40")).amount
 
-        second_income = test_utils.create_income(
-            account=self.account, amount=Decimal("310.40")
-        ).amount
+        second_income = self.create_income(amount=Decimal("310.40")).amount
 
-        first_expenditure = test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100.50")
-        ).amount
+        first_expenditure = self.create_expenditure(amount=Decimal("100.50")).amount
 
-        second_expenditure = test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100.50")
-        ).amount
+        second_expenditure = self.create_expenditure(amount=Decimal("100.50")).amount
 
         with self.assertNumQueries(1):
             result = utils.generate_reports(user=self.account.owner)
@@ -229,17 +203,11 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_accounts_with_no_transactions_are_not_listed(self):
-        Account.objects.create(
-            name="Second account name", currency=account_constants.BGN, owner=self.user
-        )
+        self.create_account()
 
-        income = test_utils.create_income(
-            account=self.account, amount=Decimal("310")
-        ).amount
+        income = self.create_income(amount=Decimal("310")).amount
 
-        expenditure = test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100")
-        ).amount
+        expenditure = self.create_expenditure(amount=Decimal("100")).amount
 
         with self.assertNumQueries(1):
             result = utils.generate_reports(user=self.account.owner)
@@ -267,13 +235,9 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_reports_for_multiple_months(self):
-        income_now = test_utils.create_income(
-            account=self.account, amount=Decimal("310.15")
-        ).amount
+        income_now = self.create_income(amount=Decimal("310.15")).amount
 
-        expenditure_now = test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100.10")
-        ).amount
+        expenditure_now = self.create_expenditure(amount=Decimal("100.10")).amount
 
         first_day_of_the_current_month = self.now.replace(day=1)
         one_month_ago = first_day_of_the_current_month - relativedelta(months=1)
@@ -286,34 +250,30 @@ class MonthlyReportsTestCase(TestCase):
 
             mocked_now.return_value = different_date_in_the_same_month
 
-            income_first_day_of_current_month = test_utils.create_income(
-                account=self.account, amount=Decimal("20.25")
+            income_first_day_of_current_month = self.create_income(
+                amount=Decimal("20.25")
             ).amount
 
-            expenditure_first_day_of_current_month = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("32.50")
+            expenditure_first_day_of_current_month = self.create_expenditure(
+                amount=Decimal("32.50")
             ).amount
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = one_month_ago
-            income_one_month_ago = test_utils.create_income(
-                account=self.account, amount=Decimal("412.20")
-            ).amount
+            income_one_month_ago = self.create_income(amount=Decimal("412.20")).amount
 
-            expenditure_one_month_ago = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("111.50")
+            expenditure_one_month_ago = self.create_expenditure(
+                amount=Decimal("111.50")
             ).amount
 
         two_months_ago = one_month_ago - relativedelta(months=1)
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = two_months_ago
-            income_two_months_ago = test_utils.create_income(
-                account=self.account, amount=Decimal("65.43")
-            ).amount
+            income_two_months_ago = self.create_income(amount=Decimal("65.43")).amount
 
-            expenditure_two_months_ago = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("11.32")
+            expenditure_two_months_ago = self.create_expenditure(
+                amount=Decimal("11.32")
             ).amount
 
         with self.assertNumQueries(1):
@@ -381,12 +341,10 @@ class MonthlyReportsTestCase(TestCase):
 
     def test_reports_for_multiple_months_with_start_date(self):
 
-        income_current_month = test_utils.create_income(
-            account=self.account, amount=Decimal("310.15")
-        ).amount
+        income_current_month = self.create_income(amount=Decimal("310.15")).amount
 
-        expenditure_current_month = test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100.10")
+        expenditure_current_month = self.create_expenditure(
+            amount=Decimal("100.10")
         ).amount
 
         first_day_of_the_current_month = self.now.replace(day=1)
@@ -394,12 +352,10 @@ class MonthlyReportsTestCase(TestCase):
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = one_month_ago
-            income_one_month_ago = test_utils.create_income(
-                account=self.account, amount=Decimal("412.20")
-            ).amount
+            income_one_month_ago = self.create_income(amount=Decimal("412.20")).amount
 
-            expenditure_one_month_ago = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("111.50")
+            expenditure_one_month_ago = self.create_expenditure(
+                amount=Decimal("111.50")
             ).amount
 
         first_day_of_the_last_month = one_month_ago.replace(day=1)
@@ -407,12 +363,10 @@ class MonthlyReportsTestCase(TestCase):
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = two_months_ago
-            income_two_months_ago = test_utils.create_income(
-                account=self.account, amount=Decimal("65.43")
-            ).amount
+            income_two_months_ago = self.create_income(amount=Decimal("65.43")).amount
 
-            expenditure_two_months_ago = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("11.32")
+            expenditure_two_months_ago = self.create_expenditure(
+                amount=Decimal("11.32")
             ).amount
 
         with self.assertNumQueries(1):
@@ -456,23 +410,19 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_reports_for_multiple_months_with_end_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310.15")).amount
+        self.create_income(amount=Decimal("310.15")).amount
 
-        test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100.10")
-        ).amount
+        self.create_expenditure(amount=Decimal("100.10")).amount
 
         first_day_of_the_current_month = self.now.replace(day=1)
         one_month_ago = first_day_of_the_current_month - timedelta(days=1)
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = one_month_ago
-            income_one_month_ago = test_utils.create_income(
-                account=self.account, amount=Decimal("412.20")
-            ).amount
+            income_one_month_ago = self.create_income(amount=Decimal("412.20")).amount
 
-            expenditure_one_month_ago = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("111.50")
+            expenditure_one_month_ago = self.create_expenditure(
+                amount=Decimal("111.50")
             ).amount
 
         first_day_of_the_last_month = one_month_ago.replace(day=1)
@@ -480,12 +430,10 @@ class MonthlyReportsTestCase(TestCase):
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = two_months_ago
-            income_two_months_ago = test_utils.create_income(
-                account=self.account, amount=Decimal("65.43")
-            ).amount
+            income_two_months_ago = self.create_income(amount=Decimal("65.43")).amount
 
-            expenditure_two_months_ago = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("11.32")
+            expenditure_two_months_ago = self.create_expenditure(
+                amount=Decimal("11.32")
             ).amount
 
         with self.assertNumQueries(1):
@@ -538,23 +486,19 @@ class MonthlyReportsTestCase(TestCase):
         self.assertListEqual(result, expected_result)
 
     def test_reports_for_multiple_months_with_start_and_end_date(self):
-        test_utils.create_income(account=self.account, amount=Decimal("310.15")).amount
+        self.create_income(amount=Decimal("310.15")).amount
 
-        test_utils.create_expenditure(
-            account=self.account, amount=Decimal("100.10")
-        ).amount
+        self.create_expenditure(amount=Decimal("100.10")).amount
 
         first_day_of_the_current_month = self.now.replace(day=1)
         one_month_ago = first_day_of_the_current_month - timedelta(days=1)
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = one_month_ago
-            income_one_month_ago = test_utils.create_income(
-                account=self.account, amount=Decimal("412.20")
-            ).amount
+            income_one_month_ago = self.create_income(amount=Decimal("412.20")).amount
 
-            expenditure_one_month_ago = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("111.50")
+            expenditure_one_month_ago = self.create_expenditure(
+                amount=Decimal("111.50")
             ).amount
 
         first_day_of_the_last_month = one_month_ago.replace(day=1)
@@ -562,12 +506,10 @@ class MonthlyReportsTestCase(TestCase):
 
         with mock.patch("django.utils.timezone.now") as mocked_now:
             mocked_now.return_value = two_months_ago
-            income_two_months_ago = test_utils.create_income(
-                account=self.account, amount=Decimal("65.43")
-            ).amount
+            income_two_months_ago = self.create_income(amount=Decimal("65.43")).amount
 
-            expenditure_two_months_ago = test_utils.create_expenditure(
-                account=self.account, amount=Decimal("11.32")
+            expenditure_two_months_ago = self.create_expenditure(
+                amount=Decimal("11.32")
             ).amount
 
         with self.assertNumQueries(1):
