@@ -1,0 +1,75 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Currencies" %}{% endblock %}
+
+{% block content %}
+<main class="container list-page">
+
+  <div class="row">
+    <div class="col-12">
+      <h1>{% trans "Currencies" %}</h1>
+      {% if not object_list %}
+        <div class="alert alert-primary" role="alert">
+          {% trans "No currencies" %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row table-row">
+    <div class="col-12">
+      {% if object_list %}
+        <div class="table-responsive">
+          <table class="table table-striped" id="accounts">
+            <thead>
+              <tr>
+                <th scope="col" class="d-none d-md-table-cell">#</th>
+                <th scope="col">{% trans "Name" %}</th>
+                <th scope="col">{% trans "Created at" %}</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for currency in object_list %}
+              <tr>
+                <th scope="row" class="d-none d-md-table-cell">
+                  {{ forloop.counter }}
+                </th>
+                <td>
+                  <a href="{{ currency.get_absolute_url }}">
+                    {{ currency.name }}
+                  </a>
+                </td>
+                <td>
+                  {{ currency.created_at|date:"SHORT_DATETIME_FORMAT" }}
+                </td>
+                <td>
+                  <a href="{% url 'currencies:update' currency.pk %}">
+                    <i class="fa fa-pencil" title="{% trans "Edit" context "verb" %}"></i>
+                  </a>
+                </td>
+                <td>
+                  <a href="{% url 'currencies:delete' currency.pk %}">
+                    <i class="fa fa-trash" title="{% trans "Delete" context "verb" %}"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      {% if is_paginated %}
+        {% include "base/includes/pagination.html" %}
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% endblock %}

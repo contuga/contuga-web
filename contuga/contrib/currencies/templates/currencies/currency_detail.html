@@ -1,0 +1,100 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ currency.name }}{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12 col-md-8">
+      <h1>{% trans "Currency details" %}</h1>
+      {% include "currencies/includes/currency_detail_table.html" %}
+      <a class="btn btn-primary" href="{% url 'currencies:update' currency.pk %}" role="button">
+        <i class="fa fa-pencil"></i> {% trans "Edit" context "verb" %}
+      </a>
+      <a class="btn btn-danger" href="{% url 'currencies:delete' currency.pk %}" role="button">
+        <i class="fa fa-trash"></i> {% trans "Delete" context "verb" %}
+      </a>
+    </div>
+  </div>
+
+  <div class="row latest-transactions">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-12 col-md-8">
+          <h2>{% trans "Latest transactions" %}</h2>
+          {% if not currency.latest_transactions %}
+            <div class="alert alert-primary" role="alert">
+              {% trans "No transactions" %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="row table-row">
+        <div class="col-12">
+          {% if currency.latest_transactions %}
+            <div class="table-responsive">
+              <table class="table table-striped" id="transactions">
+                <thead>
+                  <tr>
+                    <th scope="col">{% trans "Amount" %}</th>
+                    <th scope="col">{% trans "Account" %}</th>
+                    <th scope="col">{% trans "Created at" %}</th>
+                    {% if filterset.form.updated_at.value %}
+                      <th scope="col">{% trans "Updated at" %}</th>
+                    {% endif %}
+                    <th scope="col" class="d-none d-md-table-cell">
+                      {% trans "Description" %}
+                    </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for transaction in currency.latest_transactions %}
+                  <tr>
+                    <td nowrap>
+                      <i class="{{ transaction.type_icon_class }}"></i>
+                      <a href="{{ transaction.get_absolute_url }}"
+                        class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
+                        {{ transaction.amount|floatformat:2 }} {{ transaction.currency }}
+                      </a>
+                    </td>
+                    <td>
+                      <a href="{{ transaction.account.get_absolute_url }}">
+                        {{ transaction.account.name }}
+                      </a>
+                    </td>
+                    <td>
+                      {{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}
+                    </td>
+                    {% if filterset.form.updated_at.value %}
+                      <td>
+                        {{ transaction.updated_at|date:"SHORT_DATETIME_FORMAT" }}
+                      </td>
+                    {% endif %}
+                    <td class="d-none d-md-table-cell">
+                      {{ transaction.description }}
+                    </td>
+                    <td>
+                      <a href="{% url 'transactions:update' transaction.pk %}">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="{% url 'transactions:delete' transaction.pk %}">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
