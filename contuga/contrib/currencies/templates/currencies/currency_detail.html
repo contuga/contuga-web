@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ currency.name }}{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12 col-md-8">
+      <h1>{% trans "Currency details" %}</h1>
+      {% include "currencies/includes/currency_detail_table.html" %}
+      <a class="btn btn-primary" href="{% url 'currencies:update' currency.pk %}" role="button">
+        <i class="fa fa-pencil"></i> {% trans "Edit" context "verb" %}
+      </a>
+      <a class="btn btn-danger" href="{% url 'currencies:delete' currency.pk %}" role="button">
+        <i class="fa fa-trash"></i> {% trans "Delete" context "verb" %}
+      </a>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -58,7 +58,11 @@ class TransactionListView(
     success_url = reverse_lazy("transactions:list")
 
     def get_queryset(self):
-        return super().get_queryset().select_related("category", "account")
+        return (
+            super()
+            .get_queryset()
+            .select_related("category", "account", "account__currency")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,7 +94,7 @@ class TransactionListView(
         currency_statistics = (
             queryset.values("account__currency")
             .annotate(
-                currency=F("account__currency"),
+                currency=F("account__currency__name"),
                 income=Coalesce(Sum("amount", filter=Q(type="income")), 0),
                 expenditure=Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
                 balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
@@ -121,7 +125,11 @@ class TransactionDetailView(
     model = models.Transaction
 
     def get_queryset(self):
-        return super().get_queryset().select_related("account", "category")
+        return (
+            super()
+            .get_queryset()
+            .select_related("account", "category", "account__currency")
+        )
 
 
 class TransactionUpdateView(
@@ -174,7 +182,7 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
 
         session["expenditure"] = {
             "amount": str(expenditure.amount),
-            "currency": expenditure.currency,
+            "currency": expenditure.currency.representation,
             "url": expenditure.get_absolute_url(),
             "account": {
                 "name": expenditure.account.name,
@@ -195,7 +203,7 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
 
         session["income"] = {
             "amount": str(income.amount),
-            "currency": income.currency,
+            "currency": income.currency.representation,
             "url": income.get_absolute_url(),
             "account": {
                 "name": income.account.name,
@@ -207,10 +215,14 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        accounts = account_models.Account.objects.active().filter(
-            owner=self.request.user
+        accounts = (
+            account_models.Account.objects.active()
+            .filter(owner=self.request.user)
+            .select_related("currency")
         )
-        accounts_dict = {account.pk: account.currency for account in accounts}
+        accounts_dict = {
+            account.pk: account.currency.representation for account in accounts
+        }
         context["accounts"] = json.dumps(accounts_dict)
 
         return context
