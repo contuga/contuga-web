@@ -45,7 +45,8 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
 
         incomes_category = self.create_category(transaction_type=INCOME)
         expenditures_category = self.create_category(transaction_type=EXPENDITURE)
-        account = self.create_account()
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
         self.settings.default_incomes_category = incomes_category
         self.settings.default_expenditures_category = expenditures_category
         self.settings.default_account = account
@@ -97,7 +98,8 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
 
         incomes_category = self.create_category(transaction_type=INCOME)
         expenditures_category = self.create_category(transaction_type=EXPENDITURE)
-        account = self.create_account()
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
 
         data = {
             "default_incomes_category": reverse(
@@ -144,7 +146,8 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
 
         incomes_category = self.create_category(transaction_type=INCOME)
         expenditures_category = self.create_category(transaction_type=EXPENDITURE)
-        account = self.create_account(owner=user)
+        currency = self.create_currency()
+        account = self.create_account(owner=user, currency=currency)
 
         data = {
             "default_incomes_category": reverse(

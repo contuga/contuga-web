@@ -49,7 +49,8 @@ def get_aggregated_data(transactions, start_date, end_date, truncClass):
             "account__name",
             "account__pk",
             "account__balance",
-            "account__currency",
+            "account__currency__code",
+            "account__currency__name",
             "created_on",
         )
         .annotate(
@@ -78,7 +79,10 @@ def group_reports(aggregated_data, report_unit):
             {
                 "pk": item["account__pk"],
                 "name": item["account__name"],
-                "currency": item["account__currency"],
+                "currency": {
+                    "code": item["account__currency__code"],
+                    "name": item["account__currency__name"],
+                },
                 "balance": item["account__balance"],
                 "reports": {},
             },

@@ -37,7 +37,11 @@ class CategoryDetailView(
         return (
             super()
             .get_queryset()
-            .prefetch_related("transactions", "transactions__account")
+            .prefetch_related(
+                "transactions",
+                "transactions__account",
+                "transactions__account__currency",
+            )
         )
 
 

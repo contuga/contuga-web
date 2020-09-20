@@ -97,7 +97,7 @@
               }
           ]
 
-          createChart('bar', barChartId, labels, datasets, account.currency);
+          createChart('bar', barChartId, labels, datasets, account.currency.code || account.currency.name);
 
           const lineDatasets = [
               {
@@ -107,7 +107,7 @@
               }
           ]
 
-          createChart('line', lineChartId, labels, lineDatasets, account.currency);
+          createChart('line', lineChartId, labels, lineDatasets, account.currency.code || account.currency.name);
         }
 
         function createChart(type, element, labels, datasets, currency) {

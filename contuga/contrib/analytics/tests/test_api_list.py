@@ -16,6 +16,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
     def setUp(self):
         self.now = timezone.now().astimezone()
         self.user = self.create_user(email="john.doe@example.com", password="password")
+        self.currency = self.create_currency()
         self.account = self.create_account()
 
         token, created = Token.objects.get_or_create(user=self.user)

@@ -156,7 +156,8 @@ class CategoryDetailTestCase(APITestCase, TestMixin):
 
     def test_patch_to_all(self):
         url = reverse("category-detail", args=[self.category.pk])
-        account = self.create_account()
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
         self.create_transaction(account=account)
 
         data = {
@@ -194,7 +195,8 @@ class CategoryDetailTestCase(APITestCase, TestMixin):
         category = self.create_category(transaction_type=constants.EXPENDITURE)
 
         url = reverse("category-detail", args=[category.pk])
-        account = self.create_account()
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
         self.create_transaction(category=category, account=account)
 
         data = {
@@ -225,7 +227,8 @@ class CategoryDetailTestCase(APITestCase, TestMixin):
         category = self.create_category(transaction_type=constants.INCOME)
 
         url = reverse("category-detail", args=[category.pk])
-        account = self.create_account()
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
         self.create_transaction(
             type=category.transaction_type, category=category, account=account
         )

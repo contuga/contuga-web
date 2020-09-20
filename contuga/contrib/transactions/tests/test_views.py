@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from contuga.contrib.accounts.constants import EUR
 from contuga.contrib.settings.models import Settings
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.models import Transaction
@@ -12,6 +11,7 @@ class TransactionViewTests(TestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
         self.category = self.create_category()
+        self.currency = self.create_currency()
         self.account = self.create_account()
         self.transaction = self.create_transaction()
         self.client.force_login(self.user)
@@ -41,7 +41,8 @@ class TransactionViewTests(TestCase, TestMixin):
         )
 
     def test_filter_statistics(self):
-        eur_account = self.create_account(name="Second account name", currency=EUR)
+        currency = self.create_currency(name="Euro", code="EUR")
+        eur_account = self.create_account(name="Second account name", currency=currency)
         income_transaction = self.create_transaction(
             type=INCOME, author=self.user, category=self.category, account=eur_account
         )
@@ -67,14 +68,14 @@ class TransactionViewTests(TestCase, TestMixin):
             "currency_count": 2,
             "currency_statistics": [
                 {
-                    "currency": self.account.currency,
+                    "currency": self.account.currency.name,
                     "income": 0,
                     "expenditure": self.transaction.amount,
                     "balance": -(self.transaction.amount),
                     "count": self.account.transactions.count(),
                 },
                 {
-                    "currency": eur_account.currency,
+                    "currency": eur_account.currency.name,
                     "income": income_transaction.amount,
                     "expenditure": expenditure_transaction.amount,
                     "balance": income_transaction.amount

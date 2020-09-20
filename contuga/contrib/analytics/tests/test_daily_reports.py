@@ -17,6 +17,7 @@ class DailyReportsTestCase(TestCase, TestMixin):
     def setUp(self):
         self.now = timezone.now().astimezone()
         self.user = self.create_user(email="john.doe@example.com", password="password")
+        self.currency = self.create_currency()
         self.account = self.create_account()
 
     def test_report_with_single_account(self):
@@ -43,7 +44,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]
@@ -101,13 +105,19 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": first_account_reports,
             },
             {
                 "pk": second_account.pk,
                 "name": second_account.name,
-                "currency": second_account.currency,
+                "currency": {
+                    "name": second_account.currency.name,
+                    "code": second_account.currency.code,
+                },
                 "reports": second_account_reports,
             },
         ]
@@ -136,7 +146,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]
@@ -165,7 +178,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]
@@ -203,7 +219,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]
@@ -235,7 +254,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]
@@ -321,7 +343,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]
@@ -385,7 +410,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]
@@ -464,7 +492,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]
@@ -520,7 +551,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
             {
                 "pk": self.account.pk,
                 "name": self.account.name,
-                "currency": self.account.currency,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
                 "reports": reports,
             }
         ]

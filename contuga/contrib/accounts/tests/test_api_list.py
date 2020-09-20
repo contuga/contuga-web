@@ -4,13 +4,13 @@ from rest_framework.test import APIClient, APITestCase
 
 from contuga.mixins import TestMixin
 
-from .. import constants
 from ..models import Account
 
 
 class AccountListTestCase(APITestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
+        self.currency = self.create_currency()
         self.account = self.create_account()
 
         token, created = Token.objects.get_or_create(user=self.user)
@@ -21,7 +21,7 @@ class AccountListTestCase(APITestCase, TestMixin):
 
         return self.create_account(
             name="Other account name",
-            currency=constants.EUR,
+            currency=self.currency,
             owner=user,
             description="Other account description",
         )
@@ -49,7 +49,9 @@ class AccountListTestCase(APITestCase, TestMixin):
                         reverse("account-detail", args=[self.account.pk])
                     ),
                     "name": self.account.name,
-                    "currency": self.account.currency,
+                    "currency": response.wsgi_request.build_absolute_uri(
+                        reverse("currency-detail", args=[self.account.currency.pk])
+                    ),
                     "owner": response.wsgi_request.build_absolute_uri(
                         reverse("user-detail", args=[self.user.pk])
                     ),
@@ -67,9 +69,11 @@ class AccountListTestCase(APITestCase, TestMixin):
     def test_post(self):
         url = reverse("account-list")
 
+        currency = self.create_currency(name="Euro", code="EUR")
+
         data = {
             "name": "New account name",
-            "currency": constants.EUR,
+            "currency": reverse("currency-detail", args=[currency.pk]),
             "description": "New account description",
             "is_active": False,
         }
@@ -87,7 +91,9 @@ class AccountListTestCase(APITestCase, TestMixin):
                 reverse("account-detail", args=[account.pk])
             ),
             "name": account.name,
-            "currency": account.currency,
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[account.currency.pk])
+            ),
             "owner": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
@@ -102,11 +108,12 @@ class AccountListTestCase(APITestCase, TestMixin):
 
     def test_owner_field_is_ignored_on_post(self):
         url = reverse("account-list")
+        currency = self.create_currency(name="Euro", code="EUR")
         user = self.create_user(email="richard.roe@example.com", password="password")
 
         data = {
             "name": "New account name",
-            "currency": constants.EUR,
+            "currency": reverse("currency-detail", args=[currency.pk]),
             "owner": reverse("user-detail", args=[user.pk]),
             "description": "New account description",
             "is_active": False,
@@ -125,7 +132,9 @@ class AccountListTestCase(APITestCase, TestMixin):
                 reverse("account-detail", args=[account.pk])
             ),
             "name": account.name,
-            "currency": account.currency,
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[account.currency.pk])
+            ),
             "owner": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
