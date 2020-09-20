@@ -4,7 +4,6 @@ from decimal import Decimal
 from django.test import TestCase
 from django.urls import reverse
 
-from contuga.contrib.accounts.constants import EUR
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.forms import InternalTransferForm
@@ -15,6 +14,7 @@ from contuga.mixins import TestMixin
 class InternalTransferViewTests(TestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
+        self.currency = self.create_currency()
         self.account = self.create_account()
         self.client.force_login(self.user)
 
@@ -44,7 +44,10 @@ class InternalTransferViewTests(TestCase, TestMixin):
         )
 
         expected_account_list = json.dumps(
-            {account.pk: account.currency for account in expected_account_queryset}
+            {
+                account.pk: account.currency.representation
+                for account in expected_account_queryset
+            }
         )
 
         self.assertEqual(response.context["accounts"], expected_account_list)
@@ -123,7 +126,7 @@ class InternalTransferViewTests(TestCase, TestMixin):
         # Assert the new transactions are added to the context
         expected_context_expenditure = {
             "amount": str(expenditure.amount),
-            "currency": expenditure.currency,
+            "currency": expenditure.currency.representation,
             "url": expenditure.get_absolute_url(),
             "account": {
                 "name": expenditure.account.name,
@@ -133,7 +136,7 @@ class InternalTransferViewTests(TestCase, TestMixin):
 
         expected_context_income = {
             "amount": str(income.amount),
-            "currency": income.currency,
+            "currency": income.currency.representation,
             "url": income.get_absolute_url(),
             "account": {
                 "name": income.account.name,
@@ -148,7 +151,10 @@ class InternalTransferViewTests(TestCase, TestMixin):
         self.assertDictEqual(response.context["income"], expected_context_income)
 
     def test_tansfer_to_account_of_different_currency(self):
-        second_account = self.create_account(name="Second account name", currency=EUR)
+        currency = self.create_currency(name="Euro", code="EUR")
+        second_account = self.create_account(
+            name="Second account name", currency=currency
+        )
 
         data = {
             "from_account": self.account.pk,
@@ -236,7 +242,7 @@ class InternalTransferViewTests(TestCase, TestMixin):
         # Assert the new transactions are added to the session before redirect
         expected_session_expenditure = {
             "amount": str(expenditure.amount),
-            "currency": expenditure.currency,
+            "currency": expenditure.currency.representation,
             "url": expenditure.get_absolute_url(),
             "account": {
                 "name": expenditure.account.name,
@@ -246,7 +252,7 @@ class InternalTransferViewTests(TestCase, TestMixin):
 
         expected_session_income = {
             "amount": str(income.amount),
-            "currency": income.currency,
+            "currency": income.currency.representation,
             "url": income.get_absolute_url(),
             "account": {
                 "name": income.account.name,

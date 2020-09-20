@@ -3,13 +3,13 @@ from django.urls import reverse
 
 from contuga.mixins import TestMixin
 
-from .. import constants as account_constants
 from ..models import Account
 
 
 class AccountsTestCase(TestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user(email="john.doe@example.com", password="password")
+        self.currency = self.create_currency()
         self.account = self.create_account()
         self.client.force_login(self.user)
 
@@ -28,7 +28,7 @@ class AccountsTestCase(TestCase, TestMixin):
         )
 
         # Assert account fields are used
-        fields = [self.account.name, self.account.get_currency_display()]
+        fields = [self.account.name, self.account.currency.name]
         for field in fields:
             self.assertContains(response=response, text=field)
 
@@ -45,7 +45,7 @@ class AccountsTestCase(TestCase, TestMixin):
         # Assert account fields are used
         fields = [
             self.account.name,
-            self.account.get_currency_display(),
+            self.account.currency.name,
             self.account.description,
         ]
         for field in fields:
@@ -59,9 +59,11 @@ class AccountsTestCase(TestCase, TestMixin):
         self.assertEqual(response.status_code, 200)
 
     def test_create(self):
+        currency = self.create_currency()
+
         data = {
             "name": "New account name",
-            "currency": account_constants.EUR,
+            "currency": currency.pk,
             "description": "New account description",
         }
         old_account_count = Account.objects.count()
@@ -78,6 +80,8 @@ class AccountsTestCase(TestCase, TestMixin):
 
         # Assert account is saved correctly
         account = Account.objects.order_by("created_at").last()
+
+        data["currency"] = currency
         account_data = {
             "name": account.name,
             "currency": account.currency,

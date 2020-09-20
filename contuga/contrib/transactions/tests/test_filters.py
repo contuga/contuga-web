@@ -19,6 +19,7 @@ class TransactionFilterTests(TestCase, TestMixin):
     def create_test_data(self, name):
         user = self.create_user(f"{name}@example.com", "password")
         category = self.create_category(author=user, name=f"{name}'s category")
+        self.currency = self.create_currency(name=f"{name}'s currency", author=user)
         account = self.create_account(owner=user, name=f"{name}'s account")
         transaction = self.create_transaction(
             author=user, category=category, account=account

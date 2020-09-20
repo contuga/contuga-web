@@ -72,7 +72,7 @@
                   </a>
                 </td>
                 <td>
-                  {{ account.get_currency_display }}
+                  {{ account.currency }}
                 </td>
                 <td class="{% if account.is_balance_negative %} text-danger {% else %} text-success {% endif %}">
                   {{ account.balance|floatformat:2 }}

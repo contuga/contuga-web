@@ -14,6 +14,9 @@ class SettingsViewTests(TestCase, TestMixin):
         self.settings = Settings.objects.last()
         self.client.force_login(self.user)
 
+        self.currency = self.create_currency()
+        self.account = self.create_account()
+
     def test_update_get(self):
         incomes_category = self.create_category(
             transaction_type=category_constants.INCOME
@@ -21,11 +24,10 @@ class SettingsViewTests(TestCase, TestMixin):
         expenditures_category = self.create_category(
             transaction_type=category_constants.EXPENDITURE
         )
-        account = self.create_account()
 
         self.settings.default_incomes_category = incomes_category
         self.settings.default_expenditures_category = expenditures_category
-        self.settings.default_account = account
+        self.settings.default_account = self.account
         self.settings.save()
 
         url = reverse("settings:update")
@@ -61,11 +63,11 @@ class SettingsViewTests(TestCase, TestMixin):
         expenditures_category = self.create_category(
             transaction_type=category_constants.EXPENDITURE
         )
-        account = self.create_account()
+
         data = {
             "default_incomes_category": incomes_category.pk,
             "default_expenditures_category": expenditures_category.pk,
-            "default_account": account.pk,
+            "default_account": self.account.pk,
         }
 
         url = reverse("settings:update")
@@ -92,7 +94,7 @@ class SettingsViewTests(TestCase, TestMixin):
             "pk": self.user.pk,
             "default_incomes_category": incomes_category,
             "default_expenditures_category": expenditures_category,
-            "default_account": account,
+            "default_account": self.account,
         }
         self.assertDictEqual(settings_data, expected_data)
 
@@ -103,17 +105,16 @@ class SettingsViewTests(TestCase, TestMixin):
         expenditures_category = self.create_category(
             transaction_type=category_constants.EXPENDITURE
         )
-        account = self.create_account()
 
         self.settings.default_incomes_category = incomes_category
         self.settings.default_expenditures_category = expenditures_category
-        self.settings.default_account = account
+        self.settings.default_account = self.account
         self.settings.save()
 
         data = {
             "default_incomes_category": expenditures_category.pk,
             "default_expenditures_category": incomes_category.pk,
-            "default_account": account.pk,
+            "default_account": self.account.pk,
         }
 
         url = reverse("settings:update")

@@ -18,34 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: contuga/contrib/accounts/constants.py:11
-msgid "Bulgarian lev"
-msgstr "Български лев"
-
-#: contuga/contrib/accounts/constants.py:12
-msgid "Euro"
-msgstr "Евро"
-
-#: contuga/contrib/accounts/constants.py:13
-msgid "US Dollars"
-msgstr "Щатски долар"
-
-#: contuga/contrib/accounts/constants.py:14
-msgid "British pound"
-msgstr "Британски паунд"
-
-#: contuga/contrib/accounts/constants.py:15
-msgid "Swiss franc"
-msgstr "Швейцарски франк"
-
-#: contuga/contrib/accounts/constants.py:16
-msgid "Russian ruble"
-msgstr "Руска рубла"
-
-#: contuga/contrib/accounts/constants.py:18
-msgid "Chinese yuan"
-msgstr "Китайски юан"
-
 #: contuga/contrib/accounts/models.py:15
 #: contuga/contrib/accounts/templates/accounts/account_list.html:27
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:6
@@ -529,6 +501,40 @@ msgstr "Създай категория"
 #: contuga/contrib/categories/templates/categories/category_list.html:13
 msgid "No categories"
 msgstr "Няма открити категории"
+
+#: contuga/contrib/currencies/models.py:13
+#: contuga/contrib/currencies/templates/currencies/currency_list.html:56
+msgid "ISO code"
+msgstr "ISO код"
+
+#: contuga/contrib/currencies/models.py:14
+#: contuga/contrib/currencies/templates/currencies/currency_list.html:57
+#: contuga/contrib/currencies/templates/currencies/includes/currency_detail_table.html:14
+msgid "Nominal"
+msgstr "Номинал"
+
+#: contuga/contrib/currencies/models.py:22
+#: contuga/contrib/currencies/templates/currencies/currency_list.html:4
+#: contuga/contrib/currencies/templates/currencies/currency_list.html:38
+#: contuga/templates/base/includes/navigation.html:64
+msgid "Currencies"
+msgstr "Валути"
+
+#: contuga/contrib/currencies/templates/currencies/currency_confirm_delete.html:13
+msgid "Are you sure you want to delete this currency?"
+msgstr "Сигурен ли си, че искаш да изтриеш тази валута?"
+
+#: contuga/contrib/currencies/templates/currencies/currency_detail.html:10
+msgid "Currency details"
+msgstr "Детайли за валута"
+
+#: contuga/contrib/currencies/templates/currencies/currency_form.html:4
+msgid "Create currency"
+msgstr "Създай валута"
+
+#: contuga/contrib/currencies/templates/currencies/currency_list.html:41
+msgid "No currencies"
+msgstr "Няма открити валути"
 
 #: contuga/contrib/pages/constants.py:6
 msgid "Left"

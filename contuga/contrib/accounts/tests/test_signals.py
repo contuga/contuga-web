@@ -5,21 +5,22 @@ from django.test import TestCase
 from contuga.contrib.transactions import constants as transaction_constants
 from contuga.mixins import TestMixin
 
-from .. import constants
 from ..models import Account
 
 
 class AccountSignalsTestCase(TestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
+        self.currency = self.create_currency()
         self.account = self.create_account()
 
     def create_user_and_account(self, email="richard.roe@example.com"):
         user = self.create_user(email, "password")
+        currency = self.create_currency()
 
         return self.create_account(
             name="Other account name",
-            currency=constants.EUR,
+            currency=currency,
             owner=user,
             description="Other account description",
         )

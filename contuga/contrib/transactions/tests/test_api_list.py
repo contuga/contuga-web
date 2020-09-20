@@ -13,6 +13,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
         self.category = self.create_category()
+        self.currency = self.create_currency()
         self.account = self.create_account()
         self.transaction = self.create_transaction(amount="100.10")
 

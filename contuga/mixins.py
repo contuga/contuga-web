@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 
-from contuga.contrib.accounts.constants import BGN
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.categories.constants import ALL
 from contuga.contrib.categories.models import Category
+from contuga.contrib.currencies.models import Currency
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.models import Transaction
 
@@ -38,17 +38,22 @@ class TestMixin:
             description=description,
         )
 
+    def create_currency(self, name="Bulgarian lev", author=None, code="BGN", nominal=1):
+        return Currency.objects.create(
+            name=name, author=author or self.user, code=code, nominal=nominal
+        )
+
     def create_account(
         self,
         name="Account name",
-        currency=BGN,
+        currency=None,
         owner=None,
         description="Account description",
         is_active=True,
     ):
         return Account.objects.create(
             name=name,
-            currency=currency,
+            currency=currency or self.currency,
             owner=owner or self.user,
             description=description,
             is_active=is_active,
