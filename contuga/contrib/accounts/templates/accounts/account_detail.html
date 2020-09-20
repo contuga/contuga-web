@@ -57,7 +57,7 @@
                       <i class="{{ transaction.type_icon_class }}"></i>
                       <a href="{{ transaction.get_absolute_url }}"
                         class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
-                        {{ transaction.amount|floatformat:2 }} {{ transaction.currency }}
+                        {{ transaction.amount|floatformat:2 }} {{ transaction.currency.representation }}
                       </a>
                     </td>
                     <td>

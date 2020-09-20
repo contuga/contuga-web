@@ -13,6 +13,7 @@ from contuga.mixins import TestMixin
 class TransactionViewTests(TestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
+        self.currency = self.create_currency()
         self.account = self.create_account()
         self.client.force_login(self.user)
 

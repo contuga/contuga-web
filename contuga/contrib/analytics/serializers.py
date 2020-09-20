@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
-from contuga.contrib.accounts import constants
+
+class CurrencySerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=254)
+    code = serializers.CharField(max_length=3)
 
 
 class ReportItemSerializer(serializers.Serializer):
@@ -17,5 +20,5 @@ class ReportsSerializer(serializers.Serializer):
     start_date = serializers.DateField(write_only=True)
     pk = serializers.IntegerField()
     name = serializers.CharField()
-    currency = serializers.ChoiceField(choices=constants.CURRENCY_CHOICES)
+    currency = CurrencySerializer()
     reports = ReportItemSerializer(many=True)

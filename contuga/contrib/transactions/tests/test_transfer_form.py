@@ -3,7 +3,6 @@ from decimal import Decimal
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from contuga.contrib.accounts.constants import BGN, EUR
 from contuga.contrib.transactions.forms import InternalTransferForm
 from contuga.mixins import TestMixin
 
@@ -11,9 +10,10 @@ from contuga.mixins import TestMixin
 class InternalTransferFormTests(TestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
+        self.currency = self.create_currency()
         self.account = self.create_prefixed_account()
 
-    def create_prefixed_account(self, prefix="First", currency=BGN, user=None):
+    def create_prefixed_account(self, prefix="First", currency=None, user=None):
         return self.create_account(
             name=f"{prefix} account name",
             currency=currency,
@@ -45,7 +45,10 @@ class InternalTransferFormTests(TestCase, TestMixin):
         self.assertDictEqual(form.cleaned_data, expected_cleaned_data)
 
     def test_tansfer_to_account_of_different_currency(self):
-        second_account = self.create_prefixed_account(prefix="Second", currency=EUR)
+        currency = self.create_currency(name="Euro", code="EUR")
+        second_account = self.create_prefixed_account(
+            prefix="Second", currency=currency
+        )
 
         data = {
             "from_account": self.account.pk,
@@ -87,7 +90,10 @@ class InternalTransferFormTests(TestCase, TestMixin):
         )
 
     def test_tansfer_to_account_of_different_currency_with_rate_missing(self):
-        second_account = self.create_prefixed_account(prefix="Second", currency=EUR)
+        currency = self.create_currency(name="Euro", code="EUR")
+        second_account = self.create_prefixed_account(
+            prefix="Second", currency=currency
+        )
 
         data = {
             "from_account": self.account.pk,

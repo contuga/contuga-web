@@ -5,13 +5,13 @@ from rest_framework.test import APIClient, APITestCase
 
 from contuga.mixins import TestMixin
 
-from .. import constants
 from ..models import Account
 
 
 class AccountDetailTestCase(APITestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
+        self.currency = self.create_currency()
         self.account = self.create_account()
 
         token, created = Token.objects.get_or_create(user=self.user)
@@ -22,7 +22,7 @@ class AccountDetailTestCase(APITestCase, TestMixin):
 
         return self.create_account(
             name="Other account name",
-            currency=constants.EUR,
+            currency=self.currency,
             owner=user,
             description="Other account description",
         )
@@ -38,7 +38,9 @@ class AccountDetailTestCase(APITestCase, TestMixin):
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(url),
             "name": self.account.name,
-            "currency": self.account.currency,
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[self.account.currency.pk])
+            ),
             "owner": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
@@ -88,7 +90,9 @@ class AccountDetailTestCase(APITestCase, TestMixin):
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(url),
             "name": data["name"],
-            "currency": account.currency,
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[self.account.currency.pk])
+            ),
             "owner": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
@@ -152,7 +156,9 @@ class AccountDetailTestCase(APITestCase, TestMixin):
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(url),
             "name": data["name"],
-            "currency": self.account.currency,
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[self.account.currency.pk])
+            ),
             "owner": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),
@@ -169,7 +175,7 @@ class AccountDetailTestCase(APITestCase, TestMixin):
         url = reverse("account-detail", args=[self.account.pk])
 
         data = {
-            "currency": constants.EUR,
+            "currency": reverse("currency-detail", args=[self.currency.pk]),
             "name": "New account name",
             "description": "New account description",
             "is_active": False,
@@ -189,7 +195,9 @@ class AccountDetailTestCase(APITestCase, TestMixin):
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(url),
             "name": data["name"],
-            "currency": account.currency,
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[account.currency.pk])
+            ),
             "owner": response.wsgi_request.build_absolute_uri(
                 reverse("user-detail", args=[self.user.pk])
             ),

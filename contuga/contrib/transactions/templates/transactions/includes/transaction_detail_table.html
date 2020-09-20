@@ -19,6 +19,14 @@
       </td>
     </tr>
     <tr>
+      <th scope="row">{% trans "Currency" %}</th>
+      <td>
+        <a href="{{ transaction.currency.get_absolute_url }}">
+          {{ transaction.currency.name }}
+        </a>
+      </td>
+    </tr>
+    <tr>
       <th scope="row">{% trans "Category" %}</th>
       <td>
         <a href="{{ transaction.category.get_absolute_url }}">
