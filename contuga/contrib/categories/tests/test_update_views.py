@@ -69,7 +69,8 @@ class CategoryViewTests(TestCase, TestMixin):
 
     def test_update_to_all(self):
         category = self.create_category(transaction_type=constants.EXPENDITURE)
-        account = self.create_account()
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
         self.create_transaction(category=category, account=account)
 
         data = {
@@ -101,7 +102,8 @@ class CategoryViewTests(TestCase, TestMixin):
 
     def test_update_to_income_when_still_in_use(self):
         category = self.create_category(transaction_type=constants.EXPENDITURE)
-        account = self.create_account()
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
         self.create_transaction(
             type=category.transaction_type, category=category, account=account
         )
@@ -135,7 +137,8 @@ class CategoryViewTests(TestCase, TestMixin):
 
     def test_update_to_expenditure_when_still_in_use(self):
         category = self.create_category(transaction_type=constants.INCOME)
-        account = self.create_account()
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
         self.create_transaction(
             type=category.transaction_type, category=category, account=account
         )
