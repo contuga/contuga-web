@@ -19,6 +19,16 @@ class AccountCreateView(mixins.LoginRequiredMixin, generic.CreateView):
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
 
+    def get_form(self):
+        form = super().get_form()
+
+        currency_field = form.fields["currency"]
+        currency_field.queryset = currency_field.queryset.filter(
+            author=self.request.user
+        )
+
+        return form
+
 
 class AccountListView(
     OnlyOwnedByCurrentUserMixin, mixins.LoginRequiredMixin, views.FilteredListView
@@ -26,6 +36,9 @@ class AccountListView(
     model = models.Account
     paginate_by = 20
     filterset_class = filters.AccountFilterSet
+
+    def get_queryset(self):
+        return super().get_queryset().select_related("currency")
 
 
 class AccountDetailView(

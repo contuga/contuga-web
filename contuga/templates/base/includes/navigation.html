@@ -59,6 +59,19 @@
               </a>
             </div>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+              {% trans 'Currencies' %}
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'currencies:list' %}">
+                {% trans 'View all' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'currencies:create' %}">
+                {% trans 'Add new' %}
+              </a>
+            </div>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'analytics:list' %}">
               {% trans 'Statistics' %}
