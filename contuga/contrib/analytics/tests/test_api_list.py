@@ -44,7 +44,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "previous": None,
             "results": [
                 {
-                    "pk": item.get("pk"),
+                    "pk": str(item.get("pk")),
                     "name": item.get("name"),
                     "currency": item.get("currency"),
                     "reports": [
@@ -86,7 +86,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "previous": None,
             "results": [
                 {
-                    "pk": item.get("pk"),
+                    "pk": str(item.get("pk")),
                     "name": item.get("name"),
                     "currency": item.get("currency"),
                     "reports": [
@@ -139,7 +139,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "previous": None,
             "results": [
                 {
-                    "pk": item.get("pk"),
+                    "pk": str(item.get("pk")),
                     "name": item.get("name"),
                     "currency": item.get("currency"),
                     "reports": [
@@ -195,7 +195,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "previous": None,
             "results": [
                 {
-                    "pk": item.get("pk"),
+                    "pk": str(item.get("pk")),
                     "name": item.get("name"),
                     "currency": item.get("currency"),
                     "reports": [
@@ -237,7 +237,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "previous": None,
             "results": [
                 {
-                    "pk": item.get("pk"),
+                    "pk": str(item.get("pk")),
                     "name": item.get("name"),
                     "currency": item.get("currency"),
                     "reports": [
@@ -284,7 +284,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "previous": None,
             "results": [
                 {
-                    "pk": item.get("pk"),
+                    "pk": str(item.get("pk")),
                     "name": item.get("name"),
                     "currency": item.get("currency"),
                     "reports": [
@@ -339,7 +339,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "previous": None,
             "results": [
                 {
-                    "pk": item.get("pk"),
+                    "pk": str(item.get("pk")),
                     "name": item.get("name"),
                     "currency": item.get("currency"),
                     "reports": [
@@ -401,7 +401,7 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "previous": None,
             "results": [
                 {
-                    "pk": item.get("pk"),
+                    "pk": str(item.get("pk")),
                     "name": item.get("name"),
                     "currency": item.get("currency"),
                     "reports": [
