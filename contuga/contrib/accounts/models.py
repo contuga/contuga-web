@@ -5,7 +5,6 @@ from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from contuga.contrib.currencies.models import Currency
 from contuga.models import TimestampModel
 
 from . import managers
@@ -16,7 +15,7 @@ UserModel = get_user_model()
 class Account(TimestampModel):
     name = models.CharField(_("Name"), max_length=254)
     currency = models.ForeignKey(
-        Currency,
+        "currencies.Currency",
         related_name="accounts",
         on_delete=models.CASCADE,
         blank=True,
