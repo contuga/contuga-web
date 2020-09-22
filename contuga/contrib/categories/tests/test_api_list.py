@@ -70,7 +70,7 @@ class CategoryListTestCase(APITestCase, TestMixin):
         self.assertEqual(response.status_code, 201)
 
         # Assert correct data is returned
-        category = Category.objects.order_by("pk").last()
+        category = Category.objects.order_by("created_at").last()
 
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(
@@ -105,7 +105,7 @@ class CategoryListTestCase(APITestCase, TestMixin):
         self.assertEqual(response.status_code, 201)
 
         # Assert correct data is returned
-        category = Category.objects.order_by("pk").last()
+        category = Category.objects.order_by("created_at").last()
 
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(
