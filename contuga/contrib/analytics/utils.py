@@ -59,7 +59,7 @@ def get_aggregated_data(transactions, start_date, end_date, truncClass):
         )
         # order_by() is used to remove the default ordering from Group By
         # https://docs.djangoproject.com/en/2.2/topics/db/aggregation/#interaction-with-default-ordering-or-order-by
-        .order_by()
+        .order_by("account__name")
     )
 
 
@@ -249,6 +249,7 @@ def generate_reports(user, start_date=None, end_date=None, report_unit=MONTHS):
         end_date=end_date,
         truncClass=conf["truncClass"],
     )
+
     grouped_reports = group_reports(aggregated_data, report_unit=report_unit)
     processed_reports = process_reports(
         reports=grouped_reports,
