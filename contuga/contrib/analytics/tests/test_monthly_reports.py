@@ -59,7 +59,7 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
             amount=Decimal("100.50")
         ).amount
 
-        second_account = self.create_account()
+        second_account = self.create_account(name="Second Account Name")
 
         second_account_income = self.create_income(
             account=second_account, amount=Decimal("1034.44")
@@ -115,6 +115,7 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
                 "reports": second_account_reports,
             },
         ]
+        self.maxDiff = None
 
         self.assertListEqual(result, expected_result)
 
