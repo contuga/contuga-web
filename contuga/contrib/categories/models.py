@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
@@ -11,6 +13,7 @@ UserModel = get_user_model()
 
 
 class Category(TimestampModel):
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True)
     name = models.CharField(_("Name"), max_length=254)
     author = models.ForeignKey(
         UserModel, related_name="categories", on_delete=models.CASCADE

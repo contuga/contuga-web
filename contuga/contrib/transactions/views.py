@@ -11,7 +11,7 @@ from django.views import generic
 from import_export.mixins import ExportViewFormMixin
 from rest_framework import permissions, viewsets
 
-from contuga import views
+from contuga import utils, views
 from contuga.contrib.accounts import models as account_models
 from contuga.contrib.categories import constants as category_constants
 from contuga.contrib.settings import models as settings_models
@@ -78,7 +78,9 @@ class TransactionListView(
             )
             .first()
         )
-        context["category_choices"] = json.dumps(self.get_category_choices(settings))
+        context["category_choices"] = json.dumps(
+            self.get_category_choices(settings), cls=utils.UUIDEncoder
+        )
         self.apply_initial_values(form, settings)
 
         # context["object_list"] cannot be used due to the pagination which makes
