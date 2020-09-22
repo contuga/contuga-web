@@ -101,7 +101,7 @@ class TransactionListView(
                 expenditure=Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
                 balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
                 - Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
-                count=Count("id"),
+                count=Count("pk"),
             )
             .values("currency", "income", "expenditure", "balance", "count")
             .order_by("currency")

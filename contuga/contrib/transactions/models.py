@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
@@ -13,6 +15,7 @@ UserModel = get_user_model()
 
 
 class Transaction(TimestampModel):
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True)
     type = models.CharField(
         _("Type"),
         max_length=254,
