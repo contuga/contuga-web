@@ -18,7 +18,7 @@ class ReportItemSerializer(serializers.Serializer):
 class ReportsSerializer(serializers.Serializer):
     report_unit = serializers.CharField(write_only=True)
     start_date = serializers.DateField(write_only=True)
-    pk = serializers.IntegerField()
+    pk = serializers.UUIDField()
     name = serializers.CharField()
     currency = CurrencySerializer()
     reports = ReportItemSerializer(many=True)
