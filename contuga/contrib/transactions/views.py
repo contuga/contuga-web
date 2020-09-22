@@ -102,7 +102,7 @@ class TransactionListView(
                 count=Count("id"),
             )
             .values("currency", "income", "expenditure", "balance", "count")
-            .order_by()
+            .order_by("currency")
         )
 
         return {
