@@ -93,7 +93,7 @@ class GroupedCategoriesMixin:
             if category.transaction_type == category_constants.INCOME:
                 grouped_categories[constants.INCOME].append(
                     {
-                        "id": category.pk,
+                        "id": str(category.pk),
                         "name": category.name,
                         "selected": category == settings.default_incomes_category,
                     }
@@ -101,7 +101,7 @@ class GroupedCategoriesMixin:
             elif category.transaction_type == category_constants.EXPENDITURE:
                 grouped_categories[constants.EXPENDITURE].append(
                     {
-                        "id": category.pk,
+                        "id": str(category.pk),
                         "name": category.name,
                         "selected": category == settings.default_expenditures_category,
                     }
@@ -109,14 +109,14 @@ class GroupedCategoriesMixin:
             else:
                 grouped_categories[constants.INCOME].append(
                     {
-                        "id": category.pk,
+                        "id": str(category.pk),
                         "name": category.name,
                         "selected": category == settings.default_incomes_category,
                     }
                 )
                 grouped_categories[constants.EXPENDITURE].append(
                     {
-                        "id": category.pk,
+                        "id": str(category.pk),
                         "name": category.name,
                         "selected": category == settings.default_expenditures_category,
                     }
