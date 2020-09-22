@@ -221,7 +221,7 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
             owner=self.request.user
         )
         accounts_dict = {
-            account.pk: account.currency.representation for account in accounts
+            str(account.pk): account.currency.representation for account in accounts
         }
         context["accounts"] = json.dumps(accounts_dict)
 

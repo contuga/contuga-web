@@ -45,7 +45,7 @@ class InternalTransferViewTests(TestCase, TestMixin):
 
         expected_account_list = json.dumps(
             {
-                account.pk: account.currency.representation
+                str(account.pk): account.currency.representation
                 for account in expected_account_queryset
             }
         )

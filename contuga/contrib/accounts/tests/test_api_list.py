@@ -84,7 +84,7 @@ class AccountListTestCase(APITestCase, TestMixin):
         self.assertEqual(response.status_code, 201)
 
         # Assert correct data is returned
-        account = Account.objects.order_by("pk").last()
+        account = Account.objects.order_by("created_at").last()
 
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(
@@ -125,7 +125,7 @@ class AccountListTestCase(APITestCase, TestMixin):
         self.assertEqual(response.status_code, 201)
 
         # Assert correct data is returned
-        account = Account.objects.order_by("pk").last()
+        account = Account.objects.order_by("created_at").last()
 
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(
