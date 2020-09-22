@@ -95,7 +95,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
         self.assertEqual(response.status_code, 201)
 
         # Assert correct data is returned
-        transaction = Transaction.objects.order_by("pk").last()
+        transaction = Transaction.objects.order_by("created_at").last()
 
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(
@@ -147,7 +147,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
         self.assertEqual(response.status_code, 201)
 
         # Assert correct data is returned
-        transaction = Transaction.objects.order_by("pk").last()
+        transaction = Transaction.objects.order_by("created_at").last()
 
         expected_response = {
             "url": response.wsgi_request.build_absolute_uri(
