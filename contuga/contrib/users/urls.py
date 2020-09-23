@@ -31,7 +31,7 @@ urlpatterns = [
         base_views.TemplateView.as_view(template_name="users/activation_complete.html"),
         name="activation_complete",
     ),
-    path("<int:pk>/", views.UserDetailView.as_view(), name="profile"),
+    path("<uuid:uuid>/", views.UserDetailView.as_view(), name="profile"),
     path(
         "password_change/", views.PasswordChangeView.as_view(), name="password_change"
     ),
