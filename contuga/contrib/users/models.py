@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
@@ -7,6 +9,8 @@ from .managers import UserManager
 
 
 class User(AbstractUser):
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
+
     username_validator = UnicodeUsernameValidator()
 
     email = models.EmailField(verbose_name="Email", max_length=255, unique=True)
