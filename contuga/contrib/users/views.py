@@ -91,6 +91,8 @@ class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 
 class UserDetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = UserModel
+    slug_field = "uuid"
+    slug_url_kwarg = "uuid"
 
     def get_queryset(self):
         return super().get_queryset().filter(pk=self.request.user.pk)

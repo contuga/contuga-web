@@ -84,7 +84,7 @@
               {{ user }}
             </a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'users:profile' user.pk %}">
+              <a class="dropdown-item" href="{% url 'users:profile' user.uuid %}">
                 {% trans 'Profile' %}
               </a>
               <a class="dropdown-item" href="{% url 'settings:detail' %}">
