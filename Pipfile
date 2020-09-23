@@ -33,7 +33,7 @@ django-debug-toolbar = "==2.2.*"
 isort = "==4.3.*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
 
 [scripts]
 manage = "python manage.py"
