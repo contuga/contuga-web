@@ -215,6 +215,48 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
 
         self.assertDictEqual(response.json(), expected_response)
 
+    def test_get_monthly_reports_with_category(self):
+        category = self.create_category()
+
+        self.create_income(amount=Decimal("310"), category=category)
+
+        self.create_expenditure(amount=Decimal("100"), category=category)
+
+        url = reverse("analytics-list")
+        response = self.client.get(url, {"category": category.pk}, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert correct data is returned
+        expected_reports = utils.generate_reports(
+            user=self.account.owner, report_unit=constants.MONTHS, category=category
+        )
+
+        expected_response = {
+            "count": len(expected_reports),
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": str(item.get("pk")),
+                    "name": item.get("name"),
+                    "currency": item.get("currency"),
+                    "reports": [
+                        {
+                            "month": report.get("month"),
+                            "year": report.get("year"),
+                            "income": f"{report.get('income'):.2f}",
+                            "expenditures": f"{report.get('expenditures'):.2f}",
+                        }
+                        for report in item["reports"]
+                    ],
+                }
+                for item in expected_reports
+            ],
+        }
+        self.assertDictEqual(response.json(), expected_response)
+
     def test_get_daily_reports(self):
         self.create_income(amount=Decimal("310"))
 
@@ -420,4 +462,51 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             ],
         }
 
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_get_daily_reports_with_category(self):
+        category = self.create_category()
+
+        self.create_income(amount=Decimal("310"), category=category)
+
+        self.create_expenditure(amount=Decimal("100"), category=category)
+
+        url = reverse("analytics-list")
+        response = self.client.get(
+            url,
+            {"report_unit": constants.DAYS, "category": str(category.pk)},
+            format="json",
+        )
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert correct data is returned
+        expected_reports = utils.generate_reports(
+            user=self.account.owner, report_unit=constants.DAYS, category=category
+        )
+
+        expected_response = {
+            "count": len(expected_reports),
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": str(item.get("pk")),
+                    "name": item.get("name"),
+                    "currency": item.get("currency"),
+                    "reports": [
+                        {
+                            "day": report.get("day"),
+                            "month": report.get("month"),
+                            "year": report.get("year"),
+                            "income": f"{report.get('income'):.2f}",
+                            "expenditures": f"{report.get('expenditures'):.2f}",
+                        }
+                        for report in item["reports"]
+                    ],
+                }
+                for item in expected_reports
+            ],
+        }
         self.assertDictEqual(response.json(), expected_response)
