@@ -17,13 +17,16 @@ REPORTS = {
 }
 
 
-def get_aggregated_data(transactions, start_date, end_date, truncClass):
+def get_aggregated_data(transactions, start_date, end_date, category, truncClass):
+    if category:
+        transactions = transactions.filter(category=category)
+
     queryset = transactions.filter(
         created_at__gte=start_date.astimezone(pytz.UTC),
         created_at__lte=end_date.astimezone(pytz.UTC),
     )
 
-    if end_date:
+    if end_date and not category:
         # Calculte the account balance until the selected end_date
         account__balance = (
             transactions.filter(
@@ -40,20 +43,27 @@ def get_aggregated_data(transactions, start_date, end_date, truncClass):
             .order_by()
         )
 
-    return (
-        queryset.annotate(created_on=truncClass("created_at", tzinfo=start_date.tzinfo))
-        .annotate(
+    queryset = queryset.annotate(
+        created_on=truncClass("created_at", tzinfo=start_date.tzinfo)
+    )
+
+    values = [
+        "account__name",
+        "account__pk",
+        "account__currency__code",
+        "account__currency__name",
+        "created_on",
+    ]
+
+    if not category:
+        queryset = queryset.annotate(
             account__balance=Subquery(account__balance, output_field=DecimalField())
         )
-        .values(
-            "account__name",
-            "account__pk",
-            "account__balance",
-            "account__currency__code",
-            "account__currency__name",
-            "created_on",
-        )
-        .annotate(
+
+        values.append("account__balance")
+
+    return (
+        queryset.values(*values).annotate(
             income=Coalesce(Sum("amount", filter=Q(type="income")), 0),
             expenditures=Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
         )
@@ -74,19 +84,20 @@ def group_reports(aggregated_data, report_unit):
     grouped_reports = {}
 
     for item in aggregated_data:
-        account = grouped_reports.setdefault(
-            item["account__pk"],
-            {
-                "pk": item["account__pk"],
-                "name": item["account__name"],
-                "currency": {
-                    "code": item["account__currency__code"],
-                    "name": item["account__currency__name"],
-                },
-                "balance": item["account__balance"],
-                "reports": {},
+        default = {
+            "pk": item["account__pk"],
+            "name": item["account__name"],
+            "currency": {
+                "code": item["account__currency__code"],
+                "name": item["account__currency__name"],
             },
-        )
+            "reports": {},
+        }
+
+        if item.get("account__balance"):
+            default["balance"] = item["account__balance"]
+
+        account = grouped_reports.setdefault(item["account__pk"], default)
 
         year = item["created_on"].year
         month = item["created_on"].month
@@ -141,12 +152,13 @@ def process_monthly_reports(reports, start_date, end_date):
                 {"month": month, "year": year, "income": 0, "expenditures": 0},
             )
 
-            report["balance"] = calculate_balance(
-                report=report,
-                next_report=account["reports"][next_date],
-                account_balance=account["balance"],
-                end_date=end_date,
-            )
+            if account.get("balance"):
+                report["balance"] = calculate_balance(
+                    report=report,
+                    next_report=account["reports"][next_date],
+                    account_balance=account["balance"],
+                    end_date=end_date,
+                )
 
             next_date = date_string
 
@@ -158,7 +170,8 @@ def process_monthly_reports(reports, start_date, end_date):
 
             date_string = construct_date_string(year, month)
 
-        del account["balance"]
+        if account.get("balance"):
+            del account["balance"]
 
         account["reports"] = sorted(
             account["reports"].values(), key=lambda x: (x["year"], x["month"])
@@ -189,12 +202,13 @@ def process_daily_reports(reports, start_date, end_date):
                 },
             )
 
-            report["balance"] = calculate_balance(
-                report=report,
-                next_report=account["reports"][next_date],
-                account_balance=account["balance"],
-                end_date=end_date,
-            )
+            if account.get("balance"):
+                report["balance"] = calculate_balance(
+                    report=report,
+                    next_report=account["reports"][next_date],
+                    account_balance=account["balance"],
+                    end_date=end_date,
+                )
 
             next_date = date_string
 
@@ -202,7 +216,8 @@ def process_daily_reports(reports, start_date, end_date):
 
             date_string = construct_date_string(date.year, date.month, date.day)
 
-        del account["balance"]
+        if account.get("balance"):
+            del account["balance"]
 
         account["reports"] = sorted(
             account["reports"].values(), key=lambda x: (x["year"], x["month"], x["day"])
@@ -222,7 +237,9 @@ def process_reports(reports, report_unit, start_date, end_date):
         )
 
 
-def generate_reports(user, start_date=None, end_date=None, report_unit=MONTHS):
+def generate_reports(
+    user, start_date=None, end_date=None, report_unit=MONTHS, category=None
+):
     transactions = Transaction.objects.filter(account__is_active=True, author=user)
 
     # If empty_string is passed as report_unit
@@ -247,10 +264,12 @@ def generate_reports(user, start_date=None, end_date=None, report_unit=MONTHS):
         transactions=transactions,
         start_date=start_date,
         end_date=end_date,
+        category=category,
         truncClass=conf["truncClass"],
     )
 
     grouped_reports = group_reports(aggregated_data, report_unit=report_unit)
+
     processed_reports = process_reports(
         reports=grouped_reports,
         start_date=start_date,

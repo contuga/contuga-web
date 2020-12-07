@@ -576,3 +576,43 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
         ]
 
         self.assertListEqual(result, expected_result)
+
+    def test_report_for_specific_category(self):
+        category = self.create_category()
+
+        income = self.create_income(amount=Decimal("310.40"), category=category).amount
+
+        self.create_income(amount=Decimal("310.40")).amount
+
+        expenditure = self.create_expenditure(
+            amount=Decimal("100.50"), category=category
+        ).amount
+
+        self.create_expenditure(amount=Decimal("100.50")).amount
+
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(user=self.account.owner, category=category)
+
+        reports = test_utils.create_empty_reports(last_date=self.now, hasBalance=False)
+        reports.append(
+            {
+                "month": self.now.month,
+                "year": self.now.year,
+                "income": income,
+                "expenditures": expenditure,
+            }
+        )
+
+        expected_result = [
+            {
+                "pk": self.account.pk,
+                "name": self.account.name,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
+                "reports": reports,
+            }
+        ]
+
+        self.assertListEqual(result, expected_result)

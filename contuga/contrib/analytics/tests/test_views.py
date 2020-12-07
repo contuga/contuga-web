@@ -70,7 +70,12 @@ class AnalyticsTestCase(TestCase, TestMixin):
         form = response.context.get("form")
         self.assertEqual(
             form.cleaned_data,
-            {"report_unit": constants.MONTHS, "start_date": None, "end_date": None},
+            {
+                "category": None,
+                "report_unit": constants.MONTHS,
+                "start_date": None,
+                "end_date": None,
+            },
         )
 
     def test_get_monthly_reports_with_invalid_unit(self):
@@ -123,7 +128,12 @@ class AnalyticsTestCase(TestCase, TestMixin):
         form = response.context.get("form")
         self.assertEqual(
             form.cleaned_data,
-            {"report_unit": constants.MONTHS, "start_date": today, "end_date": None},
+            {
+                "category": None,
+                "report_unit": constants.MONTHS,
+                "start_date": today,
+                "end_date": None,
+            },
         )
 
     def test_get_monthly_reports_with_invalid_start_date(self):
@@ -218,6 +228,7 @@ class AnalyticsTestCase(TestCase, TestMixin):
         self.assertEqual(
             form.cleaned_data,
             {
+                "category": None,
                 "report_unit": constants.MONTHS,
                 "start_date": None,
                 "end_date": one_month_ago.date(),
@@ -320,9 +331,44 @@ class AnalyticsTestCase(TestCase, TestMixin):
         self.assertEqual(
             form.cleaned_data,
             {
+                "category": None,
                 "report_unit": constants.MONTHS,
                 "start_date": one_month_ago.date(),
                 "end_date": one_month_ago.date(),
+            },
+        )
+
+    def test_get_monthly_reports_with_category(self):
+        category = self.create_category()
+
+        self.create_income(amount=Decimal("310"), category=category)
+
+        self.create_expenditure(amount=Decimal("100"), category=category)
+
+        url = reverse("analytics:list")
+        response = self.client.get(url, {"category": category.pk}, follow=True)
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert reports are correct
+        expected_reports = utils.generate_reports(
+            user=self.account.owner, category=category
+        )
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        # Assert form is correct
+        form = response.context.get("form")
+        self.assertEqual(
+            form.cleaned_data,
+            {
+                "category": category,
+                "report_unit": constants.MONTHS,
+                "start_date": None,
+                "end_date": None,
             },
         )
 
@@ -350,7 +396,12 @@ class AnalyticsTestCase(TestCase, TestMixin):
         form = response.context.get("form")
         self.assertEqual(
             form.cleaned_data,
-            {"report_unit": constants.DAYS, "start_date": None, "end_date": None},
+            {
+                "category": None,
+                "report_unit": constants.DAYS,
+                "start_date": None,
+                "end_date": None,
+            },
         )
 
     def test_get_daily_reports_with_start_date(self):
@@ -381,7 +432,12 @@ class AnalyticsTestCase(TestCase, TestMixin):
         form = response.context.get("form")
         self.assertEqual(
             form.cleaned_data,
-            {"report_unit": constants.DAYS, "start_date": today, "end_date": None},
+            {
+                "category": None,
+                "report_unit": constants.DAYS,
+                "start_date": today,
+                "end_date": None,
+            },
         )
 
     def test_get_daily_reports_with_end_date(self):
@@ -421,6 +477,7 @@ class AnalyticsTestCase(TestCase, TestMixin):
         self.assertEqual(
             form.cleaned_data,
             {
+                "category": None,
                 "report_unit": constants.DAYS,
                 "start_date": None,
                 "end_date": yesterday.date(),
@@ -471,8 +528,45 @@ class AnalyticsTestCase(TestCase, TestMixin):
         self.assertEqual(
             form.cleaned_data,
             {
+                "category": None,
                 "report_unit": constants.DAYS,
                 "start_date": yesterday.date(),
                 "end_date": yesterday.date(),
+            },
+        )
+
+    def test_get_daily_reports_with_category(self):
+        category = self.create_category()
+
+        self.create_income(amount=Decimal("310"), category=category)
+
+        self.create_expenditure(amount=Decimal("100"), category=category)
+
+        url = reverse("analytics:list")
+        response = self.client.get(
+            url, {"category": category.pk, "report_unit": constants.DAYS}, follow=True
+        )
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert reports are correct
+        expected_reports = utils.generate_reports(
+            user=self.account.owner, category=category, report_unit=constants.DAYS
+        )
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        # Assert form is correct
+        form = response.context.get("form")
+        self.assertEqual(
+            form.cleaned_data,
+            {
+                "category": category,
+                "report_unit": constants.DAYS,
+                "start_date": None,
+                "end_date": None,
             },
         )

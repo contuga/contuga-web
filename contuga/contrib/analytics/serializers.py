@@ -12,7 +12,7 @@ class ReportItemSerializer(serializers.Serializer):
     year = serializers.IntegerField()
     income = serializers.DecimalField(max_digits=14, decimal_places=2)
     expenditures = serializers.DecimalField(max_digits=14, decimal_places=2)
-    balance = serializers.DecimalField(max_digits=14, decimal_places=2)
+    balance = serializers.DecimalField(max_digits=14, decimal_places=2, required=False)
 
 
 class ReportsSerializer(serializers.Serializer):
