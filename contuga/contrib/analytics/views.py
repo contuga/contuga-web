@@ -22,27 +22,32 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        user = self.request.user
         reports = None
+
         if len(self.request.GET):
             form_data = self.request.GET.copy()
             report_unit = form_data.get("report_unit")
             form_data["report_unit"] = report_unit if report_unit else MONTHS
-            form = ReportsFilterForm(form_data)
+            form = ReportsFilterForm(user, form_data)
         else:
-            form = ReportsFilterForm()
+            form = ReportsFilterForm(user)
 
         if form.is_valid():
             report_unit = form.cleaned_data.get("report_unit")
             start_date = form.cleaned_data.get("start_date")
             end_date = form.cleaned_data.get("end_date")
+            category = form.cleaned_data.get("category")
+
             reports = utils.generate_reports(
-                user=self.request.user,
+                user=user,
                 report_unit=report_unit,
                 start_date=start_date,
                 end_date=end_date,
+                category=category,
             )
         else:
-            reports = utils.generate_reports(user=self.request.user)
+            reports = utils.generate_reports(user=user)
 
         if reports:
             context["reports"] = json.dumps(reports, cls=DjangoJSONEncoder)
@@ -63,20 +68,24 @@ class AnalyticsViewSet(viewsets.ViewSet):
         return permission_classes
 
     def list(self, request):
+        user = self.request.user
+
         if len(self.request.query_params):
-            form = ReportsFilterForm(self.request.GET)
+            form = ReportsFilterForm(user, self.request.GET)
         else:
-            form = ReportsFilterForm()
+            form = ReportsFilterForm(user)
 
         if form.is_valid():
             report_unit = form.cleaned_data.get("report_unit")
             start_date = form.cleaned_data.get("start_date")
             end_date = form.cleaned_data.get("end_date")
+            category = form.cleaned_data.get("category")
             reports = utils.generate_reports(
                 user=self.request.user,
                 report_unit=report_unit,
                 start_date=start_date,
                 end_date=end_date,
+                category=category,
             )
         else:
             reports = utils.generate_reports(user=self.request.user)

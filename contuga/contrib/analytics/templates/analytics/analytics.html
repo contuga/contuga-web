@@ -28,6 +28,9 @@
               <div class="col-12 col-md-2 col-lg-2">
                 {% include 'contuga/forms/field.html' with field=form.end_date|attr:'autocomplete:off' %}
               </div>
+              <div class="col-12 col-md-3">
+                {% include 'contuga/forms/field.html' with field=form.category %}
+              </div>
               <div class="col-12 col-md-2 d-flex align-items-end mb-3">
                 <button type="submit" class="btn btn-primary">
                   {% trans "Apply" %}
@@ -99,15 +102,17 @@
 
           createChart('bar', barChartId, labels, datasets, account.currency.code || account.currency.name);
 
-          const lineDatasets = [
-              {
-                  label: '{% trans "Balance" %}',
-                  data: account.reports.map((it) => it.balance),
-                  backgroundColor: '#254c7c'
-              }
-          ]
+          {% if not form.category.value %}
+            const lineDatasets = [
+                {
+                    label: '{% trans "Balance" %}',
+                    data: account.reports.map((it) => it.balance),
+                    backgroundColor: '#254c7c'
+                }
+            ]
 
-          createChart('line', lineChartId, labels, lineDatasets, account.currency.code || account.currency.name);
+            createChart('line', lineChartId, labels, lineDatasets, account.currency.code || account.currency.name);
+          {% endif %}
         }
 
         function createChart(type, element, labels, datasets, currency) {
