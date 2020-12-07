@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from contuga.contrib.categories import models as category_models
+
 from .constants import MONTHS, REPORT_UNIT_CHOICES
 
 
@@ -17,6 +19,16 @@ class ReportsFilterForm(forms.Form):
     )
     start_date = forms.DateField(label=_("Start date"), required=False)
     end_date = forms.DateField(label=_("End date"), required=False)
+    category = forms.ModelChoiceField(
+        label=_("Category"), required=False, queryset=None
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["category"].queryset = category_models.Category.objects.filter(
+            author=user
+        )
 
     def clean_start_date(self):
         start_date = self.cleaned_data.get("start_date")

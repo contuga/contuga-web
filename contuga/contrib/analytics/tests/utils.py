@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 from ..constants import DAYS, MONTHS
 
 
-def create_empty_reports(last_date, report_unit=MONTHS):
+def create_empty_reports(last_date, report_unit=MONTHS, hasBalance=True):
     reports = []
 
     if report_unit == MONTHS:
@@ -22,8 +22,10 @@ def create_empty_reports(last_date, report_unit=MONTHS):
             "year": date.year,
             "income": 0,
             "expenditures": 0,
-            "balance": 0,
         }
+
+        if hasBalance:
+            report["balance"] = 0
 
         if report_unit == DAYS:
             report["day"] = date.day
