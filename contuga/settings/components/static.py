@@ -19,7 +19,7 @@ STATICFILES_FINDERS = (
     "pipeline.finders.PipelineFinder",
 )
 
-STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
+STATICFILES_STORAGE = "pipeline.storage.PipelineManifestStorage"
 
 # Django Pipeline
 # https://django-pipeline.readthedocs.io/en/stable/
