@@ -8,4 +8,5 @@ media/
 /static/
 node_modules/
 .coverage
+.env
 htmlcov
