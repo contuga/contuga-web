@@ -8,10 +8,10 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-from contuga.mixins import TestMixin
+from contuga.mixins import EndToEndTestMixin, TestMixin
 
 
-class SeleniumTestCase(StaticLiveServerTestCase, TestMixin):
+class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
