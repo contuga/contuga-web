@@ -11,6 +11,7 @@ pre-commit = "*"
 wily = "*"
 bandit = "*"
 coverage = "*"
+selenium = "*"
 
 [packages]
 django = "==3.1.*"
