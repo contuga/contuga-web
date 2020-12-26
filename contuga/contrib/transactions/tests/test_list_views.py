@@ -122,37 +122,3 @@ class TransactionViewTests(TestCase, TestMixin):
 
         account_field = form.fields["account"]
         self.assertEqual(account_field.initial, settings.default_account)
-
-    def test_detail(self):
-        url = reverse("transactions:detail", kwargs={"pk": self.transaction.pk})
-        response = self.client.get(url, follow=True)
-
-        # Assert status code is correct
-        self.assertEqual(response.status_code, 200)
-
-        # Assert correct model is retrieved
-        self.assertEqual(response.context["transaction"], self.transaction)
-
-        # Assert transaction fields are used
-        fields = [
-            self.transaction.amount,
-            self.transaction.category.name,
-            self.transaction.description,
-        ]
-        for field in fields:
-            self.assertContains(response=response, text=field)
-
-    def test_delete(self):
-        old_transaction_count = Transaction.objects.count()
-
-        url = reverse("transactions:delete", kwargs={"pk": self.transaction.pk})
-        response = self.client.post(url, follow=True)
-
-        # Assert status code is correct
-        self.assertEqual(response.status_code, 200)
-
-        # Assert transaction is deleted
-        new_transaction_count = Transaction.objects.count()
-        self.assertEqual(new_transaction_count, old_transaction_count - 1)
-        with self.assertRaises(Transaction.DoesNotExist):
-            Transaction.objects.get(pk=self.transaction.pk)
