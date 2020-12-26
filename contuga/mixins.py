@@ -154,3 +154,11 @@ class EndToEndTestMixin:
         WebDriverWait(self.selenium, 5).until(
             expected_conditions.url_changes(current_url)
         )
+
+    def go_back(self):
+        current_url = self.selenium.current_url
+        self.selenium.back()
+
+        WebDriverWait(self.selenium, 5).until(
+            expected_conditions.url_changes(current_url)
+        )
