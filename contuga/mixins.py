@@ -115,6 +115,10 @@ class TestMixin:
         )
 
 
+# TODO: Move this class out of mixins.py
+# Currently, the application requires selenium to be installed
+# due to the imports in this file. The class should be moved
+# so that selenium can become only a dev dependency.
 class EndToEndTestMixin:
     def login(self):
         self.navigate_to_login_form()
