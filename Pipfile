@@ -12,7 +12,6 @@ wily = "*"
 bandit = "*"
 coverage = "*"
 isort = "==4.3.*"
-selenium = "==3.141.*"
 
 [packages]
 django = "==3.1.*"
@@ -32,6 +31,7 @@ coreapi = "==2.3.*"
 python-dateutil = "==2.8.*"
 django-parler = "==2.2.*"
 django-debug-toolbar = "==3.2.*"
+selenium = "==3.141.*"
 
 [requires]
 python_version = "3.8"
