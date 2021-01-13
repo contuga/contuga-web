@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  web:
+    build: .
+    expose:
+      - "8000"
+    links:
+      - postgres:postgres
+    volumes:
+      - static-files:/usr/src/app/static
+      - nginx-config:/usr/src/app/nginx/
+    env_file: .env
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    depends_on:
+      - postgres
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - static-files:/www/static
+      - nginx-config:/etc/nginx/conf.d
+    links:
+      - web:web
+  postgres:
+    restart: always
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - database:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=postgres
+volumes:
+  static-files:
+  nginx-config:
+  database:
