@@ -50,7 +50,11 @@ class AccountDetailView(
         return (
             super()
             .get_queryset()
-            .prefetch_related("transactions", "transactions__category")
+            .prefetch_related(
+                "transactions",
+                "transactions__income_counterpart",
+                "transactions__category",
+            )
         )
 
 
