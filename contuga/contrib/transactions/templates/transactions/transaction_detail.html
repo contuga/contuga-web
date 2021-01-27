@@ -7,7 +7,12 @@
 <main class="container">
   <div class="row">
     <div class="col-12 col-md-8">
-      <h1>{% trans "Transaction details" %}</h1>
+      <h1>
+        {% trans "Transaction details" %}
+        {% if transaction.is_part_of_transfer %}
+          <i class="fa fa-exchange" title='{% trans "Transfer between own accounts" %}'></i>
+        {% endif %}
+      </h1>
       {% include "transactions/includes/transaction_detail_table.html" %}
       <a class="btn btn-primary" href="{% url 'transactions:update' transaction.pk %}" role="button">
         <i class="fa fa-pencil"></i> {% trans "Edit" context "verb" %}

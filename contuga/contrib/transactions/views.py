@@ -61,7 +61,9 @@ class TransactionListView(
         return (
             super()
             .get_queryset()
-            .select_related("category", "account", "account__currency")
+            .select_related(
+                "income_counterpart", "category", "account", "account__currency"
+            )
         )
 
     def get_context_data(self, **kwargs):
@@ -130,7 +132,9 @@ class TransactionDetailView(
         return (
             super()
             .get_queryset()
-            .select_related("account", "category", "account__currency")
+            .select_related(
+                "income_counterpart", "account", "category", "account__currency"
+            )
         )
 
 
@@ -171,7 +175,6 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
         amount = cleaned_data.get("amount")
         description = cleaned_data.get("description")
 
-        # TODO: Separate transfers from normal transactions
         session = self.request.session
 
         expenditure = models.Transaction.objects.create(
@@ -201,6 +204,7 @@ class InternalTransferFormView(mixins.LoginRequiredMixin, generic.FormView):
             author=self.request.user,
             account=to_account,
             description=description,
+            expenditure_counterpart=expenditure,
         )
 
         session["income"] = {
