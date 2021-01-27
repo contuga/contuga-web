@@ -41,6 +41,9 @@
                   class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
                   {{ transaction.amount|floatformat:2 }} {{ transaction.currency.code }}
                 </a>
+                {% if transaction.is_part_of_transfer %}
+                  <i class="fa fa-exchange" title='{% trans "Transfer between own accounts" %}'></i>
+                {% endif %}
               </td>
               <td>
                 <a href="{{ transaction.account.get_absolute_url }}">

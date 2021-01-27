@@ -747,6 +747,10 @@ msgid ""
 msgstr ""
 "Трябва да посочите обменен курс, ако двете сметки са в различна валута."
 
+#: contuga/contrib/transactions/models.py:52
+msgid "Income counterpart"
+msgstr "Приходна трансакция"
+
 #: contuga/contrib/transactions/models.py:54
 msgid "Transaction"
 msgstr "Трансакция"
@@ -759,6 +763,18 @@ msgstr "Трансакция"
 #: contuga/templates/base/includes/navigation.html:22
 msgid "Transactions"
 msgstr "Трансакции"
+
+#: contuga/contrib/transactions/models.py:83
+msgid "Cannot change the type of a transaction that is part of a transfer"
+msgstr "Не можете да смените типът на трансакция, която е част от трасфер."
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:18
+msgid "Sold for"
+msgstr "Продадени за"
+
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:20
+msgid "Bought for"
+msgstr "Купени за"
 
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_export_form.html:12
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:17
