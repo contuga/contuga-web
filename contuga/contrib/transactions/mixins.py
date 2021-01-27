@@ -16,24 +16,15 @@ class BaseTransactionFormViewMixin:
         form = super().get_form()
         category_field = form.fields["category"]
 
+        if form.is_bound and form.instance.is_part_of_transfer:
+            type_field = form.fields["type"]
+            type_field.disabled = True
+
         queryset = category_field.queryset.filter(author=self.request.user)
 
         transaction_type = self.request.POST.get("type") if self.request.POST else form.instance.type
 
-        if transaction_type == constants.INCOME:
-            category_field.queryset = queryset.filter(
-                transaction_type__in=(
-                    category_constants.ALL,
-                    category_constants.INCOME,
-                )
-            )
-        else:
-            category_field.queryset = queryset.filter(
-                transaction_type__in=(
-                    category_constants.ALL,
-                    category_constants.EXPENDITURE,
-                )
-            )
+        self.update_category_queryset(form, transaction_type, queryset)
 
         description_field = form.fields["description"]
         description_field.widget = django_forms.Textarea(attrs={"rows": 3})
@@ -42,6 +33,21 @@ class BaseTransactionFormViewMixin:
         account_field.queryset = account_field.queryset.filter(owner=self.request.user)
 
         return form
+
+    def update_category_queryset(self, form, transaction_type, queryset):
+        category_field = form.fields["category"]
+
+        if transaction_type == constants.INCOME:
+            category_field.queryset = queryset.filter(
+                transaction_type__in=(category_constants.ALL, category_constants.INCOME)
+            )
+        else:
+            category_field.queryset = queryset.filter(
+                transaction_type__in=(
+                    category_constants.ALL,
+                    category_constants.EXPENDITURE,
+                )
+            )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

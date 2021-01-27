@@ -63,6 +63,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
                         reverse("account-detail", args=[self.account.pk])
                     ),
                     "description": self.transaction.description,
+                    "expenditure_counterpart": None,
                     "updated_at": self.transaction.updated_at.astimezone().isoformat(),
                     "created_at": self.transaction.created_at.astimezone().isoformat(),
                 }
@@ -113,6 +114,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
                 reverse("account-detail", args=[account.pk])
             ),
             "description": data["description"],
+            "expenditure_counterpart": None,
             "updated_at": transaction.updated_at.astimezone().isoformat(),
             "created_at": transaction.created_at.astimezone().isoformat(),
         }
@@ -165,6 +167,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
                 reverse("account-detail", args=[account.pk])
             ),
             "description": data["description"],
+            "expenditure_counterpart": None,
             "updated_at": transaction.updated_at.astimezone().isoformat(),
             "created_at": transaction.created_at.astimezone().isoformat(),
         }
