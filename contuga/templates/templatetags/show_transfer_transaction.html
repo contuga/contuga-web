@@ -1,0 +1,3 @@
+<a href="{{ transaction.get_absolute_url }}">
+  {{ transaction.amount|floatformat:2 }} {{ transaction.currency.representation }}
+</a>

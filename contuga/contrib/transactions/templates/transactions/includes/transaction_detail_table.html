@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n transactions %}
 
 <table class="table">
   <tbody>
@@ -10,6 +10,27 @@
       <th scope="row">{% trans "Type" %}</th>
       <td>{{ transaction.get_type_display }}</td>
     </tr>
+
+    {% if transaction.is_part_of_transfer %}
+      <tr>
+        <th scope="row">{% trans "Exchanged for" %}</th>
+        <td>
+          {% if transaction.is_expenditure %}
+            {% show_transfer_transaction transaction.income_counterpart %}
+          {% else %}
+            {% show_transfer_transaction transaction.expenditure_counterpart %}
+          {% endif %}
+        </td>
+      </tr>
+
+      <tr>
+        <th scope="row">{% trans "Exchange rate" %}</th>
+        <td>{{ transaction.exchange_rate|floatformat:5 }}</td>
+      </tr>
+
+
+    {% endif %}
+
     <tr>
       <th scope="row">{% trans "Account" %}</th>
       <td>

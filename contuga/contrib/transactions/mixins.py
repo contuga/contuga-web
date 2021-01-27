@@ -16,38 +16,16 @@ class BaseTransactionFormViewMixin:
         form = super().get_form()
         category_field = form.fields["category"]
 
+        if form.is_bound and form.instance.is_part_of_transfer:
+            type_field = form.fields["type"]
+            type_field.disabled = True
+
         queryset = category_field.queryset.filter(author=self.request.user)
 
         if self.request.POST:
-            if self.request.POST.get("type") == constants.INCOME:
-                category_field.queryset = queryset.filter(
-                    transaction_type__in=(
-                        category_constants.ALL,
-                        category_constants.INCOME,
-                    )
-                )
-            else:
-                category_field.queryset = queryset.filter(
-                    transaction_type__in=(
-                        category_constants.ALL,
-                        category_constants.EXPENDITURE,
-                    )
-                )
+            self.update_category_queryset_for_post(form, queryset)
         else:
-            if form.instance.type == constants.INCOME:
-                category_field.queryset = queryset.filter(
-                    transaction_type__in=(
-                        category_constants.ALL,
-                        category_constants.INCOME,
-                    )
-                )
-            else:
-                category_field.queryset = queryset.filter(
-                    transaction_type__in=[
-                        category_constants.ALL,
-                        category_constants.EXPENDITURE,
-                    ]
-                )
+            self.update_category_queryset_for_get(form, queryset)
 
         description_field = form.fields["description"]
         description_field.widget = django_forms.Textarea(attrs={"rows": 3})
@@ -56,6 +34,36 @@ class BaseTransactionFormViewMixin:
         account_field.queryset = account_field.queryset.filter(owner=self.request.user)
 
         return form
+
+    def update_category_queryset_for_post(self, form, queryset):
+        category_field = form.fields["category"]
+
+        if self.request.POST.get("type") == constants.INCOME:
+            category_field.queryset = queryset.filter(
+                transaction_type__in=(category_constants.ALL, category_constants.INCOME)
+            )
+        else:
+            category_field.queryset = queryset.filter(
+                transaction_type__in=(
+                    category_constants.ALL,
+                    category_constants.EXPENDITURE,
+                )
+            )
+
+    def update_category_queryset_for_get(self, form, queryset):
+        category_field = form.fields["category"]
+
+        if form.instance.type == constants.INCOME:
+            category_field.queryset = queryset.filter(
+                transaction_type__in=(category_constants.ALL, category_constants.INCOME)
+            )
+        else:
+            category_field.queryset = queryset.filter(
+                transaction_type__in=[
+                    category_constants.ALL,
+                    category_constants.EXPENDITURE,
+                ]
+            )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
