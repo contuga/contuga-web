@@ -14,8 +14,7 @@ from rest_framework import permissions, viewsets
 from contuga import utils, views
 from contuga.contrib.accounts import models as account_models
 from contuga.contrib.categories import constants as category_constants
-from contuga.contrib.settings import models as settings_models
-from contuga.mixins import OnlyAuthoredByCurrentUserMixin
+from contuga.mixins import OnlyAuthoredByCurrentUserMixin, SettingsMixin
 
 from . import constants, filters, forms, models, resources, serializers
 from .mixins import BaseTransactionFormViewMixin, GroupedCategoriesMixin
@@ -24,6 +23,7 @@ from .mixins import BaseTransactionFormViewMixin, GroupedCategoriesMixin
 class TransactionCreateView(
     BaseTransactionFormViewMixin,
     GroupedCategoriesMixin,
+    SettingsMixin,
     mixins.LoginRequiredMixin,
     generic.CreateView,
 ):
@@ -47,6 +47,7 @@ class TransactionCreateView(
 class TransactionListView(
     GroupedCategoriesMixin,
     OnlyAuthoredByCurrentUserMixin,
+    SettingsMixin,
     mixins.LoginRequiredMixin,
     views.FilteredListView,
     ExportViewFormMixin,
@@ -71,19 +72,10 @@ class TransactionListView(
         form = forms.TransactionCreateForm(user=self.request.user)
         context["create_form"] = form
 
-        settings = (
-            settings_models.Settings.objects.filter(user=self.request.user)
-            .select_related(
-                "default_expenditures_category",
-                "default_incomes_category",
-                "default_account",
-            )
-            .first()
-        )
         context["category_choices"] = json.dumps(
-            self.get_category_choices(settings), cls=utils.UUIDEncoder
+            self.get_category_choices(self.settings), cls=utils.UUIDEncoder
         )
-        self.apply_initial_values(form, settings)
+        self.apply_initial_values(form, self.settings)
 
         # context["object_list"] cannot be used due to the pagination which makes
         # the use of order_by impossible. Cannot reorder a query once a slice has been taken.
@@ -142,6 +134,7 @@ class TransactionUpdateView(
     BaseTransactionFormViewMixin,
     GroupedCategoriesMixin,
     OnlyAuthoredByCurrentUserMixin,
+    SettingsMixin,
     mixins.LoginRequiredMixin,
     generic.UpdateView,
 ):
