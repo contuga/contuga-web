@@ -55,7 +55,6 @@ class TransactionListView(
     model = models.Transaction
     filterset_class = filters.TransactionFilterSet
     resource_class = resources.TransactionResource
-    paginate_by = 50
     success_url = reverse_lazy("transactions:list")
 
     def get_queryset(self):
@@ -66,6 +65,9 @@ class TransactionListView(
                 "income_counterpart", "category", "account", "account__currency"
             )
         )
+
+    def get_paginate_by(self, queryset):
+        return self.settings.transactions_per_page
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
