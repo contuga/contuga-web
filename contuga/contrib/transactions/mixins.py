@@ -6,7 +6,6 @@ from django import forms as django_forms
 from contuga import utils
 from contuga.contrib.categories import constants as category_constants
 from contuga.contrib.categories import models as category_models
-from contuga.contrib.settings import models as settings_models
 
 from . import constants
 
@@ -52,19 +51,10 @@ class BaseTransactionFormViewMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        settings = (
-            settings_models.Settings.objects.filter(user=self.request.user)
-            .select_related(
-                "default_expenditures_category",
-                "default_incomes_category",
-                "default_account",
-            )
-            .first()
-        )
         context["category_choices"] = json.dumps(
-            self.get_category_choices(settings), cls=utils.UUIDEncoder
+            self.get_category_choices(self.settings), cls=utils.UUIDEncoder
         )
-        self.apply_initial_values(context.get("form"), settings)
+        self.apply_initial_values(context.get("form"), self.settings)
 
         return context
 
