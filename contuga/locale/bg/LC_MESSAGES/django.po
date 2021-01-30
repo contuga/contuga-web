@@ -648,6 +648,11 @@ msgstr "Категория по подразбиране за разходи"
 msgid "Default account"
 msgstr "Сметка по подразбиране"
 
+#: contuga/contrib/settings/models.py:42
+#: contuga/contrib/settings/templates/settings/settings_detail.html:28
+msgid "Transactions per page"
+msgstr "Трансакции на страница"
+
 #: contuga/contrib/settings/models.py:43
 msgid "User settings"
 msgstr "Потребителски настройки"

@@ -6,6 +6,7 @@ from rest_framework.test import APIClient, APITestCase
 from contuga.contrib.categories.constants import EXPENDITURE, INCOME
 from contuga.mixins import TestMixin
 
+from .. import constants
 from ..models import Settings
 
 
@@ -36,6 +37,7 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
             "default_incomes_category": None,
             "default_expenditures_category": None,
             "default_account": None,
+            "transactions_per_page": constants.DEFAULT_TRANSACTIONS_PER_PAGE,
         }
 
         self.assertDictEqual(response.json(), expected_response)
@@ -50,6 +52,8 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
         self.settings.default_incomes_category = incomes_category
         self.settings.default_expenditures_category = expenditures_category
         self.settings.default_account = account
+        transactions_per_page = self.settings.transactions_per_page + 10
+        self.settings.transactions_per_page = transactions_per_page
         self.settings.save()
 
         response = self.client.get(url, format="json")
@@ -74,6 +78,7 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
             "default_account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[account.pk])
             ),
+            "transactions_per_page": transactions_per_page,
         }
 
         self.assertDictEqual(response.json(), expected_response)
@@ -101,6 +106,8 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
         currency = self.create_currency()
         account = self.create_account(currency=currency)
 
+        transactions_per_page = self.settings.transactions_per_page + 10
+
         data = {
             "default_incomes_category": reverse(
                 "category-detail", args=[incomes_category.pk]
@@ -109,6 +116,7 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
                 "category-detail", args=[expenditures_category.pk]
             ),
             "default_account": reverse("account-detail", args=[account.pk]),
+            "transactions_per_page": transactions_per_page,
         }
 
         response = self.client.patch(url, data=data, format="json")
@@ -135,6 +143,7 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
             "default_account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[account.pk])
             ),
+            "transactions_per_page": transactions_per_page,
         }
 
         self.assertDictEqual(response.json(), expected_response)
@@ -157,6 +166,7 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
                 "category-detail", args=[expenditures_category.pk]
             ),
             "default_account": reverse("account-detail", args=[account.pk]),
+            "transactions_per_page": constants.DEFAULT_TRANSACTIONS_PER_PAGE + 10,
         }
 
         response = self.client.patch(url, data=data, format="json")

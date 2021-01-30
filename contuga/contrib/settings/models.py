@@ -1,10 +1,13 @@
 from django.contrib.auth import get_user_model
+from django.core import validators
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.categories.models import Category
+
+from . import constants
 
 UserModel = get_user_model()
 
@@ -36,6 +39,11 @@ class Settings(models.Model):
         verbose_name=_("Default account"),
         blank=True,
         null=True,
+    )
+    transactions_per_page = models.IntegerField(
+        _("Transactions per page"),
+        default=constants.DEFAULT_TRANSACTIONS_PER_PAGE,
+        validators=[validators.MinValueValidator(10)],
     )
 
     class Meta:

@@ -6,6 +6,7 @@ from contuga.contrib.accounts.models import Account
 from contuga.contrib.categories.constants import ALL
 from contuga.contrib.categories.models import Category
 from contuga.contrib.currencies.models import Currency
+from contuga.contrib.settings.models import Settings
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.models import Transaction
 
@@ -20,6 +21,27 @@ class OnlyAuthoredByCurrentUserMixin:
 class OnlyOwnedByCurrentUserMixin:
     def get_queryset(self):
         return super().get_queryset().filter(owner=self.request.user)
+
+
+class SettingsMixin:
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+
+        self.settings = self.get_settings()
+
+    def get_settings(self):
+        if not self.request.user.is_authenticated:
+            return None
+
+        return (
+            Settings.objects.filter(user=self.request.user)
+            .select_related(
+                "default_expenditures_category",
+                "default_incomes_category",
+                "default_account",
+            )
+            .first()
+        )
 
 
 class TestMixin:

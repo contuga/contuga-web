@@ -33,7 +33,6 @@ class UsersTestCase(TestCase, TestMixin):
 
         # Assert status code is correct
         self.assertEqual(response.status_code, 200)
-
         # Assert new user is created
         new_user_count = UserModel.objects.count()
         self.assertEqual(new_user_count, old_user_count + 1)

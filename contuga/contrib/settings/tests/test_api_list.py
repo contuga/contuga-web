@@ -6,6 +6,8 @@ from rest_framework.test import APIClient, APITestCase
 from contuga.contrib.categories.constants import EXPENDITURE, INCOME
 from contuga.mixins import TestMixin
 
+from .. import constants
+
 
 class SettingsListTestCase(APITestCase, TestMixin):
     def setUp(self):
@@ -44,6 +46,7 @@ class SettingsListTestCase(APITestCase, TestMixin):
                     "default_incomes_category": None,
                     "default_expenditures_category": None,
                     "default_account": None,
+                    "transactions_per_page": constants.DEFAULT_TRANSACTIONS_PER_PAGE,
                 }
             ],
         }
@@ -60,6 +63,8 @@ class SettingsListTestCase(APITestCase, TestMixin):
         self.settings.default_incomes_category = incomes_category
         self.settings.default_expenditures_category = expenditures_category
         self.settings.default_account = account
+        transactions_per_page = self.settings.transactions_per_page + 10
+        self.settings.transactions_per_page = transactions_per_page
         self.settings.save()
 
         # Creating another user to make sure the currently logged in user
@@ -93,6 +98,7 @@ class SettingsListTestCase(APITestCase, TestMixin):
                     "default_account": response.wsgi_request.build_absolute_uri(
                         reverse("account-detail", args=[account.pk])
                     ),
+                    "transactions_per_page": transactions_per_page,
                 }
             ],
         }
@@ -116,6 +122,7 @@ class SettingsListTestCase(APITestCase, TestMixin):
                 "category-detail", args=[expenditures_category.pk]
             ),
             "default_account": reverse("account-detail", args=[account.pk]),
+            "transactions_per_page": self.settings.transactions_per_page,
         }
 
         response = self.client.post(url, data=data, format="json")

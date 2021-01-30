@@ -116,9 +116,7 @@ class Transaction(TimestampModel):
         if not self.is_part_of_transfer:
             return
 
-        divisible = (
-            self.amount if self.is_income else self.income_counterpart.amount
-        )
+        divisible = self.amount if self.is_income else self.income_counterpart.amount
 
         divisor = self.expenditure_counterpart.amount if self.is_income else self.amount
 

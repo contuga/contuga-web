@@ -48,11 +48,13 @@ class SettingsViewTests(TestCase, TestMixin):
                 "default_expenditures_category"
             ],
             "default_account": form.initial["default_account"],
+            "transactions_per_page": form.initial["transactions_per_page"],
         }
         expected_data = {
             "default_incomes_category": self.settings.default_incomes_category.pk,
             "default_expenditures_category": self.settings.default_expenditures_category.pk,
             "default_account": self.settings.default_account.pk,
+            "transactions_per_page": self.settings.transactions_per_page,
         }
         self.assertDictEqual(form_data, expected_data)
 
@@ -64,10 +66,13 @@ class SettingsViewTests(TestCase, TestMixin):
             transaction_type=category_constants.EXPENDITURE
         )
 
+        transactions_per_page = self.settings.transactions_per_page = 10
+
         data = {
             "default_incomes_category": incomes_category.pk,
             "default_expenditures_category": expenditures_category.pk,
             "default_account": self.account.pk,
+            "transactions_per_page": transactions_per_page,
         }
 
         url = reverse("settings:update")
@@ -89,12 +94,14 @@ class SettingsViewTests(TestCase, TestMixin):
             "default_incomes_category": updated_settings.default_incomes_category,
             "default_expenditures_category": updated_settings.default_expenditures_category,
             "default_account": updated_settings.default_account,
+            "transactions_per_page": updated_settings.transactions_per_page,
         }
         expected_data = {
             "pk": self.user.pk,
             "default_incomes_category": incomes_category,
             "default_expenditures_category": expenditures_category,
             "default_account": self.account,
+            "transactions_per_page": transactions_per_page,
         }
         self.assertDictEqual(settings_data, expected_data)
 
@@ -115,6 +122,7 @@ class SettingsViewTests(TestCase, TestMixin):
             "default_incomes_category": expenditures_category.pk,
             "default_expenditures_category": incomes_category.pk,
             "default_account": self.account.pk,
+            "transactions_per_page": self.settings.transactions_per_page + 10,
         }
 
         url = reverse("settings:update")
@@ -147,11 +155,13 @@ class SettingsViewTests(TestCase, TestMixin):
             "default_incomes_category": updated_settings.default_incomes_category,
             "default_expenditures_category": updated_settings.default_expenditures_category,
             "default_account": updated_settings.default_account,
+            "transactions_per_page": updated_settings.transactions_per_page,
         }
         expected_data = {
             "pk": self.settings.pk,
             "default_incomes_category": self.settings.default_incomes_category,
             "default_expenditures_category": self.settings.default_expenditures_category,
             "default_account": self.settings.default_account,
+            "transactions_per_page": self.settings.transactions_per_page,
         }
         self.assertDictEqual(settings_data, expected_data)
