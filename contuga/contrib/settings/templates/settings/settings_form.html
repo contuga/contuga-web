@@ -12,6 +12,7 @@
         {% include 'contuga/forms/field.html' with field=form.default_incomes_category %}
         {% include 'contuga/forms/field.html' with field=form.default_expenditures_category %}
         {% include 'contuga/forms/field.html' with field=form.default_account %}
+        {% include 'contuga/forms/field.html' with field=form.transactions_per_page %}
         <button type="submit" class="btn btn-primary">
           {% trans "Save" context "verb" %}
         </button>

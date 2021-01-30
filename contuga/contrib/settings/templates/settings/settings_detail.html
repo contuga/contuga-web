@@ -24,6 +24,10 @@
             <th scope="row">{% trans "Default account" %}</th>
             <td>{{ settings.default_account|default:not_selected_translation }}</td>
           </tr>
+          <tr>
+            <th scope="row">{% trans "Transactions per page" %}</th>
+            <td>{{ settings.transactions_per_page }}</td>
+          </tr>
         </tbody>
       </table>
 
