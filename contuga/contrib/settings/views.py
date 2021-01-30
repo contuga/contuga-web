@@ -31,6 +31,7 @@ class SettingsUpdateView(
         "default_incomes_category",
         "default_expenditures_category",
         "default_account",
+        "transactions_per_page",
     )
 
     def get_form(self):
