@@ -28,6 +28,7 @@ from contuga.contrib.analytics.views import AnalyticsViewSet
 from contuga.contrib.categories.views import CategoryViewSet
 from contuga.contrib.currencies.views import CurrencyViewSet
 from contuga.contrib.settings.views import SettingsViewSet
+from contuga.contrib.tags.views import TagViewSet
 from contuga.contrib.transactions.views import TransactionViewSet
 from contuga.contrib.users.views import UserViewSet
 
@@ -38,12 +39,14 @@ router.register(r"transactions", TransactionViewSet, basename="transaction")
 router.register(r"currencies", CurrencyViewSet, basename="currency")
 router.register(r"accounts", AccountViewSet, basename="account")
 router.register(r"categories", CategoryViewSet, basename="category")
+router.register(r"tags", TagViewSet, basename="tag")
 router.register(r"users", UserViewSet, basename="user")
 router.register(r"settings", SettingsViewSet, basename="settings")
 router.register(r"analytics", AnalyticsViewSet, basename="analytics")
 
 urlpatterns = i18n_patterns(
     path("categories/", include(("contuga.contrib.categories.urls", "categories"))),
+    path("tags/", include(("contuga.contrib.tags.urls", "tags"))),
     path(
         "transactions/", include(("contuga.contrib.transactions.urls", "transactions"))
     ),

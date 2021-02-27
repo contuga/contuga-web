@@ -1,3 +1,5 @@
+import json
+
 from django import forms
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.utils.translation import pgettext_lazy
@@ -5,26 +7,85 @@ from django.utils.translation import ugettext_lazy as _
 
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.categories import constants as category_constants
-from contuga.contrib.categories.models import Category
+from contuga.contrib.tags.models import Tag
 
 from . import models
 
 
-class TransactionCreateForm(forms.ModelForm):
+class TransactionForm(forms.ModelForm):
+    # TODO: Consider using JSONField in the future.
+    tags = forms.CharField(label=_("Tags"), required=False, widget=forms.Textarea)
+
     class Meta:
         model = models.Transaction
         fields = ("type", "amount", "account", "category", "description")
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["account"].queryset = Account.objects.active(owner=user)
-        self.fields["category"].queryset = Category.objects.filter(
-            author=user,
-            transaction_type__in=[
-                category_constants.ALL,
-                category_constants.EXPENDITURE,
-            ],
+
+        if self.is_bound and self.instance.is_part_of_transfer:
+            type_field = self.fields["type"]
+            type_field.disabled = True
+
+        category_field = self.fields["category"]
+        queryset = category_field.queryset.filter(author=user)
+
+        transaction_type = self.data.get("type") if self.data else self.instance.type
+        self.update_category_queryset(transaction_type, queryset)
+
+        account_field = self.fields["account"]
+        account_field.queryset = account_field.queryset.filter(
+            is_active=True, owner=user
         )
+
+    def update_category_queryset(self, type, queryset):
+        category_field = self.fields["category"]
+
+        if self.data.get("type") == category_constants.INCOME:
+            category_field.queryset = queryset.filter(
+                transaction_type__in=(category_constants.ALL, category_constants.INCOME)
+            )
+        else:
+            category_field.queryset = queryset.filter(
+                transaction_type__in=(
+                    category_constants.ALL,
+                    category_constants.EXPENDITURE,
+                )
+            )
+
+    def clean_tags(self):
+        tags = self.cleaned_data.get("tags")
+        # import ipdb; ipdb.set_trace()
+        if not tags:
+            return []
+
+        try:
+            return json.loads(tags)
+        except ValueError:
+            self.add_error(
+                "tags", ValidationError(message=_("Invalid tags"), code="invalid")
+            )
+
+        return tags
+
+    def save(self, commit=True):
+        instance = super().save(commit=commit)
+
+        instance.tags.clear()
+
+        tags = self.cleaned_data.get("tags")
+
+        for tag in tags:
+            value = tag.get("value")
+
+            if not value:
+                continue
+
+            tag, _ = Tag.objects.get_or_create(author=instance.author, name=value)
+
+            instance.tags.add(tag)
+
+        return instance
 
 
 class TransactionFilterForm(forms.Form):

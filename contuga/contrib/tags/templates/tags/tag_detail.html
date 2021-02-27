@@ -1,0 +1,103 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ tag.name }}{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-12 col-md-8">
+      <h1>{% trans "Tag details" %}</h1>
+      {% include "tags/includes/tag_detail_table.html" %}
+      <a class="btn btn-primary" href="{% url 'tags:update' tag.pk %}" role="button">
+        <i class="fa fa-pencil"></i> {% trans "Edit" context "verb" %}
+      </a>
+      <a class="btn btn-danger" href="{% url 'tags:delete' tag.pk %}" role="button">
+        <i class="fa fa-trash"></i> {% trans "Delete" context "verb" %}
+      </a>
+    </div>
+  </div>
+
+  <div class="row latest-transactions">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-12 col-md-8">
+          <h2>{% trans "Latest transactions" %}</h2>
+          {% if not tag.latest_transactions %}
+            <div class="alert alert-primary" role="alert">
+              {% trans "No transactions" %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="row table-row">
+        <div class="col-12">
+          {% if tag.latest_transactions %}
+            <div class="table-responsive">
+              <table class="table table-striped" id="transactions">
+                <thead>
+                  <tr>
+                    <th scope="col">{% trans "Amount" %}</th>
+                    <th scope="col">{% trans "Account" %}</th>
+                    <th scope="col">{% trans "Created at" %}</th>
+                    {% if filterset.form.updated_at.value %}
+                      <th scope="col">{% trans "Updated at" %}</th>
+                    {% endif %}
+                    <th scope="col" class="d-none d-md-table-cell">
+                      {% trans "Description" %}
+                    </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for transaction in tag.latest_transactions %}
+                  <tr>
+                    <td nowrap>
+                      <i class="{{ transaction.type_icon_class }}"></i>
+                      <a href="{{ transaction.get_absolute_url }}"
+                        class="{% if transaction.is_expenditure %} text-danger {% else %} text-success {% endif %}">
+                        {{ transaction.amount|floatformat:2 }} {{ transaction.currency.representation }}
+                      </a>
+                      {% if transaction.is_part_of_transfer %}
+                        <i class="fa fa-exchange" title='{% trans "Transfer between own accounts" %}'></i>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <a href="{{ transaction.account.get_absolute_url }}">
+                        {{ transaction.account.name }}
+                      </a>
+                    </td>
+                    <td>
+                      {{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}
+                    </td>
+                    {% if filterset.form.updated_at.value %}
+                      <td>
+                        {{ transaction.updated_at|date:"SHORT_DATETIME_FORMAT" }}
+                      </td>
+                    {% endif %}
+                    <td class="d-none d-md-table-cell">
+                      {{ transaction.description }}
+                    </td>
+                    <td>
+                      <a href="{% url 'transactions:update' transaction.pk %}">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="{% url 'transactions:delete' transaction.pk %}">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
