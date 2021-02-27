@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/contuga/contuga-web#readme",
   "dependencies": {
+    "@yaireo/tagify": "^3.22.3",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
     "daterangepicker": "^3.0.5",

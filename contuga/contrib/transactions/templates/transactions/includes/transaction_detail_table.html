@@ -62,6 +62,18 @@
       </td>
     </tr>
     <tr>
+      <th scope="row">{% trans "Tags" %}</th>
+      <td>
+        {% for tag in transaction.tags.all %}
+        <span class="badge bg-info ">
+          <a href="{{ tag.get_absolute_url }}" class="text-light">
+            {{ tag.name }}
+          </a>
+        </span>
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
       <th scope="row">{% trans "Created at" %}</th>
       <td>{{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
     </tr>
