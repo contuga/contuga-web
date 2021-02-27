@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-23 23:25+0300\n"
+"POT-Creation-Date: 2021-03-17 23:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,11 @@ msgstr ""
 #: contuga/contrib/currencies/models.py:15
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:55
 #: contuga/contrib/currencies/templates/currencies/includes/currency_detail_table.html:6
+#: contuga/contrib/tags/models.py:15
+#: contuga/contrib/tags/templates/tags/includes/tag_detail_table.html:6
+#: contuga/contrib/tags/templates/tags/tag_list.html:52
 #: contuga/contrib/users/templates/users/user_detail.html:19
+#: contuga/tests/test_accounts_e2e.py:165
 msgid "Name"
 msgstr "Име"
 
@@ -41,6 +45,7 @@ msgstr "Име"
 #: contuga/contrib/pages/models.py:20 contuga/contrib/transactions/forms.py:60
 #: contuga/contrib/transactions/models.py:48
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:39
+#: contuga/contrib/tags/templates/tags/tag_detail.html:47
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:29
 msgid "Description"
 msgstr "Описание"
@@ -59,8 +64,7 @@ msgstr "Баланс"
 
 #: contuga/contrib/accounts/models.py:40
 #: contuga/contrib/categories/templates/categories/category_detail.html:41
-#: contuga/contrib/transactions/models.py:46
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:14
+#: contuga/contrib/tags/templates/tags/tag_detail.html:41
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:22
 msgid "Account"
 msgstr "Сметка"
@@ -76,6 +80,7 @@ msgstr "Сметки"
 #: contuga/contrib/accounts/templates/accounts/account_confirm_delete.html:4
 #: contuga/contrib/categories/templates/categories/category_confirm_delete.html:4
 #: contuga/contrib/currencies/templates/currencies/currency_confirm_delete.html:4
+#: contuga/contrib/tags/templates/tags/tag_confirm_delete.html:4
 #: contuga/contrib/transactions/templates/transactions/transaction_confirm_delete.html:4
 msgid "Confirm deletion"
 msgstr "Потвърди изтриване"
@@ -87,6 +92,7 @@ msgstr "Потвърдете, че желаете да изтриете тази
 #: contuga/contrib/accounts/templates/accounts/account_confirm_delete.html:16
 #: contuga/contrib/categories/templates/categories/category_confirm_delete.html:17
 #: contuga/contrib/currencies/templates/currencies/currency_confirm_delete.html:17
+#: contuga/contrib/tags/templates/tags/tag_confirm_delete.html:17
 #: contuga/contrib/transactions/templates/transactions/transaction_confirm_delete.html:17
 msgid "Confirm"
 msgstr "Потвърждавам"
@@ -104,6 +110,8 @@ msgstr "Детайли за сметка"
 #: contuga/contrib/settings/templates/settings/settings_detail.html:31
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:68
 #: contuga/contrib/transactions/templates/transactions/transaction_detail.html:13
+#: contuga/contrib/tags/templates/tags/tag_detail.html:13
+#: contuga/contrib/tags/templates/tags/tag_list.html:74
 msgctxt "verb"
 msgid "Edit"
 msgstr "Редактирай"
@@ -114,25 +122,30 @@ msgstr "Редактирай"
 #: contuga/contrib/categories/templates/categories/category_list.html:89
 #: contuga/contrib/currencies/templates/currencies/currency_detail.html:16
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:90
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:73
-#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:16
+#: contuga/contrib/tags/templates/tags/tag_detail.html:16
+#: contuga/contrib/tags/templates/tags/tag_list.html:79
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:76
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:21
 msgctxt "verb"
 msgid "Delete"
 msgstr "Изтрий"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:25
 #: contuga/contrib/categories/templates/categories/category_detail.html:25
+#: contuga/contrib/tags/templates/tags/tag_detail.html:25
 msgid "Latest transactions"
 msgstr "Последни трансакции"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:28
 #: contuga/contrib/categories/templates/categories/category_detail.html:28
+#: contuga/contrib/tags/templates/tags/tag_detail.html:28
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:8
 msgid "No transactions"
 msgstr "Няма трансакции"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:40
 #: contuga/contrib/categories/templates/categories/category_detail.html:40
+#: contuga/contrib/tags/templates/tags/tag_detail.html:40
 #: contuga/contrib/transactions/filters.py:38
 #: contuga/contrib/transactions/forms.py:58
 #: contuga/contrib/transactions/models.py:26
@@ -156,8 +169,11 @@ msgstr "Категория"
 #: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:14
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:58
 #: contuga/contrib/currencies/templates/currencies/includes/currency_detail_table.html:18
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:30
-#: contuga/models.py:6
+#: contuga/contrib/tags/templates/tags/tag_detail.html:42
+#: contuga/contrib/tags/templates/tags/tag_list.html:53
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:77
+#: contuga/models.py:6 contuga/tests/test_accounts_e2e.py:189
+#: contuga/tests/test_transactions_e2e.py:216
 msgid "Created at"
 msgstr "Създаден на"
 
@@ -166,8 +182,7 @@ msgstr "Създаден на"
 #: contuga/contrib/categories/templates/categories/category_detail.html:44
 #: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:18
 #: contuga/contrib/currencies/templates/currencies/includes/currency_detail_table.html:22
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:34
-#: contuga/models.py:7
+#: contuga/contrib/tags/templates/tags/tag_detail.html:44
 msgid "Updated at"
 msgstr "Обновен на"
 
@@ -178,9 +193,7 @@ msgstr "Добави сметка"
 #: contuga/contrib/accounts/templates/accounts/account_form.html:16
 #: contuga/contrib/categories/templates/categories/category_form.html:16
 #: contuga/contrib/currencies/templates/currencies/currency_form.html:16
-#: contuga/contrib/settings/templates/settings/settings_form.html:16
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_create_form.html:25
-#: contuga/contrib/transactions/templates/transactions/transaction_form.html:30
+#: contuga/contrib/tags/templates/tags/tag_form.html:14
 msgctxt "verb"
 msgid "Save"
 msgstr "Запиши"
@@ -188,6 +201,7 @@ msgstr "Запиши"
 #: contuga/contrib/accounts/templates/accounts/account_list.html:13
 #: contuga/contrib/categories/templates/categories/category_list.html:13
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:13
+#: contuga/contrib/tags/templates/tags/tag_list.html:13
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:21
 msgid "Filters"
 msgstr "Филтри"
@@ -197,6 +211,7 @@ msgstr "Филтри"
 #: contuga/contrib/analytics/templates/analytics/analytics.html:166
 #: contuga/contrib/categories/templates/categories/category_list.html:24
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:27
+#: contuga/contrib/tags/templates/tags/tag_list.html:24
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_form.html:38
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:57
 msgid "Apply"
@@ -231,6 +246,7 @@ msgstr "Архивирана"
 #: contuga/contrib/accounts/templates/accounts/account_update_form.html:4
 #: contuga/contrib/categories/templates/categories/category_update_form.html:4
 #: contuga/contrib/currencies/templates/currencies/currency_update_form.html:4
+#: contuga/contrib/tags/templates/tags/tag_update_form.html:4
 msgctxt "noun"
 msgid "Update"
 msgstr "Промяна"
@@ -241,10 +257,8 @@ msgstr "Промяна"
 #: contuga/contrib/categories/tests/test_api_detail.py:116
 #: contuga/contrib/currencies/tests/test_api_detail.py:55
 #: contuga/contrib/currencies/tests/test_api_detail.py:107
-#: contuga/contrib/settings/tests/test_api_detail.py:92
-#: contuga/contrib/settings/tests/test_api_detail.py:180
-#: contuga/contrib/transactions/tests/test_api_detail.py:69
-#: contuga/contrib/transactions/tests/test_api_detail.py:153
+#: contuga/contrib/tags/tests/test_api_detail.py:63
+#: contuga/contrib/tags/tests/test_api_detail.py:121
 #: contuga/contrib/users/tests/test_api_detail.py:50
 #: contuga/contrib/users/tests/test_api_detail.py:97
 msgid "Not found."
@@ -690,6 +704,36 @@ msgstr "Метод \"POST\" не е разрешен."
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr "Изберете валидна стойност. Въведената не е сред разрешените."
 
+#: contuga/contrib/tags/models.py:20
+msgid "Tag"
+msgstr "Таг"
+
+#: contuga/contrib/tags/models.py:21
+#: contuga/contrib/tags/templates/tags/tag_list.html:4
+#: contuga/contrib/tags/templates/tags/tag_list.html:35
+#: contuga/contrib/transactions/forms.py:17
+#: contuga/contrib/transactions/models.py:44
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:65
+#: contuga/tests/test_transactions_e2e.py:211
+msgid "Tags"
+msgstr "Тагове"
+
+#: contuga/contrib/tags/templates/tags/tag_confirm_delete.html:13
+msgid "Are you sure you want to delete this tag?"
+msgstr "Потвърдете, че желаете да изтриете този таг."
+
+#: contuga/contrib/tags/templates/tags/tag_detail.html:10
+msgid "Tag details"
+msgstr "Детайли за таг"
+
+#: contuga/contrib/tags/templates/tags/tag_form.html:4
+msgid "Create tag"
+msgstr "Създай таг"
+
+#: contuga/contrib/tags/templates/tags/tag_list.html:38
+msgid "No tags"
+msgstr "Няма тагове"
+
 #: contuga/contrib/transactions/filters.py:28
 msgid "Equals"
 msgstr "Равни"
@@ -726,7 +770,10 @@ msgstr "Максимална сума"
 msgid "Descripton"
 msgstr "Описание"
 
-#: contuga/contrib/transactions/forms.py:47
+#: contuga/contrib/transactions/forms.py:66
+msgid "Invalid tags"
+msgstr "Невалидни тагове"
+
 msgid "Invalid date range"
 msgstr "Невалиден времеви диапазон"
 
