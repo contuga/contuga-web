@@ -13,6 +13,8 @@ class TransactionDetailTestCase(APITestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
         self.category = self.create_category()
+        self.tags = [self.create_tag(), self.create_tag(name="Second tag")]
+        self.tags.reverse()
         self.currency = self.create_currency()
         self.account = self.create_account()
         self.transaction = self.create_transaction(amount="100.10")
@@ -23,9 +25,13 @@ class TransactionDetailTestCase(APITestCase, TestMixin):
     def create_independent_transaction(self):
         user = self.create_user(email="richard.roe@example.com")
         category = self.create_category(author=user)
+        tags = [
+            self.create_tag(author=user),
+            self.create_tag(name="Second tag", author=user),
+        ]
         account = self.create_account(owner=user)
         return self.create_expenditure(
-            amount="100.10", author=user, category=category, account=account
+            amount="100.10", author=user, category=category, tags=tags, account=account
         )
 
     def test_get(self):
@@ -46,6 +52,12 @@ class TransactionDetailTestCase(APITestCase, TestMixin):
             "category": response.wsgi_request.build_absolute_uri(
                 reverse("category-detail", args=[self.category.pk])
             ),
+            "tags": [
+                response.wsgi_request.build_absolute_uri(
+                    reverse("tag-detail", args=[tag.pk])
+                )
+                for tag in self.tags
+            ],
             "account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[self.account.pk])
             ),
@@ -110,6 +122,12 @@ class TransactionDetailTestCase(APITestCase, TestMixin):
             "category": response.wsgi_request.build_absolute_uri(
                 reverse("category-detail", args=[category.pk])
             ),
+            "tags": [
+                response.wsgi_request.build_absolute_uri(
+                    reverse("tag-detail", args=[tag.pk])
+                )
+                for tag in self.tags
+            ],
             "account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[account.pk])
             ),
@@ -189,6 +207,12 @@ class TransactionDetailTestCase(APITestCase, TestMixin):
             "category": response.wsgi_request.build_absolute_uri(
                 reverse("category-detail", args=[self.transaction.category.pk])
             ),
+            "tags": [
+                response.wsgi_request.build_absolute_uri(
+                    reverse("tag-detail", args=[tag.pk])
+                )
+                for tag in self.tags
+            ],
             "account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[self.transaction.account.pk])
             ),

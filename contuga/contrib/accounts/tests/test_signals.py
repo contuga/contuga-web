@@ -107,7 +107,7 @@ class AccountSignalsTestCase(TestCase, TestMixin):
             type=transaction_constants.EXPENDITURE, amount=Decimal("50.25")
         )
 
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             income.delete()
 
         updated_account = Account.objects.get(pk=self.account.pk)
@@ -120,7 +120,7 @@ class AccountSignalsTestCase(TestCase, TestMixin):
             type=transaction_constants.INCOME, amount=Decimal("100.50")
         )
 
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             transaction.delete()
 
         updated_account = Account.objects.get(pk=self.account.pk)

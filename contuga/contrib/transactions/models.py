@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from contuga.contrib.categories.models import Category
+from contuga.contrib.tags.models import Tag
 from contuga.models import TimestampModel
 
 from . import constants, managers
@@ -38,6 +39,9 @@ class Transaction(TimestampModel):
         verbose_name=_("Category"),
         blank=True,
         null=True,
+    )
+    tags = models.ManyToManyField(
+        Tag, related_name="transactions", verbose_name=_("Tags")
     )
     account = models.ForeignKey(
         "accounts.Account",

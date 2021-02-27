@@ -173,3 +173,11 @@ section {
     box-shadow: none;
   }
 }
+
+.tagify.form-control {
+  height: auto;
+}
+
+.tagify__input::before {
+  position: inherit;
+}
