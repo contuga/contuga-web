@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "contuga.contrib.currencies.apps.CurrenciesConfig",
     "contuga.contrib.accounts.apps.AccountsConfig",
     "contuga.contrib.settings.apps.SettingsConfig",
+    "contuga.contrib.tags.apps.TagsConfig",
 ]
 
 MIDDLEWARE = [

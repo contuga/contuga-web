@@ -11,7 +11,7 @@ from django.views import generic
 from import_export.mixins import ExportViewFormMixin
 from rest_framework import permissions, viewsets
 
-from contuga import utils, views
+from contuga import views
 from contuga.contrib.accounts import models as account_models
 from contuga.contrib.categories import constants as category_constants
 from contuga.mixins import OnlyAuthoredByCurrentUserMixin, SettingsMixin
@@ -28,23 +28,31 @@ class TransactionCreateView(
     generic.CreateView,
 ):
     model = models.Transaction
-    fields = ("type", "amount", "account", "category", "description")
+    form_class = forms.TransactionForm
 
-    def get_form(self):
-        form = super().get_form()
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
 
-        account_field = form.fields["account"]
-        account_field.queryset = account_field.queryset.filter(is_active=True)
+        kwargs["user"] = self.request.user
 
-        return form
+        return kwargs
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
 
+    def get_initial(self):
+        initial = self.initial.copy()
+
+        initial["category"] = self.settings.default_expenditures_category
+        initial["account"] = self.settings.default_account
+
+        return initial
+
 
 class TransactionListView(
+    BaseTransactionFormViewMixin,
     GroupedCategoriesMixin,
     OnlyAuthoredByCurrentUserMixin,
     SettingsMixin,
@@ -71,13 +79,10 @@ class TransactionListView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        form = forms.TransactionCreateForm(user=self.request.user)
-        context["create_form"] = form
 
-        context["category_choices"] = json.dumps(
-            self.get_category_choices(self.settings), cls=utils.UUIDEncoder
-        )
-        self.apply_initial_values(form, self.settings)
+        initial = self.get_create_form_initial()
+        form = forms.TransactionForm(user=self.request.user, initial=initial)
+        context["create_form"] = form
 
         # context["object_list"] cannot be used due to the pagination which makes
         # the use of order_by impossible. Cannot reorder a query once a slice has been taken.
@@ -87,6 +92,12 @@ class TransactionListView(
         )
 
         return context
+
+    def get_create_form_initial(self):
+        return {
+            "category": self.settings.default_expenditures_category,
+            "account": self.settings.default_account,
+        }
 
     def get_filter_statistics(self, queryset, paginator):
         currency_statistics = (
@@ -108,13 +119,6 @@ class TransactionListView(
             "currency_count": len(currency_statistics),
             "currency_statistics": currency_statistics,
         }
-
-    def apply_initial_values(self, form, settings):
-        category_field = form.fields["category"]
-        category_field.initial = settings.default_expenditures_category
-
-        account_field = form.fields["account"]
-        account_field.initial = settings.default_account
 
 
 class TransactionDetailView(
@@ -141,8 +145,27 @@ class TransactionUpdateView(
     generic.UpdateView,
 ):
     model = models.Transaction
-    fields = ("type", "amount", "account", "category", "description")
+    form_class = forms.TransactionForm
     template_name = "transactions/transaction_update_form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        kwargs["user"] = self.request.user
+
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        self.object = form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_initial(self):
+        initial = self.initial.copy()
+        tags = [tag.name for tag in self.object.tags.all()]
+        initial["tags"] = ", ".join(tags)
+
+        return initial
 
 
 class TransactionDeleteView(

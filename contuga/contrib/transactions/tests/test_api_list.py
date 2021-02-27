@@ -13,6 +13,8 @@ class TransactionListTestCase(APITestCase, TestMixin):
     def setUp(self):
         self.user = self.create_user()
         self.category = self.create_category()
+        self.tags = [self.create_tag(), self.create_tag(name="Second tag")]
+        self.tags.reverse()
         self.currency = self.create_currency()
         self.account = self.create_account()
         self.transaction = self.create_transaction(amount="100.10")
@@ -23,9 +25,13 @@ class TransactionListTestCase(APITestCase, TestMixin):
     def create_independent_transaction(self):
         user = self.create_user(email="richard.roe@example.com")
         category = self.create_category(author=user)
+        tags = [
+            self.create_tag(author=user),
+            self.create_tag(name="Second tag", author=user),
+        ]
         account = self.create_account(owner=user)
         return self.create_expenditure(
-            amount="100.10", author=user, category=category, account=account
+            amount="100.10", author=user, category=category, tags=tags, account=account
         )
 
     def test_get(self):
@@ -59,6 +65,12 @@ class TransactionListTestCase(APITestCase, TestMixin):
                     "category": response.wsgi_request.build_absolute_uri(
                         reverse("category-detail", args=[self.category.pk])
                     ),
+                    "tags": [
+                        response.wsgi_request.build_absolute_uri(
+                            reverse("tag-detail", args=[tag.pk])
+                        )
+                        for tag in self.tags
+                    ],
                     "account": response.wsgi_request.build_absolute_uri(
                         reverse("account-detail", args=[self.account.pk])
                     ),
@@ -73,6 +85,62 @@ class TransactionListTestCase(APITestCase, TestMixin):
         self.assertDictEqual(response.json(), expected_response)
 
     def test_post(self):
+        url = reverse("transaction-list")
+
+        category = self.create_category(
+            name="Second category name", description="Second category description"
+        )
+        account = self.create_account(
+            name="Second account name", description="Second account description"
+        )
+        tag = self.create_tag("Second tag name")
+
+        data = {
+            "type": INCOME,
+            "amount": "300.30",
+            "category": reverse("category-detail", args=[category.pk]),
+            "tags": [reverse("tag-detail", args=[tag.pk])],
+            "account": reverse("account-detail", args=[account.pk]),
+            "description": "New transaction description",
+        }
+
+        response = self.client.post(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 201)
+
+        # Assert correct data is returned
+        transaction = Transaction.objects.order_by("created_at").last()
+
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(
+                reverse("transaction-detail", args=[transaction.pk])
+            ),
+            "type": data["type"],
+            "amount": data["amount"],
+            "author": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[category.pk])
+            ),
+            "tags": [
+                response.wsgi_request.build_absolute_uri(
+                    reverse("tag-detail", args=[tag.pk])
+                )
+            ],
+            "account": response.wsgi_request.build_absolute_uri(
+                reverse("account-detail", args=[account.pk])
+            ),
+            "description": data["description"],
+            "expenditure_counterpart": None,
+            "updated_at": transaction.updated_at.astimezone().isoformat(),
+            "created_at": transaction.created_at.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_post_without_tags(self):
         url = reverse("transaction-list")
 
         category = self.create_category(
@@ -110,6 +178,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
             "category": response.wsgi_request.build_absolute_uri(
                 reverse("category-detail", args=[category.pk])
             ),
+            "tags": [],
             "account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[account.pk])
             ),
@@ -163,6 +232,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
             "category": response.wsgi_request.build_absolute_uri(
                 reverse("category-detail", args=[category.pk])
             ),
+            "tags": [],
             "account": response.wsgi_request.build_absolute_uri(
                 reverse("account-detail", args=[account.pk])
             ),
@@ -188,7 +258,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
         old_transaction_count = Transaction.objects.count()
 
         url = reverse("transaction-list")
-        response = self.client.post(url, data=data, follow=True)
+        response = self.client.post(url, data=data, format="json")
 
         # Assert status code is correct
         self.assertEqual(response.status_code, 400)
@@ -215,7 +285,7 @@ class TransactionListTestCase(APITestCase, TestMixin):
         old_transaction_count = Transaction.objects.count()
 
         url = reverse("transaction-list")
-        response = self.client.post(url, data=data, follow=True)
+        response = self.client.post(url, data=data, format="json")
 
         # Assert status code is correct
         self.assertEqual(response.status_code, 400)

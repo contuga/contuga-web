@@ -53,11 +53,11 @@ class TransactionViewTests(TestCase, TestMixin):
         # Assert initial form data is correct
         form = response.context.get("form")
 
-        category_field = form.fields["category"]
-        self.assertEqual(category_field.initial, settings.default_expenditures_category)
+        category_initial = form.initial.get("category")
+        self.assertEqual(category_initial, settings.default_expenditures_category)
 
-        account_field = form.fields["account"]
-        self.assertEqual(account_field.initial, settings.default_account)
+        account_initial = form.initial.get("account")
+        self.assertEqual(account_initial, settings.default_account)
 
     def test_create_get_account_queryset(self):
         self.create_account(name="Second account name")

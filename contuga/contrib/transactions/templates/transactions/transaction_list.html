@@ -131,6 +131,33 @@
           );
         }
       });
+
+      const input = document.querySelector('[name=tags]')
+      const tagify = new Tagify(input, { whitelist:[] })
+      let controller
+
+      tagify.on('input', onInput)
+
+      function onInput(e) {
+        var value = e.detail.value;
+        tagify.settings.whitelist.length = 0
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+        controller && controller.abort()
+        controller = new AbortController()
+
+        tagify.loading(true).dropdown.hide.call(tagify)
+
+        fetch(`{% url 'tag-list' %}?name__startswith=${value}`, { signal:controller.signal })
+          .then(response => response.json())
+          .then(function(data){
+            const whitelist = data.results.map(tag => tag.name)
+
+            tagify.settings.whitelist.splice(0, whitelist.length, ...whitelist)
+            tagify.loading(false).dropdown.show.call(tagify, value)
+          })
+          .catch(error => null);
+      }
     });
   </script>
 {% endblock %}
