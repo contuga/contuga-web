@@ -7,6 +7,7 @@ from contuga.contrib.categories.constants import ALL
 from contuga.contrib.categories.models import Category
 from contuga.contrib.currencies.models import Currency
 from contuga.contrib.settings.models import Settings
+from contuga.contrib.tags.models import Tag
 from contuga.contrib.transactions.constants import EXPENDITURE, INCOME
 from contuga.contrib.transactions.models import Transaction
 
@@ -71,6 +72,9 @@ class TestMixin:
             name=name, author=author or self.user, code=code, nominal=nominal
         )
 
+    def create_tag(self, name="Tag", author=None, transactions=None):
+        return Tag.objects.create(name=name, author=author or self.user)
+
     def create_account(
         self,
         name="Account name",
@@ -93,6 +97,7 @@ class TestMixin:
         type=EXPENDITURE,
         author=None,
         category=None,
+        tags=None,
         account=None,
         description=None,
     ):
@@ -101,7 +106,12 @@ class TestMixin:
         except AttributeError:
             pass
 
-        return Transaction.objects.create(
+        try:
+            tags = tags or self.tags
+        except AttributeError:
+            tags = []
+
+        transaction = Transaction.objects.create(
             amount=amount or 100,
             type=type,
             author=author or self.user or account.user
@@ -112,26 +122,45 @@ class TestMixin:
             description=description or "Transaction description",
         )
 
+        for tag in tags:
+            transaction.tags.add(tag)
+
+        return transaction
+
     def create_income(
-        self, amount=None, author=None, category=None, account=None, description=None
+        self,
+        amount=None,
+        author=None,
+        category=None,
+        tags=None,
+        account=None,
+        description=None,
     ):
         return self.create_transaction(
             type=INCOME,
             amount=amount,
             author=author,
             category=category,
+            tags=tags,
             account=account,
             description=description,
         )
 
     def create_expenditure(
-        self, amount=None, author=None, category=None, account=None, description=None
+        self,
+        amount=None,
+        author=None,
+        category=None,
+        tags=None,
+        account=None,
+        description=None,
     ):
         return self.create_transaction(
             type=EXPENDITURE,
             amount=amount,
             author=author,
             category=category,
+            tags=tags,
             account=account,
             description=description,
         )

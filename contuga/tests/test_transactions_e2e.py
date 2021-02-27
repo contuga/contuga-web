@@ -31,6 +31,7 @@ class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
         self.currency = self.create_currency()
         self.account = self.create_account()
         self.category = self.create_category()
+        self.tags = [self.create_tag(), self.create_tag("Second tag")]
 
         second_currency = self.create_currency(name="Euro", code="EUR")
         second_account = self.create_account(
@@ -155,6 +156,7 @@ class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
                 self.verify_detail_page_account(transaction)
                 self.verify_detail_page_currency(transaction)
                 self.verify_detail_page_category(transaction)
+                self.verify_detail_page_tags(transaction)
                 self.verify_detail_page_created_at(transaction)
                 self.verify_detail_page_updated_at(transaction)
                 self.go_back()
@@ -205,19 +207,24 @@ class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
         expected_value = transaction.category.name
         self.verify_detail_page_row(4, expected_label, expected_value)
 
+    def verify_detail_page_tags(self, transaction):
+        expected_label = _("Tags")
+        expected_value = " ".join(transaction.tags.values_list("name", flat=True))
+        self.verify_detail_page_row(5, expected_label, expected_value)
+
     def verify_detail_page_created_at(self, transaction):
         expected_label = _("Created at")
         expected_value = formats.date_format(
             transaction.created_at.astimezone(), "SHORT_DATETIME_FORMAT"
         )
-        self.verify_detail_page_row(5, expected_label, expected_value)
+        self.verify_detail_page_row(6, expected_label, expected_value)
 
     def verify_detail_page_updated_at(self, transaction):
         expected_label = _("Updated at")
         expected_value = formats.date_format(
             transaction.updated_at.astimezone(), "SHORT_DATETIME_FORMAT"
         )
-        self.verify_detail_page_row(6, expected_label, expected_value)
+        self.verify_detail_page_row(7, expected_label, expected_value)
 
     def verify_detail_page_row(self, index, expected_label, expected_value):
         table = self.selenium.find_element_by_tag_name("table")
