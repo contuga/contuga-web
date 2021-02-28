@@ -21,6 +21,4 @@ ENV DJANGO_ENV=production
 
 EXPOSE 8000
 
-COPY ./docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
-ENTRYPOINT /docker-entrypoint.sh
+CMD sh docker-entrypoint.sh
