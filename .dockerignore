@@ -1,1 +1,11 @@
+db.sqlite3
+.vscode
+.sass-cache
+*.pyc
+*.mo
+media/
+/static/
 node_modules/
+.coverage
+htmlcov
+geckodriver.log
