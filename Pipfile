@@ -33,6 +33,7 @@ django-debug-toolbar = "==3.2.*"
 isort = "==4.3.*"
 selenium = "==3.141.*"
 psycopg2 = "==2.8.*"
+rollbar = "*"
 
 [requires]
 python_version = "3.8"
