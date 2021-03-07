@@ -13,5 +13,5 @@ echo "Compiling translations"
 python3 ./manage.py compilemessages
 
 echo "Starting server"
-gunicorn contuga.wsgi:application -w 2 -b :8000
+gunicorn contuga.wsgi:application -w 2 -b :8000 --access-logfile "-"
 # uwsgi --http :8000 --module contuga.wsgi
