@@ -21,6 +21,7 @@ include(
     "components/base.py",
     "components/static.py",
     "components/internationalization.py",
+    "components/logging.py",
     "environments/{0}.py".format(ENV),
     optional("environments/local.py"),
 )
