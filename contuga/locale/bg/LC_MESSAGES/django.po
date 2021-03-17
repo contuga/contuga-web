@@ -82,7 +82,7 @@ msgstr "Потвърди изтриване"
 
 #: contuga/contrib/accounts/templates/accounts/account_confirm_delete.html:13
 msgid "Are you sure you want to delete this account?"
-msgstr "Сигурен ли си, че искаш да изтриеш тази сметка?"
+msgstr "Потвърдете, че желаете да изтриете тази сметка."
 
 #: contuga/contrib/accounts/templates/accounts/account_confirm_delete.html:16
 #: contuga/contrib/categories/templates/categories/category_confirm_delete.html:17
@@ -519,7 +519,7 @@ msgstr "Категории"
 
 #: contuga/contrib/categories/templates/categories/category_confirm_delete.html:13
 msgid "Are you sure you want to delete this category?"
-msgstr "Сигурен ли си, че искаш да изтриеш тази категория?"
+msgstr "Потвърдете, че желаете да изтриете тази категория."
 
 #: contuga/contrib/categories/templates/categories/category_detail.html:10
 msgid "Category details"
@@ -554,7 +554,7 @@ msgstr "Валути"
 
 #: contuga/contrib/currencies/templates/currencies/currency_confirm_delete.html:13
 msgid "Are you sure you want to delete this currency?"
-msgstr "Сигурен ли си, че искаш да изтриеш тази валута?"
+msgstr "Потвърдете, че желаете да изтриете тази валута."
 
 #: contuga/contrib/currencies/templates/currencies/currency_detail.html:10
 msgid "Currency details"
@@ -836,7 +836,7 @@ msgstr "Създай нов"
 
 #: contuga/contrib/transactions/templates/transactions/transaction_confirm_delete.html:13
 msgid "Are you sure you want to delete this transaction?"
-msgstr "Сигурен ли си, че искаш да изтриеш тази трансакция?"
+msgstr "Потвърдете, че желаете да изтриете тази трансакция."
 
 #: contuga/contrib/transactions/templates/transactions/transaction_detail.html:4
 #: contuga/contrib/transactions/templates/transactions/transaction_detail.html:10
