@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-17 23:43+0200\n"
+"POT-Creation-Date: 2021-03-18 00:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,11 +42,13 @@ msgstr "Име"
 #: contuga/contrib/categories/templates/categories/category_detail.html:47
 #: contuga/contrib/categories/templates/categories/category_list.html:56
 #: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:22
-#: contuga/contrib/pages/models.py:20 contuga/contrib/transactions/forms.py:60
-#: contuga/contrib/transactions/models.py:48
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:39
+#: contuga/contrib/pages/models.py:20
 #: contuga/contrib/tags/templates/tags/tag_detail.html:47
+#: contuga/contrib/transactions/forms.py:121
+#: contuga/contrib/transactions/models.py:60
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:86
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:29
+#: contuga/tests/test_accounts_e2e.py:183
 msgid "Description"
 msgstr "Описание"
 
@@ -57,15 +59,19 @@ msgstr "Активна"
 #: contuga/contrib/accounts/models.py:33
 #: contuga/contrib/accounts/templates/accounts/account_list.html:57
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:14
-#: contuga/contrib/analytics/templates/analytics/analytics.html:104
+#: contuga/contrib/analytics/templates/analytics/analytics.html:108
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_statistics.html:20
+#: contuga/tests/test_accounts_e2e.py:177
 msgid "Balance"
 msgstr "Баланс"
 
 #: contuga/contrib/accounts/models.py:40
 #: contuga/contrib/categories/templates/categories/category_detail.html:41
 #: contuga/contrib/tags/templates/tags/tag_detail.html:41
+#: contuga/contrib/transactions/models.py:50
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:41
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:22
+#: contuga/tests/test_transactions_e2e.py:196
 msgid "Account"
 msgstr "Сметка"
 
@@ -98,6 +104,7 @@ msgid "Confirm"
 msgstr "Потвърждавам"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:10
+#: contuga/tests/test_accounts_e2e.py:160
 msgid "Account details"
 msgstr "Детайли за сметка"
 
@@ -107,11 +114,11 @@ msgstr "Детайли за сметка"
 #: contuga/contrib/categories/templates/categories/category_list.html:84
 #: contuga/contrib/currencies/templates/currencies/currency_detail.html:13
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:85
-#: contuga/contrib/settings/templates/settings/settings_detail.html:31
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:68
-#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:13
+#: contuga/contrib/settings/templates/settings/settings_detail.html:35
 #: contuga/contrib/tags/templates/tags/tag_detail.html:13
 #: contuga/contrib/tags/templates/tags/tag_list.html:74
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:71
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:18
 msgctxt "verb"
 msgid "Edit"
 msgstr "Редактирай"
@@ -147,18 +154,21 @@ msgstr "Няма трансакции"
 #: contuga/contrib/categories/templates/categories/category_detail.html:40
 #: contuga/contrib/tags/templates/tags/tag_detail.html:40
 #: contuga/contrib/transactions/filters.py:38
-#: contuga/contrib/transactions/forms.py:58
-#: contuga/contrib/transactions/models.py:26
+#: contuga/contrib/transactions/forms.py:119
+#: contuga/contrib/transactions/models.py:27
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:6
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:21
+#: contuga/tests/test_transactions_e2e.py:186
 msgid "Amount"
 msgstr "Сума"
 
 #: contuga/contrib/accounts/templates/accounts/account_detail.html:41
+#: contuga/contrib/analytics/forms.py:23
 #: contuga/contrib/categories/models.py:32
-#: contuga/contrib/transactions/models.py:38
-#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:22
+#: contuga/contrib/transactions/models.py:39
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:57
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:23
+#: contuga/tests/test_transactions_e2e.py:206
 msgid "Category"
 msgstr "Категория"
 
@@ -183,8 +193,20 @@ msgstr "Създаден на"
 #: contuga/contrib/categories/templates/categories/includes/category_detail_table.html:18
 #: contuga/contrib/currencies/templates/currencies/includes/currency_detail_table.html:22
 #: contuga/contrib/tags/templates/tags/tag_detail.html:44
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:81
+#: contuga/models.py:7 contuga/tests/test_accounts_e2e.py:197
+#: contuga/tests/test_transactions_e2e.py:223
 msgid "Updated at"
 msgstr "Обновен на"
+
+#: contuga/contrib/accounts/templates/accounts/account_detail.html:63
+#: contuga/contrib/categories/templates/categories/category_detail.html:63
+#: contuga/contrib/tags/templates/tags/tag_detail.html:63
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:45
+#: contuga/contrib/transactions/templates/transactions/internal_transfer_form.html:4
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:13
+msgid "Transfer between own accounts"
+msgstr "Превод между собствени сметки"
 
 #: contuga/contrib/accounts/templates/accounts/account_form.html:4
 msgid "Add account"
@@ -193,7 +215,10 @@ msgstr "Добави сметка"
 #: contuga/contrib/accounts/templates/accounts/account_form.html:16
 #: contuga/contrib/categories/templates/categories/category_form.html:16
 #: contuga/contrib/currencies/templates/currencies/currency_form.html:16
+#: contuga/contrib/settings/templates/settings/settings_form.html:17
 #: contuga/contrib/tags/templates/tags/tag_form.html:14
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_create_form.html:32
+#: contuga/contrib/transactions/templates/transactions/transaction_form.html:35
 msgctxt "verb"
 msgid "Save"
 msgstr "Запиши"
@@ -207,8 +232,8 @@ msgid "Filters"
 msgstr "Филтри"
 
 #: contuga/contrib/accounts/templates/accounts/account_list.html:27
-#: contuga/contrib/analytics/templates/analytics/analytics.html:33
-#: contuga/contrib/analytics/templates/analytics/analytics.html:166
+#: contuga/contrib/analytics/templates/analytics/analytics.html:36
+#: contuga/contrib/analytics/templates/analytics/analytics.html:171
 #: contuga/contrib/categories/templates/categories/category_list.html:24
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:27
 #: contuga/contrib/tags/templates/tags/tag_list.html:24
@@ -224,22 +249,30 @@ msgstr "Няма открити сметки"
 #: contuga/contrib/accounts/templates/accounts/account_list.html:56
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:10
 #: contuga/contrib/currencies/models.py:24
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:49
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_statistics.html:16
+#: contuga/tests/test_accounts_e2e.py:171
+#: contuga/tests/test_transactions_e2e.py:201
 msgid "Currency"
 msgstr "Валута"
 
 #: contuga/contrib/accounts/templates/accounts/account_list.html:58
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:30
+#: contuga/tests/test_accounts_e2e.py:205
 msgid "Status"
 msgstr "Статус"
 
 #: contuga/contrib/accounts/templates/accounts/account_list.html:82
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:33
+#: contuga/tests/test_accounts_e2e.py:125
+#: contuga/tests/test_accounts_e2e.py:206
 msgid "Active"
 msgstr "Активна"
 
 #: contuga/contrib/accounts/templates/accounts/account_list.html:84
 #: contuga/contrib/accounts/templates/accounts/includes/account_detail_table.html:35
+#: contuga/tests/test_accounts_e2e.py:125
+#: contuga/tests/test_accounts_e2e.py:206
 msgid "Archived"
 msgstr "Архивирана"
 
@@ -251,14 +284,18 @@ msgctxt "noun"
 msgid "Update"
 msgstr "Промяна"
 
-#: contuga/contrib/accounts/tests/test_api_detail.py:67
-#: contuga/contrib/accounts/tests/test_api_detail.py:130
+#: contuga/contrib/accounts/tests/test_api_detail.py:66
+#: contuga/contrib/accounts/tests/test_api_detail.py:129
 #: contuga/contrib/categories/tests/test_api_detail.py:56
 #: contuga/contrib/categories/tests/test_api_detail.py:116
 #: contuga/contrib/currencies/tests/test_api_detail.py:55
 #: contuga/contrib/currencies/tests/test_api_detail.py:107
+#: contuga/contrib/settings/tests/test_api_detail.py:97
+#: contuga/contrib/settings/tests/test_api_detail.py:190
 #: contuga/contrib/tags/tests/test_api_detail.py:63
 #: contuga/contrib/tags/tests/test_api_detail.py:121
+#: contuga/contrib/transactions/tests/test_api_detail.py:82
+#: contuga/contrib/transactions/tests/test_api_detail.py:173
 #: contuga/contrib/users/tests/test_api_detail.py:50
 #: contuga/contrib/users/tests/test_api_detail.py:97
 msgid "Not found."
@@ -272,30 +309,30 @@ msgstr "Дни"
 msgid "Months"
 msgstr "Месеци"
 
-#: contuga/contrib/analytics/forms.py:13
+#: contuga/contrib/analytics/forms.py:15
 msgid "Report unit"
 msgstr "Отчетна единица"
 
-#: contuga/contrib/analytics/forms.py:18
+#: contuga/contrib/analytics/forms.py:20
 msgid "Start date"
 msgstr "Начална дата"
 
-#: contuga/contrib/analytics/forms.py:19
+#: contuga/contrib/analytics/forms.py:21
 msgid "End date"
 msgstr "Крайна дата"
 
-#: contuga/contrib/analytics/forms.py:30
-#: contuga/contrib/analytics/tests/test_views.py:182
+#: contuga/contrib/analytics/forms.py:42
+#: contuga/contrib/analytics/tests/test_views.py:192
 msgid "The start date cannot be before 2019."
 msgstr "Началната дата не може да бъде преди 2019."
 
-#: contuga/contrib/analytics/forms.py:47
-#: contuga/contrib/analytics/tests/test_views.py:281
+#: contuga/contrib/analytics/forms.py:59
+#: contuga/contrib/analytics/tests/test_views.py:292
 msgid "The end date cannot be in the future."
 msgstr "Крайната дата не може да бъде в бъдещето"
 
-#: contuga/contrib/analytics/forms.py:54
-#: contuga/contrib/analytics/tests/test_views.py:252
+#: contuga/contrib/analytics/forms.py:66
+#: contuga/contrib/analytics/tests/test_views.py:263
 msgid "The end date cannot be before 2019."
 msgstr "Крайната дата не може да бъде преди 2019."
 
@@ -309,11 +346,11 @@ msgstr "Статистика"
 msgid "Monthly reports to help you analyze your financial performance."
 msgstr "Месечни отчети за лесно анализиране на финансовото представяне."
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:48
+#: contuga/contrib/analytics/templates/analytics/analytics.html:51
 msgid "No data"
 msgstr "Няма данни"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:89
+#: contuga/contrib/analytics/templates/analytics/analytics.html:92
 #: contuga/contrib/categories/constants.py:8
 #: contuga/contrib/categories/forms.py:20
 #: contuga/contrib/categories/serializers.py:22
@@ -324,164 +361,164 @@ msgstr "Няма данни"
 msgid "Income"
 msgstr "Приход"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:94
+#: contuga/contrib/analytics/templates/analytics/analytics.html:97
 msgid "Expenditures"
 msgstr "Разход"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:153
+#: contuga/contrib/analytics/templates/analytics/analytics.html:158
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:44
 msgid "Today"
 msgstr "Днес"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:154
+#: contuga/contrib/analytics/templates/analytics/analytics.html:159
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:45
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:155
+#: contuga/contrib/analytics/templates/analytics/analytics.html:160
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:46
 msgid "Last 7 Days"
 msgstr "Последните 7 дни"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:156
+#: contuga/contrib/analytics/templates/analytics/analytics.html:161
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:47
 msgid "Last 30 Days"
 msgstr "Последните 30 дни"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:157
+#: contuga/contrib/analytics/templates/analytics/analytics.html:162
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:48
 msgid "This Month"
 msgstr "Този месец"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:158
+#: contuga/contrib/analytics/templates/analytics/analytics.html:163
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:49
 msgid "Last Month"
 msgstr "Последния месец"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:167
+#: contuga/contrib/analytics/templates/analytics/analytics.html:172
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:58
 msgid "Clear"
 msgstr "Изчисти"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:168
-#: contuga/contrib/transactions/forms.py:54
+#: contuga/contrib/analytics/templates/analytics/analytics.html:173
+#: contuga/contrib/transactions/forms.py:115
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:59
 msgid "From"
 msgstr "От"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:169
+#: contuga/contrib/analytics/templates/analytics/analytics.html:174
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:60
 msgid "To"
 msgstr "До"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:170
+#: contuga/contrib/analytics/templates/analytics/analytics.html:175
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:61
 msgid "Custom"
 msgstr "По избор"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:172
+#: contuga/contrib/analytics/templates/analytics/analytics.html:177
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:63
 msgctxt "Day of the week"
 msgid "Su"
 msgstr "Нд"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:173
+#: contuga/contrib/analytics/templates/analytics/analytics.html:178
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:64
 msgctxt "Day of the week"
 msgid "Mo"
 msgstr "Пн"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:174
+#: contuga/contrib/analytics/templates/analytics/analytics.html:179
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:65
 msgctxt "Day of the week"
 msgid "Tu"
 msgstr "Вт"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:175
+#: contuga/contrib/analytics/templates/analytics/analytics.html:180
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:66
 msgctxt "Day of the week"
 msgid "We"
 msgstr "Ср"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:176
+#: contuga/contrib/analytics/templates/analytics/analytics.html:181
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:67
 msgctxt "Day of the week"
 msgid "Th"
 msgstr "Чт"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:177
+#: contuga/contrib/analytics/templates/analytics/analytics.html:182
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:68
 msgctxt "Day of the week"
 msgid "Fr"
 msgstr "Пт"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:178
+#: contuga/contrib/analytics/templates/analytics/analytics.html:183
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:69
 msgctxt "Day of the week"
 msgid "Sa"
 msgstr "Ст"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:181
+#: contuga/contrib/analytics/templates/analytics/analytics.html:186
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:72
 msgid "January"
 msgstr "Януари"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:182
+#: contuga/contrib/analytics/templates/analytics/analytics.html:187
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:73
 msgid "February"
 msgstr "Февруари"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:183
+#: contuga/contrib/analytics/templates/analytics/analytics.html:188
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:74
 msgid "March"
 msgstr "Март"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:184
+#: contuga/contrib/analytics/templates/analytics/analytics.html:189
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:75
 msgid "April"
 msgstr "Април"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:185
+#: contuga/contrib/analytics/templates/analytics/analytics.html:190
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:76
 msgid "May"
 msgstr "Май"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:186
+#: contuga/contrib/analytics/templates/analytics/analytics.html:191
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:77
 msgid "June"
 msgstr "Юни"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:187
+#: contuga/contrib/analytics/templates/analytics/analytics.html:192
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:78
 msgid "July"
 msgstr "Юли"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:188
+#: contuga/contrib/analytics/templates/analytics/analytics.html:193
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:79
 msgid "August"
 msgstr "Август"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:189
+#: contuga/contrib/analytics/templates/analytics/analytics.html:194
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:80
 msgid "September"
 msgstr "Септември"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:190
+#: contuga/contrib/analytics/templates/analytics/analytics.html:195
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:81
 msgid "October"
 msgstr "Октомври"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:191
+#: contuga/contrib/analytics/templates/analytics/analytics.html:196
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:82
 msgid "November"
 msgstr "Ноември"
 
-#: contuga/contrib/analytics/templates/analytics/analytics.html:192
+#: contuga/contrib/analytics/templates/analytics/analytics.html:197
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:83
 msgid "December"
 msgstr "Декември"
 
-#: contuga/contrib/analytics/tests/test_views.py:154
+#: contuga/contrib/analytics/tests/test_views.py:164
 msgid "Enter a valid date."
 msgstr "Въведете валидна дата."
 
@@ -598,8 +635,9 @@ msgstr "Начална страница"
 msgid "Analytics"
 msgstr "Анализ"
 
-#: contuga/contrib/pages/models.py:14 contuga/contrib/transactions/models.py:20
+#: contuga/contrib/pages/models.py:14 contuga/contrib/transactions/models.py:21
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:10
+#: contuga/tests/test_transactions_e2e.py:191
 msgid "Type"
 msgstr "Тип"
 
@@ -647,31 +685,31 @@ msgstr ""
 msgid "Simple web-based expense manager."
 msgstr "Прост уеб-базиран инструмент за управление на разходите."
 
-#: contuga/contrib/settings/models.py:20
+#: contuga/contrib/settings/models.py:23
 #: contuga/contrib/settings/templates/settings/settings_detail.html:16
 msgid "Default category for incomes"
 msgstr "Категория по подразбиране за приходи"
 
-#: contuga/contrib/settings/models.py:28
+#: contuga/contrib/settings/models.py:31
 #: contuga/contrib/settings/templates/settings/settings_detail.html:20
 msgid "Default category for expenditures"
 msgstr "Категория по подразбиране за разходи"
 
-#: contuga/contrib/settings/models.py:36
+#: contuga/contrib/settings/models.py:39
 #: contuga/contrib/settings/templates/settings/settings_detail.html:24
 msgid "Default account"
 msgstr "Сметка по подразбиране"
 
-#: contuga/contrib/settings/models.py:42
+#: contuga/contrib/settings/models.py:44
 #: contuga/contrib/settings/templates/settings/settings_detail.html:28
 msgid "Transactions per page"
 msgstr "Трансакции на страница"
 
-#: contuga/contrib/settings/models.py:43
+#: contuga/contrib/settings/models.py:51
 msgid "User settings"
 msgstr "Потребителски настройки"
 
-#: contuga/contrib/settings/models.py:44
+#: contuga/contrib/settings/models.py:52
 msgid "All user settings"
 msgstr "Настройки на всички потребители"
 
@@ -690,11 +728,11 @@ msgstr "Не е посочено"
 msgid "Change settings"
 msgstr "Промяна на настройките"
 
-#: contuga/contrib/settings/tests/test_api_list.py:127
+#: contuga/contrib/settings/tests/test_api_list.py:134
 msgid "Method \"POST\" not allowed."
 msgstr "Метод \"POST\" не е разрешен."
 
-#: contuga/contrib/settings/tests/test_update_views.py:133
+#: contuga/contrib/settings/tests/test_update_views.py:141
 #: contuga/contrib/transactions/tests/test_create_views.py:176
 #: contuga/contrib/transactions/tests/test_create_views.py:210
 #: contuga/contrib/transactions/tests/test_transfer_form.py:154
@@ -774,24 +812,26 @@ msgstr "Описание"
 msgid "Invalid tags"
 msgstr "Невалидни тагове"
 
+#: contuga/contrib/transactions/forms.py:108
 msgid "Invalid date range"
 msgstr "Невалиден времеви диапазон"
 
-#: contuga/contrib/transactions/forms.py:56
+#: contuga/contrib/transactions/forms.py:117
 msgctxt "preposition, towards"
 msgid "To"
 msgstr "Към"
 
-#: contuga/contrib/transactions/forms.py:59
+#: contuga/contrib/transactions/forms.py:120
+#: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:33
 msgid "Exchange rate"
 msgstr "Обменен курс"
 
-#: contuga/contrib/transactions/forms.py:78
+#: contuga/contrib/transactions/forms.py:141
 #: contuga/contrib/transactions/tests/test_transfer_form.py:132
 msgid "The two accounts shouldn't be the same."
 msgstr "Двете сметки трябва да бъдат различни."
 
-#: contuga/contrib/transactions/forms.py:84
+#: contuga/contrib/transactions/forms.py:147
 #: contuga/contrib/transactions/tests/test_transfer_form.py:113
 msgid ""
 "You need to specify exchange rate if the two accounts are of different "
@@ -799,15 +839,17 @@ msgid ""
 msgstr ""
 "Трябва да посочите обменен курс, ако двете сметки са в различна валута."
 
-#: contuga/contrib/transactions/models.py:52
-msgid "Income counterpart"
+#: contuga/contrib/transactions/models.py:56
+#, fuzzy
+#| msgid "Income counterpart"
+msgid "Expenditure counterpart"
 msgstr "Приходна трансакция"
 
-#: contuga/contrib/transactions/models.py:54
+#: contuga/contrib/transactions/models.py:66
 msgid "Transaction"
 msgstr "Трансакция"
 
-#: contuga/contrib/transactions/models.py:55
+#: contuga/contrib/transactions/models.py:67
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_filter_statistics.html:17
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_list.html:5
 #: contuga/contrib/transactions/templates/transactions/transaction_list.html:4
@@ -816,7 +858,7 @@ msgstr "Трансакция"
 msgid "Transactions"
 msgstr "Трансакции"
 
-#: contuga/contrib/transactions/models.py:83
+#: contuga/contrib/transactions/models.py:87
 msgid "Cannot change the type of a transaction that is part of a transfer"
 msgstr "Не можете да смените типът на трансакция, която е част от трасфер."
 
@@ -851,10 +893,6 @@ msgctxt "transaction"
 msgid "Updated at"
 msgstr "Обновена на"
 
-#: contuga/contrib/transactions/templates/transactions/internal_transfer_form.html:4
-msgid "Transfer between own accounts"
-msgstr "Превод между собствени сметки"
-
 #: contuga/contrib/transactions/templates/transactions/internal_transfer_form.html:27
 msgctxt "verb"
 msgid "Transfer"
@@ -886,7 +924,8 @@ msgid "Are you sure you want to delete this transaction?"
 msgstr "Потвърдете, че желаете да изтриете тази трансакция."
 
 #: contuga/contrib/transactions/templates/transactions/transaction_detail.html:4
-#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:10
+#: contuga/contrib/transactions/templates/transactions/transaction_detail.html:11
+#: contuga/tests/test_transactions_e2e.py:181
 msgid "Transaction details"
 msgstr "Детайли за трансакция"
 
@@ -906,10 +945,10 @@ msgstr "Добави нова"
 msgid "Update transaction"
 msgstr "Обновяване на трансакция"
 
-#: contuga/contrib/transactions/tests/test_api_detail.py:225
-#: contuga/contrib/transactions/tests/test_api_detail.py:253
-#: contuga/contrib/transactions/tests/test_api_list.py:194
-#: contuga/contrib/transactions/tests/test_api_list.py:221
+#: contuga/contrib/transactions/tests/test_api_detail.py:252
+#: contuga/contrib/transactions/tests/test_api_detail.py:280
+#: contuga/contrib/transactions/tests/test_api_list.py:267
+#: contuga/contrib/transactions/tests/test_api_list.py:294
 msgid "Invalid hyperlink - Object does not exist."
 msgstr "Невалидна връзка - Обекта не съществува."
 
@@ -958,6 +997,8 @@ msgid "Successful activation"
 msgstr "Успешна активация"
 
 #: contuga/contrib/users/templates/users/activation_complete.html:10
+#: contuga/contrib/users/tests/test_views.py:74
+#: contuga/tests/test_registration_e2e.py:112
 msgid "Your activation was successful"
 msgstr "Активацията беше успешна."
 
@@ -1128,8 +1169,11 @@ msgid "Successful registration"
 msgstr "Успешна регистрация"
 
 #: contuga/contrib/users/templates/users/registration_complete.html:10
+#: contuga/contrib/users/tests/test_views.py:46
+#: contuga/tests/test_registration_e2e.py:74
 msgid ""
-"Your registration is successful. An activation link has been sent to your email."
+"Your registration is successful. An activation link has been sent to your "
+"email."
 msgstr "Вашата регистрация е успешна. Изпратен е Email за активация."
 
 #: contuga/contrib/users/templates/users/registration_disallowed.html:4
@@ -1164,7 +1208,7 @@ msgstr "Категории"
 msgid "Total accounts"
 msgstr "Сметки"
 
-#: contuga/contrib/users/views.py:34
+#: contuga/contrib/users/views.py:33
 msgid ""
 "Redirection loop for authenticated user detected. Check that your "
 "LOGIN_REDIRECT_URL doesn't point to registration page."
@@ -1172,27 +1216,27 @@ msgstr ""
 "Открит е цикъл на препращане. Проверете дали LOGIN_REDIRECT_URL не води към "
 "регистрационната форма."
 
-#: contuga/settings/components/base.py:142
+#: contuga/settings/components/base.py:144
 msgid "Food and drinks"
 msgstr "Храни и напитки"
 
-#: contuga/settings/components/base.py:143
+#: contuga/settings/components/base.py:145
 msgid "Entertainment"
 msgstr "Забавления"
 
-#: contuga/settings/components/base.py:144
+#: contuga/settings/components/base.py:146
 msgid "Bills"
 msgstr "Сметки"
 
-#: contuga/settings/components/base.py:145
+#: contuga/settings/components/base.py:147
 msgid "Transport"
 msgstr "Транспорт"
 
-#: contuga/settings/components/base.py:146
+#: contuga/settings/components/base.py:148
 msgid "Drugs and pharmaceuticals"
 msgstr "Лекарства и козметика"
 
-#: contuga/settings/components/base.py:147
+#: contuga/settings/components/base.py:149
 msgid "Other"
 msgstr "Други"
 
@@ -1269,6 +1313,10 @@ msgstr "Виж всички"
 msgid "Logout"
 msgstr "Изход"
 
-#: contuga/tests.py:22
+#: contuga/tests/test_api.py:22
 msgid "Authentication credentials were not provided."
 msgstr "Данните за автентификация не бяха предоставени."
+
+#: contuga/tests/test_registration_e2e.py:104
+msgid "The account you attempted to activate is invalid."
+msgstr ""
