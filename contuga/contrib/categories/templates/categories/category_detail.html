@@ -15,6 +15,9 @@
       <a class="btn btn-danger" href="{% url 'categories:delete' category.pk %}" role="button">
         <i class="fa fa-trash"></i> {% trans "Delete" context "verb" %}
       </a>
+      <a class="btn btn-primary" href="{% url 'categories:list' %}" role="button">
+        <i class="fa fa-list"></i> {% trans "Back to all" %}
+      </a>
     </div>
   </div>
 
