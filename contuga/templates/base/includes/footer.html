@@ -75,6 +75,25 @@
         </div>
         <div class="col-6 col-md-4 col-lg">
           <h5>
+            <a href="{% url 'tags:list' %}">
+              {% trans "Tags" %}
+            </a>
+          </h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a href="{% url 'tags:list' %}">
+                {% trans "View all tags" %}
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'tags:create' %}">
+                {% trans "Add new tag" %}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4 col-lg">
+          <h5>
             <a href="{% url 'users:profile' user.uuid %}">
               {% trans "Profile" %}
             </a>
