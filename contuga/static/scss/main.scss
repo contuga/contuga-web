@@ -83,6 +83,7 @@ section {
 }
 
 .btn {
+  margin: 0.125rem 0;
   padding: 0.5rem 1.5rem;
 }
 
@@ -111,7 +112,7 @@ section {
     vertical-align: middle;
     .fa-pencil,
     .fa-trash {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
     }
   }
 }
@@ -120,6 +121,14 @@ section {
   .page-item.active > .page-link {
     background-color: $primary;
     border: 1px solid $primary;
+  }
+}
+
+.container {
+  @include media-breakpoint-down(lg) {
+    & {
+      min-width: 100%;
+    }
   }
 }
 
