@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-05 00:22+0300\n"
+"POT-Creation-Date: 2021-04-05 21:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -344,8 +344,8 @@ msgid "The end date cannot be before 2019."
 msgstr "Крайната дата не може да бъде преди 2019."
 
 #: contuga/contrib/analytics/templates/analytics/analytics.html:10
-#: contuga/templates/base/includes/footer.html:98
-#: contuga/templates/base/includes/navigation.html:77
+#: contuga/templates/base/includes/footer.html:117
+#: contuga/templates/base/includes/navigation.html:90
 msgid "Statistics"
 msgstr "Статистика"
 
@@ -571,7 +571,6 @@ msgstr "Изберете за кой тип транскации да се из�
 #: contuga/contrib/categories/templates/categories/category_list.html:4
 #: contuga/contrib/categories/templates/categories/category_list.html:35
 #: contuga/templates/base/includes/footer.html:60
-#: contuga/templates/base/includes/navigation.html:51
 msgid "Categories"
 msgstr "Категории"
 
@@ -606,7 +605,7 @@ msgstr "Номинал"
 #: contuga/contrib/currencies/models.py:25
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:4
 #: contuga/contrib/currencies/templates/currencies/currency_list.html:38
-#: contuga/templates/base/includes/navigation.html:64
+#: contuga/templates/base/includes/navigation.html:77
 msgid "Currencies"
 msgstr "Валути"
 
@@ -722,8 +721,8 @@ msgstr "Настройки на всички потребители"
 
 #: contuga/contrib/settings/templates/settings/settings_detail.html:4
 #: contuga/contrib/settings/templates/settings/settings_detail.html:10
-#: contuga/templates/base/includes/footer.html:85
-#: contuga/templates/base/includes/navigation.html:91
+#: contuga/templates/base/includes/footer.html:104
+#: contuga/templates/base/includes/navigation.html:104
 msgid "Settings"
 msgstr "Настройки"
 
@@ -759,6 +758,8 @@ msgstr "Таг"
 #: contuga/contrib/transactions/forms.py:17
 #: contuga/contrib/transactions/models.py:44
 #: contuga/contrib/transactions/templates/transactions/includes/transaction_detail_table.html:65
+#: contuga/templates/base/includes/footer.html:79
+#: contuga/templates/base/includes/navigation.html:64
 #: contuga/tests/test_transactions_e2e.py:211
 msgid "Tags"
 msgstr "Тагове"
@@ -944,7 +945,8 @@ msgstr "Добави трансакция"
 #: contuga/templates/base/includes/navigation.html:29
 #: contuga/templates/base/includes/navigation.html:45
 #: contuga/templates/base/includes/navigation.html:58
-#: contuga/templates/base/includes/navigation.html:71
+#: contuga/templates/base/includes/navigation.html:84
+msgctxt "feminine"
 msgid "Add new"
 msgstr "Добави нова"
 
@@ -1024,8 +1026,8 @@ msgstr "Неуспешна активация"
 #: contuga/contrib/users/templates/users/login.html:4
 #: contuga/contrib/users/templates/users/login.html:25
 #: contuga/contrib/users/templates/users/registration_form.html:19
-#: contuga/templates/base/includes/footer.html:107
-#: contuga/templates/base/includes/navigation.html:108
+#: contuga/templates/base/includes/footer.html:126
+#: contuga/templates/base/includes/navigation.html:121
 msgid "Login"
 msgstr "Вход"
 
@@ -1035,8 +1037,8 @@ msgstr "Все още нямате акаунт?"
 
 #: contuga/contrib/users/templates/users/login.html:23
 #: contuga/contrib/users/templates/users/registration_form.html:22
-#: contuga/templates/base/includes/footer.html:114
-#: contuga/templates/base/includes/navigation.html:113
+#: contuga/templates/base/includes/footer.html:133
+#: contuga/templates/base/includes/navigation.html:126
 msgid "Register"
 msgstr "Регистрация"
 
@@ -1294,18 +1296,26 @@ msgstr "Всички категории"
 msgid "Add new category"
 msgstr "Добави категория"
 
-#: contuga/templates/base/includes/footer.html:79
-#: contuga/templates/base/includes/navigation.html:88
+#: contuga/templates/base/includes/footer.html:85
+msgid "View all tags"
+msgstr "Виж всички тагове"
+
+#: contuga/templates/base/includes/footer.html:90
+msgid "Add new tag"
+msgstr "Добави нов таг"
+
+#: contuga/templates/base/includes/footer.html:98
+#: contuga/templates/base/includes/navigation.html:101
 msgid "Profile"
 msgstr "Профил"
 
-#: contuga/templates/base/includes/footer.html:90
-#: contuga/templates/base/includes/navigation.html:94
+#: contuga/templates/base/includes/footer.html:109
+#: contuga/templates/base/includes/navigation.html:107
 msgid "Change password"
 msgstr "Промени парола"
 
-#: contuga/templates/base/includes/footer.html:121
-#: contuga/templates/base/includes/navigation.html:118
+#: contuga/templates/base/includes/footer.html:140
+#: contuga/templates/base/includes/navigation.html:131
 msgid "Reset password"
 msgstr "Забравена парола"
 
@@ -1313,10 +1323,23 @@ msgstr "Забравена парола"
 #: contuga/templates/base/includes/navigation.html:42
 #: contuga/templates/base/includes/navigation.html:55
 #: contuga/templates/base/includes/navigation.html:68
+#: contuga/templates/base/includes/navigation.html:81
 msgid "View all"
 msgstr "Виж всички"
 
-#: contuga/templates/base/includes/navigation.html:97
+#: contuga/templates/base/includes/navigation.html:51
+#, fuzzy
+#| msgid "Categories"
+msgctxt "feminine"
+msgid "Categories"
+msgstr "Категории"
+
+#: contuga/templates/base/includes/navigation.html:71
+msgctxt "masculine"
+msgid "Add new"
+msgstr "Добави нов"
+
+#: contuga/templates/base/includes/navigation.html:110
 msgid "Logout"
 msgstr "Изход"
 
@@ -1327,3 +1350,8 @@ msgstr "Данните за автентификация не бяха пред�
 #: contuga/tests/test_registration_e2e.py:104
 msgid "The account you attempted to activate is invalid."
 msgstr ""
+
+#~| msgid "Add new"
+#~ msgctxt "faminine"
+#~ msgid "Add new"
+#~ msgstr "Добави нова"

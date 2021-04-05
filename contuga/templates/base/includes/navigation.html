@@ -26,7 +26,7 @@
                 {% trans 'View all' %}
               </a>
               <a class="dropdown-item" href="{% url 'transactions:create' %}">
-                {% trans 'Add new' %}
+                {% trans "Add new" context "feminine" %}
               </a>
               <a class="dropdown-item" href="{% url 'transactions:internal_transfer_form' %}">
                 {% trans 'Add new transfer' %}
@@ -42,7 +42,7 @@
                   {% trans 'View all' %}
                 </a>
                 <a class="dropdown-item" href="{% url 'accounts:create' %}">
-                  {% trans 'Add new' %}
+                  {% trans "Add new" context "feminine" %}
                 </a>
               </div>
             </li>
@@ -55,7 +55,20 @@
                 {% trans 'View all' %}
               </a>
               <a class="dropdown-item" href="{% url 'categories:create' %}">
-                {% trans 'Add new' %}
+                {% trans "Add new" context "feminine" %}
+              </a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+              {% trans 'Tags' %}
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'tags:list' %}">
+                {% trans 'View all' %}
+              </a>
+              <a class="dropdown-item" href="{% url 'tags:create' %}">
+                {% trans "Add new" context "masculine" %}
               </a>
             </div>
           </li>
@@ -68,7 +81,7 @@
                 {% trans 'View all' %}
               </a>
               <a class="dropdown-item" href="{% url 'currencies:create' %}">
-                {% trans 'Add new' %}
+                {% trans "Add new" context 'feminine' %}
               </a>
             </div>
           </li>
