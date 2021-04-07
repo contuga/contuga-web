@@ -1,3 +1,4 @@
+import json
 from datetime import timedelta
 
 from django.test import RequestFactory, TestCase
@@ -20,6 +21,7 @@ class TransactionFilterTests(TestCase, TestMixin):
         user = self.create_user(f"{name}@example.com", "password")
         category = self.create_category(author=user, name=f"{name}'s category")
         self.currency = self.create_currency(name=f"{name}'s currency", author=user)
+
         account = self.create_account(owner=user, name=f"{name}'s account")
         transaction = self.create_transaction(
             author=user, category=category, account=account
@@ -49,6 +51,51 @@ class TransactionFilterTests(TestCase, TestMixin):
             self.data_john["user"].accounts.all(),
             transform=lambda x: x,
         )
+
+    def test_tags_filter_with_a_single_tag(self):
+        user = self.data_john["user"]
+        account = self.data_john["account"]
+
+        first_tag = self.create_tag(name="First tag", author=user)
+        second_tag = self.create_tag(name="Second tag", author=user)
+
+        second_transaction = self.create_income(
+            author=user, account=account, tags=[first_tag]
+        )
+        third_transaction = self.create_income(
+            author=user, account=account, tags=[first_tag]
+        )
+
+        self.create_income(author=user, account=account, tags=[second_tag])
+
+        tags = [{"value": first_tag.name}]
+        data = {"tags": json.dumps(tags)}
+        filter = TransactionFilterSet(data=data, request=self.request)
+
+        self.assertListEqual(list(filter.qs), [third_transaction, second_transaction])
+
+    def test_tags_filter_with_multiple_tags(self):
+        user = self.data_john["user"]
+        account = self.data_john["account"]
+
+        first_tag = self.create_tag(name="First tag", author=user)
+        second_tag = self.create_tag(name="Second tag", author=user)
+        third_tag = self.create_tag(name="Third tag", author=user)
+
+        second_transaction = self.create_income(
+            author=user, account=account, tags=[first_tag]
+        )
+        third_transaction = self.create_income(
+            author=user, account=account, tags=[second_tag]
+        )
+
+        self.create_income(author=user, account=account, tags=[third_tag])
+
+        tags = [{"value": first_tag.name}, {"value": second_tag.name}]
+        data = {"tags": json.dumps(tags)}
+        filter = TransactionFilterSet(data=data, request=self.request)
+
+        self.assertListEqual(list(filter.qs), [third_transaction, second_transaction])
 
     def test_created_at_filter(self):
         transaction = self.data_john["transaction"]
