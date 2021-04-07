@@ -132,31 +132,39 @@
         }
       });
 
-      const input = document.querySelector('[name=tags]')
-      const tagify = new Tagify(input, { whitelist:[] })
-      let controller
+      const createFormTagsInput = document.querySelector('#createForm [name=tags]')
+      const createFormTags = new Tagify(createFormTagsInput, { whitelist:[] })
 
-      tagify.on('input', onInput)
+      createFormTags.on('input', getInputHandler(createFormTags))
 
-      function onInput(e) {
-        var value = e.detail.value;
-        tagify.settings.whitelist.length = 0
+      const filterFormTagsInput = document.querySelector('#filterForm [name=tags]')
+      const filterFormTags = new Tagify(filterFormTagsInput, { whitelist:[] })
 
-        // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
-        controller && controller.abort()
-        controller = new AbortController()
+      filterFormTags.on('input', getInputHandler(filterFormTags))
 
-        tagify.loading(true).dropdown.hide.call(tagify)
+      function getInputHandler(tagify) {
+        let controller
 
-        fetch(`{% url 'tag-list' %}?name__startswith=${value}`, { signal:controller.signal })
-          .then(response => response.json())
-          .then(function(data){
-            const whitelist = data.results.map(tag => tag.name)
+        return (e) => {
+          const value = e.detail.value;
+          tagify.settings.whitelist.length = 0
 
-            tagify.settings.whitelist.splice(0, whitelist.length, ...whitelist)
-            tagify.loading(false).dropdown.show.call(tagify, value)
-          })
-          .catch(error => null);
+          // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+          controller && controller.abort()
+          controller = new AbortController()
+
+          tagify.loading(true).dropdown.hide.call(tagify)
+
+          fetch(`{% url 'tag-list' %}?name__startswith=${value}`, { signal:controller.signal })
+            .then(response => response.json())
+            .then(function(data){
+              const whitelist = data.results.map(tag => tag.name)
+
+              tagify.settings.whitelist.splice(0, whitelist.length, ...whitelist)
+              tagify.loading(false).dropdown.show.call(tagify, value)
+            })
+            .catch(error => null);
+        }
       }
     });
   </script>

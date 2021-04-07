@@ -6,11 +6,14 @@
       <div class="col-12 col-md-2">
         {% include 'contuga/forms/field.html' with field=filterset.form.type %}
       </div>
-      <div class="col-12 col-md-2">
+      <div class="col-12 col-md-3">
         {% include 'contuga/forms/field.html' with field=filterset.form.account %}
       </div>
-      <div class="col-12 col-md-2">
+      <div class="col-12 col-md-3">
         {% include 'contuga/forms/field.html' with field=filterset.form.category %}
+      </div>
+      <div class="col-12 col-md-4">
+        {% include 'contuga/forms/field.html' with field=filterset.form.tags %}
       </div>
       <div class="col-12 col-md-3">
         {% include 'contuga/forms/field.html' with field=filterset.form.created_at|attr:'autocomplete:off' %}
@@ -18,18 +21,18 @@
       <div class="col-12 col-md-3">
         {% include 'contuga/forms/field.html' with field=filterset.form.updated_at|attr:'autocomplete:off' %}
       </div>
-      <div class="col-12 col-md-3">
+      <div class="col-12 col-md-6">
         {% include 'contuga/forms/field.html' with field=filterset.form.description %}
       </div>
       <div class="col-12 col-md-3">
         {% include 'contuga/forms/field.html' with field=filterset.form.ordering %}
       </div>
 
-      <div class="col-12 col-md-2">
+      <div class="col-12 col-md-3">
         {% include 'contuga/forms/field.html' with field=filterset.form.min_amount %}
       </div>
 
-      <div class="col-12 col-md-2">
+      <div class="col-12 col-md-3">
         {% include 'contuga/forms/field.html' with field=filterset.form.max_amount %}
       </div>
 
