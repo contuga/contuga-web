@@ -44,6 +44,7 @@ ORDERING_LABELS = {
 class TransactionFilterSet(filterset.FilterSet):
     account = filters.ModelChoiceFilter(queryset=account_queryset)
     category = filters.ModelChoiceFilter(queryset=category_queryset)
+    tags = filters.CharFilter(method="filter_by_tags")
     created_at = filters.CharFilter(method="filter_by_date_range")
     updated_at = filters.CharFilter(method="filter_by_date_range")
     ordering = filters.OrderingFilter(
@@ -61,6 +62,16 @@ class TransactionFilterSet(filterset.FilterSet):
         model = Transaction
         fields = ("type",)
         form = TransactionFilterForm
+
+    def filter_by_tags(self, queryset, field_name, tags):
+        if self.form.is_valid():
+            tag_values = [tag["value"] for tag in tags]
+
+            queryset = queryset.filter(
+                **{"author": self.request.user, f"{field_name}__name__in": tag_values}
+            )
+
+        return queryset
 
     def filter_by_date_range(self, queryset, name, value):
         if self.form.is_valid():

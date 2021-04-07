@@ -55,7 +55,7 @@ class TransactionForm(forms.ModelForm):
 
     def clean_tags(self):
         tags = self.cleaned_data.get("tags")
-        # import ipdb; ipdb.set_trace()
+
         if not tags:
             return []
 
@@ -89,6 +89,21 @@ class TransactionForm(forms.ModelForm):
 
 
 class TransactionFilterForm(forms.Form):
+    def clean_tags(self):
+        tags = self.cleaned_data.get("tags")
+
+        if not tags:
+            return []
+
+        try:
+            return json.loads(tags)
+        except ValueError:
+            self.add_error(
+                "tags", ValidationError(message=_("Invalid tags"), code="invalid")
+            )
+
+        return tags
+
     def clean_created_at(self):
         return self.validate_date_range("created_at")
 

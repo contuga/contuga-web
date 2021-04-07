@@ -2,7 +2,7 @@
 {% load i18n %}
 
 <div class="collapse" id="createFormContainer" data-parent="#actionGroup">
-  <form method="POST" action="{% url 'transactions:create' %}">
+  <form id="createForm" method="POST" action="{% url 'transactions:create' %}">
     {% csrf_token %}
     <div class="row">
       <div class="col-12 col-md-6">
