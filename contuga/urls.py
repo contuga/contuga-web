@@ -68,6 +68,7 @@ urlpatterns = i18n_patterns(
     ),
     path("manifest.json", views.ManifestView.as_view(), name="manifest"),
     path("analytics", include(("contuga.contrib.analytics.urls", "analytics"))),
+    path("i18n/", include("django.conf.urls.i18n")),
     path("", include(("contuga.contrib.pages.urls", "pages"))),
 )
 

@@ -106,6 +106,22 @@
               <a class="dropdown-item" href="{% url 'users:password_change' %}">
                 {% trans 'Change password' %}
               </a>
+
+              {% get_current_language as LANGUAGE_CODE %}
+              {% get_available_languages as LANGUAGES %}
+              {% get_language_info_list for LANGUAGES as languages %}
+
+              {% for language in languages %}
+                {% if language.code != LANGUAGE_CODE %}
+                  <form action="{% url 'set_language' %}" method="post" id="form_{{ language.code }}" style="display:inline!important;">
+                  {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <input name="language" type="hidden" value="{{ language.code }}" />
+                  </form>
+                  <button class="dropdown-item" type="submit" form="form_{{ language.code }}" value="Submit">{{ language.name_local|title }}</button>
+                {% endif %}
+              {% endfor %}
+
               <a class="dropdown-item" href="{% url 'users:logout' %}">
                 {% trans 'Logout' %}
               </a>
