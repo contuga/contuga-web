@@ -9,7 +9,7 @@ from django.utils import timezone
 from contuga.mixins import TestMixin
 
 from .. import utils
-from ..constants import DAYS
+from ..constants import CATEGORIES, DAYS
 from . import utils as test_utils
 
 
@@ -576,7 +576,10 @@ class DailyReportsTestCase(TestCase, TestMixin):
 
         with self.assertNumQueries(1):
             result = utils.generate_reports(
-                user=self.account.owner, report_unit=DAYS, category=category
+                user=self.account.owner,
+                report_unit=DAYS,
+                grouping=CATEGORIES,
+                category=category,
             )
 
         reports = test_utils.create_empty_reports(
@@ -594,8 +597,8 @@ class DailyReportsTestCase(TestCase, TestMixin):
 
         expected_result = [
             {
-                "pk": self.account.pk,
-                "name": self.account.name,
+                "pk": category.pk,
+                "name": category.name,
                 "currency": {
                     "name": self.account.currency.name,
                     "code": self.account.currency.code,
