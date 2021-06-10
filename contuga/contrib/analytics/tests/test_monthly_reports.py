@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from contuga.mixins import TestMixin
 
-from .. import utils
+from .. import constants, utils
 from . import utils as test_utils
 
 
@@ -591,7 +591,11 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
         self.create_expenditure(amount=Decimal("100.50")).amount
 
         with self.assertNumQueries(1):
-            result = utils.generate_reports(user=self.account.owner, category=category)
+            result = utils.generate_reports(
+                user=self.account.owner,
+                grouping=constants.CATEGORIES,
+                category=category,
+            )
 
         reports = test_utils.create_empty_reports(last_date=self.now, hasBalance=False)
         reports.append(
@@ -605,14 +609,96 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
 
         expected_result = [
             {
-                "pk": self.account.pk,
-                "name": self.account.name,
+                "pk": category.pk,
+                "name": category.name,
                 "currency": {
                     "name": self.account.currency.name,
                     "code": self.account.currency.code,
                 },
                 "reports": reports,
             }
+        ]
+
+        self.assertListEqual(result, expected_result)
+
+    def test_report_for_specific_category_with_different_currencies(self):
+        category = self.create_category()
+
+        currency = self.create_currency(name="Euro", code="EUR")
+        second_account = self.create_account(
+            name="First EUR account", currency=currency
+        )
+
+        first_account_first_income = self.create_income(
+            amount=Decimal("310.40"), category=category
+        ).amount
+        first_account_second_income = self.create_income(
+            amount=Decimal("23.59"), category=category
+        ).amount
+        first_account_first_expenditure = self.create_expenditure(
+            amount=Decimal("100.50"), category=category
+        ).amount
+
+        second_account_first_income = self.create_income(
+            amount=Decimal("53.33"), category=category, account=second_account
+        ).amount
+        second_account_second_income = self.create_income(
+            amount=Decimal("534.34"), category=category, account=second_account
+        ).amount
+        second_account_first_expenditure = self.create_expenditure(
+            amount=Decimal("100.50"), category=category, account=second_account
+        ).amount
+
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(
+                user=self.account.owner,
+                grouping=constants.CATEGORIES,
+                category=category,
+            )
+
+        first_currency_reports = test_utils.create_empty_reports(
+            last_date=self.now, hasBalance=False
+        )
+        first_currency_reports.append(
+            {
+                "month": self.now.month,
+                "year": self.now.year,
+                "income": first_account_first_income + first_account_second_income,
+                "expenditures": first_account_first_expenditure,
+            }
+        )
+
+        second_currency_reports = test_utils.create_empty_reports(
+            last_date=self.now, hasBalance=False
+        )
+        second_currency_reports.append(
+            {
+                "month": self.now.month,
+                "year": self.now.year,
+                "income": second_account_first_income + second_account_second_income,
+                "expenditures": second_account_first_expenditure,
+            }
+        )
+
+        expected_result = [
+            {
+                "pk": category.pk,
+                "name": category.name,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
+                "reports": first_currency_reports,
+            },
+            {
+                "pk": category.pk,
+                "name": category.name,
+                "currency": {
+                    "name": second_account.currency.name,
+                    "code": second_account.currency.code,
+                },
+                "reports": second_currency_reports,
+            },
         ]
 
         self.assertListEqual(result, expected_result)

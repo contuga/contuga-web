@@ -6,12 +6,11 @@ from django.views.generic.base import TemplateView
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 
-from contuga.contrib.pages import constants
+from contuga.contrib.pages import constants as page_constants
 from contuga.contrib.pages.models import Page
 
-from . import utils
+from . import constants, utils
 from .api_filters import ReportsFilterBackend
-from .constants import MONTHS
 from .forms import ReportsFilterForm
 from .serializers import ReportsSerializer
 
@@ -28,7 +27,9 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
         if len(self.request.GET):
             form_data = self.request.GET.copy()
             report_unit = form_data.get("report_unit")
-            form_data["report_unit"] = report_unit if report_unit else MONTHS
+            form_data["report_unit"] = (
+                report_unit if report_unit else constants.MONTHS
+            )
             form = ReportsFilterForm(user, form_data)
         else:
             form = ReportsFilterForm(user)
@@ -39,11 +40,17 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
             end_date = form.cleaned_data.get("end_date")
             category = form.cleaned_data.get("category")
 
+            if category:
+                grouping = constants.CATEGORIES
+            else:
+                grouping = constants.ACCOUNTS
+
             reports = utils.generate_reports(
                 user=user,
                 report_unit=report_unit,
                 start_date=start_date,
                 end_date=end_date,
+                grouping=grouping,
                 category=category,
             )
         else:
@@ -53,7 +60,7 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
             context["reports"] = json.dumps(reports, cls=DjangoJSONEncoder)
 
         context["form"] = form
-        context["page"] = Page.objects.filter(type=constants.ANALYTICS_TYPE).first()
+        context["page"] = Page.objects.filter(type=page_constants.ANALYTICS_TYPE).first()
 
         return context
 
@@ -80,11 +87,18 @@ class AnalyticsViewSet(viewsets.ViewSet):
             start_date = form.cleaned_data.get("start_date")
             end_date = form.cleaned_data.get("end_date")
             category = form.cleaned_data.get("category")
+
+            if category:
+                grouping = constants.CATEGORIES
+            else:
+                grouping = constants.ACCOUNTS
+
             reports = utils.generate_reports(
                 user=self.request.user,
                 report_unit=report_unit,
                 start_date=start_date,
                 end_date=end_date,
+                grouping=grouping,
                 category=category,
             )
         else:
