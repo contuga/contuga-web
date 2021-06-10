@@ -223,14 +223,21 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
         self.create_expenditure(amount=Decimal("100"), category=category)
 
         url = reverse("analytics-list")
-        response = self.client.get(url, {"category": category.pk}, format="json")
+        response = self.client.get(
+            url,
+            {"grouping": constants.CATEGORIES, "category": category.pk},
+            format="json",
+        )
 
         # Assert status code is correct
         self.assertEqual(response.status_code, 200)
 
         # Assert correct data is returned
         expected_reports = utils.generate_reports(
-            user=self.account.owner, report_unit=constants.MONTHS, category=category
+            user=self.account.owner,
+            report_unit=constants.MONTHS,
+            grouping=constants.CATEGORIES,
+            category=category,
         )
 
         expected_response = {
@@ -474,7 +481,11 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
         url = reverse("analytics-list")
         response = self.client.get(
             url,
-            {"report_unit": constants.DAYS, "category": str(category.pk)},
+            {
+                "report_unit": constants.DAYS,
+                "grouping": constants.CATEGORIES,
+                "category": str(category.pk),
+            },
             format="json",
         )
 
@@ -483,7 +494,10 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
 
         # Assert correct data is returned
         expected_reports = utils.generate_reports(
-            user=self.account.owner, report_unit=constants.DAYS, category=category
+            user=self.account.owner,
+            report_unit=constants.DAYS,
+            grouping=constants.CATEGORIES,
+            category=category,
         )
 
         expected_response = {

@@ -63,15 +63,15 @@
   {% if reports %}
     <script type="text/javascript">
       jQuery(function($) {
-        const accounts = {{ reports|safe }};
+        const reports = {{ reports|safe }};
 
-        for(account of accounts) {
-          const title = `<div class="row"><div class="col"><h2>${account.name}</h2></div></div>`;
+        for(report of reports) {
+          const title = `<div class="row"><div class="col"><h2>${report.name} - ${report.currency.name}</h2></div></div>`;
 
-          const barChartId = `barChart${account.pk}`
+          const barChartId = `barChart${report.pk}-${report.currency.code || report.currency.name}`
           const barChart = `<div class="col-md-5"><canvas id="${barChartId}"></canvas></div>`;
 
-          const lineChartId = `lineChart${account.pk}`;
+          const lineChartId = `lineChart${report.pk}`;
           const lineChart = `<div class="col-md-5"><canvas id="${lineChartId}"></canvas></div>`;
 
           const $row = $('<div class="row">').append(barChart, lineChart)
@@ -80,7 +80,7 @@
 
           $('#chartContainer').append($section)
 
-          const labels = account.reports.map((it) => {
+          const labels = report.reports.map((it) => {
             if (it.day) {
               return `${it.day}.${it.month}.${it.year}`
             } else {
@@ -90,28 +90,28 @@
           const datasets = [
               {
                   label: '{% trans "Income" %}',
-                  data: account.reports.map((it) => it.income),
+                  data: report.reports.map((it) => it.income),
                   backgroundColor: '#28a745'
               },
               {
                   label: '{% trans "Expenditures" %}',
-                  data: account.reports.map((it) => it.expenditures),
+                  data: report.reports.map((it) => it.expenditures),
                   backgroundColor: '#dc3545'
               }
           ]
 
-          createChart('bar', barChartId, labels, datasets, account.currency.code || account.currency.name);
+          createChart('bar', barChartId, labels, datasets, report.currency.code || report.currency.name);
 
           {% if not form.category.value %}
             const lineDatasets = [
                 {
                     label: '{% trans "Balance" %}',
-                    data: account.reports.map((it) => it.balance),
+                    data: report.reports.map((it) => it.balance),
                     backgroundColor: '#254c7c'
                 }
             ]
 
-            createChart('line', lineChartId, labels, lineDatasets, account.currency.code || account.currency.name);
+            createChart('line', lineChartId, labels, lineDatasets, report.currency.code || report.currency.name);
           {% endif %}
         }
 
