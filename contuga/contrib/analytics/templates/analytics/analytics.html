@@ -22,11 +22,17 @@
               <div class="col-12 col-md-2">
                 {% include 'contuga/forms/field.html' with field=form.report_unit %}
               </div>
-              <div class="col-12 col-md-2 col-lg-2">
+              <div class="col-12 col-md-1 col-lg-1">
                 {% include 'contuga/forms/field.html' with field=form.start_date|attr:'autocomplete:off' %}
               </div>
-              <div class="col-12 col-md-2 col-lg-2">
+              <div class="col-12 col-md-1 col-lg-1">
                 {% include 'contuga/forms/field.html' with field=form.end_date|attr:'autocomplete:off' %}
+              </div>
+              <div class="col-12 col-md-1 col-lg-1">
+                {% include 'contuga/forms/field.html' with field=form.grouping %}
+              </div>
+              <div class="col-12 col-md-3">
+                {% include 'contuga/forms/field.html' with field=form.chart %}
               </div>
               <div class="col-12 col-md-3">
                 {% include 'contuga/forms/field.html' with field=form.category %}
@@ -64,6 +70,7 @@
     <script type="text/javascript">
       jQuery(function($) {
         const reports = {{ reports|safe }};
+        const chartType = '{{ form.chart.value }}';
 
         for(report of reports) {
           const title = `<div class="row"><div class="col"><h2>${report.name} - ${report.currency.name}</h2></div></div>`;

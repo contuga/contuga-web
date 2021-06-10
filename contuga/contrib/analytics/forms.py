@@ -7,7 +7,14 @@ from django.utils.translation import ugettext_lazy as _
 
 from contuga.contrib.categories import models as category_models
 
-from .constants import MONTHS, REPORT_UNIT_CHOICES
+from .constants import (
+    ACCOUNTS,
+    CHART_CHOICES,
+    GROUPING_CHOICES,
+    INCOME_EXPENDITURE_SIDE_BY_SIDE,
+    MONTHS,
+    REPORT_UNIT_CHOICES,
+)
 
 
 class ReportsFilterForm(forms.Form):
@@ -19,6 +26,15 @@ class ReportsFilterForm(forms.Form):
     )
     start_date = forms.DateField(label=_("Start date"), required=False)
     end_date = forms.DateField(label=_("End date"), required=False)
+    grouping = forms.ChoiceField(
+        label=_("Group by"), choices=GROUPING_CHOICES, initial=ACCOUNTS, required=False
+    )
+    chart = forms.ChoiceField(
+        label=_("Chart"),
+        choices=CHART_CHOICES,
+        initial=INCOME_EXPENDITURE_SIDE_BY_SIDE,
+        required=False,
+    )
     category = forms.ModelChoiceField(
         label=_("Category"), required=False, queryset=None
     )

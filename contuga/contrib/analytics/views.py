@@ -38,6 +38,8 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
             report_unit = form.cleaned_data.get("report_unit")
             start_date = form.cleaned_data.get("start_date")
             end_date = form.cleaned_data.get("end_date")
+            grouping = form.cleaned_data.get("grouping")
+            chart = form.cleaned_data.get("chart")
             category = form.cleaned_data.get("category")
 
             if category:
