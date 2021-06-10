@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from contuga.mixins import TestMixin
 
-from .. import utils
+from .. import constants, utils
 from . import utils as test_utils
 
 
@@ -591,7 +591,11 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
         self.create_expenditure(amount=Decimal("100.50")).amount
 
         with self.assertNumQueries(1):
-            result = utils.generate_reports(user=self.account.owner, category=category)
+            result = utils.generate_reports(
+                user=self.account.owner,
+                grouping=constants.CATEGORIES,
+                category=category,
+            )
 
         reports = test_utils.create_empty_reports(last_date=self.now, hasBalance=False)
         reports.append(
@@ -605,8 +609,330 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
 
         expected_result = [
             {
-                "pk": self.account.pk,
-                "name": self.account.name,
+                "pk": category.pk,
+                "name": category.name,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
+                "reports": reports,
+            }
+        ]
+
+        self.assertListEqual(result, expected_result)
+
+    def test_report_for_specific_category_with_different_currencies(self):
+        category = self.create_category()
+
+        currency = self.create_currency(name="Euro", code="EUR")
+        second_account = self.create_account(
+            name="First EUR account", currency=currency
+        )
+
+        first_account_first_income = self.create_income(
+            amount=Decimal("310.40"), category=category
+        ).amount
+        first_account_second_income = self.create_income(
+            amount=Decimal("23.59"), category=category
+        ).amount
+        first_account_first_expenditure = self.create_expenditure(
+            amount=Decimal("100.50"), category=category
+        ).amount
+
+        second_account_first_income = self.create_income(
+            amount=Decimal("53.33"), category=category, account=second_account
+        ).amount
+        second_account_second_income = self.create_income(
+            amount=Decimal("534.34"), category=category, account=second_account
+        ).amount
+        second_account_first_expenditure = self.create_expenditure(
+            amount=Decimal("100.50"), category=category, account=second_account
+        ).amount
+
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(
+                user=self.account.owner,
+                grouping=constants.CATEGORIES,
+                category=category,
+            )
+
+        first_currency_reports = test_utils.create_empty_reports(
+            last_date=self.now, hasBalance=False
+        )
+        first_currency_reports.append(
+            {
+                "month": self.now.month,
+                "year": self.now.year,
+                "income": first_account_first_income + first_account_second_income,
+                "expenditures": first_account_first_expenditure,
+            }
+        )
+
+        second_currency_reports = test_utils.create_empty_reports(
+            last_date=self.now, hasBalance=False
+        )
+        second_currency_reports.append(
+            {
+                "month": self.now.month,
+                "year": self.now.year,
+                "income": second_account_first_income + second_account_second_income,
+                "expenditures": second_account_first_expenditure,
+            }
+        )
+
+        expected_result = [
+            {
+                "pk": category.pk,
+                "name": category.name,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
+                "reports": first_currency_reports,
+            },
+            {
+                "pk": category.pk,
+                "name": category.name,
+                "currency": {
+                    "name": second_account.currency.name,
+                    "code": second_account.currency.code,
+                },
+                "reports": second_currency_reports,
+            },
+        ]
+
+        self.assertListEqual(result, expected_result)
+
+    def test_reports_for_multiple_months_and_specific_category(self):
+        category = self.create_category()
+
+        income_now = self.create_income(
+            amount=Decimal("310.15"), category=category
+        ).amount
+
+        expenditure_now = self.create_expenditure(
+            amount=Decimal("100.10"), category=category
+        ).amount
+
+        first_day_of_the_current_month = self.now.replace(day=1)
+        one_month_ago = first_day_of_the_current_month - relativedelta(months=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            if self.now.day == 1:
+                different_date_in_the_same_month = self.now.replace(day=10)
+            else:
+                different_date_in_the_same_month = first_day_of_the_current_month
+
+            mocked_now.return_value = different_date_in_the_same_month
+
+            income_first_day_of_current_month = self.create_income(
+                amount=Decimal("20.25"), category=category
+            ).amount
+
+            expenditure_first_day_of_current_month = self.create_expenditure(
+                amount=Decimal("32.50"), category=category
+            ).amount
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = one_month_ago
+            income_one_month_ago = self.create_income(
+                amount=Decimal("412.20"), category=category
+            ).amount
+
+            expenditure_one_month_ago = self.create_expenditure(
+                amount=Decimal("111.50"), category=category
+            ).amount
+
+        two_months_ago = one_month_ago - relativedelta(months=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = two_months_ago
+            income_two_months_ago = self.create_income(
+                amount=Decimal("65.43"), category=category
+            ).amount
+
+            expenditure_two_months_ago = self.create_expenditure(
+                amount=Decimal("11.32"), category=category
+            ).amount
+
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(
+                user=self.account.owner,
+                grouping=constants.CATEGORIES,
+                category=category,
+            )
+
+        reports = []
+        for count in reversed(range(3, 6)):
+            date = self.now - relativedelta(months=count)
+            reports.append(
+                {"month": date.month, "year": date.year, "income": 0, "expenditures": 0}
+            )
+
+        income_current_month = income_now + income_first_day_of_current_month
+        expenditure_current_month = (
+            expenditure_now + expenditure_first_day_of_current_month
+        )
+        report_two_months_ago = {
+            "month": two_months_ago.month,
+            "year": two_months_ago.year,
+            "income": income_two_months_ago,
+            "expenditures": expenditure_two_months_ago,
+        }
+
+        report_one_month_ago = {
+            "month": one_month_ago.month,
+            "year": one_month_ago.year,
+            "income": income_one_month_ago,
+            "expenditures": expenditure_one_month_ago,
+        }
+
+        report_current_month = {
+            "month": self.now.month,
+            "year": self.now.year,
+            "income": income_current_month,
+            "expenditures": expenditure_current_month,
+        }
+
+        reports.extend(
+            [report_two_months_ago, report_one_month_ago, report_current_month]
+        )
+
+        expected_result = [
+            {
+                "pk": category.pk,
+                "name": category.name,
+                "currency": {
+                    "name": self.account.currency.name,
+                    "code": self.account.currency.code,
+                },
+                "reports": reports,
+            }
+        ]
+
+        self.assertListEqual(result, expected_result)
+
+    def test_reports_for_multiple_months_and_specific_category_with_data_six_months_ago(
+        self
+    ):
+        category = self.create_category()
+
+        income_now = self.create_income(
+            amount=Decimal("310.15"), category=category
+        ).amount
+
+        expenditure_now = self.create_expenditure(
+            amount=Decimal("100.10"), category=category
+        ).amount
+
+        # TODO: Remove hour
+        first_day_of_the_current_month = self.now.replace(day=1, hour=10)
+        one_month_ago = first_day_of_the_current_month - relativedelta(months=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            if self.now.day == 1:
+                different_date_in_the_same_month = self.now.replace(day=10)
+            else:
+                different_date_in_the_same_month = first_day_of_the_current_month
+
+            mocked_now.return_value = different_date_in_the_same_month
+
+            income_first_day_of_current_month = self.create_income(
+                amount=Decimal("20.25"), category=category
+            ).amount
+
+            expenditure_first_day_of_current_month = self.create_expenditure(
+                amount=Decimal("32.50"), category=category
+            ).amount
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = one_month_ago
+            income_one_month_ago = self.create_income(
+                amount=Decimal("412.20"), category=category
+            ).amount
+
+            expenditure_one_month_ago = self.create_expenditure(
+                amount=Decimal("111.50"), category=category
+            ).amount
+
+        two_months_ago = one_month_ago - relativedelta(months=1)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = two_months_ago
+            income_two_months_ago = self.create_income(
+                amount=Decimal("65.43"), category=category
+            ).amount
+
+            expenditure_two_months_ago = self.create_expenditure(
+                amount=Decimal("11.32"), category=category
+            ).amount
+
+        five_months_ago = one_month_ago - relativedelta(months=4)
+
+        with mock.patch("django.utils.timezone.now") as mocked_now:
+            mocked_now.return_value = five_months_ago
+            income_five_months_ago = self.create_income(
+                amount=Decimal("10.30"), category=category
+            ).amount
+
+            expenditure_five_months_ago = self.create_expenditure(
+                amount=Decimal("17.67"), category=category
+            ).amount
+
+        with self.assertNumQueries(1):
+            result = utils.generate_reports(
+                user=self.account.owner,
+                grouping=constants.CATEGORIES,
+                category=category,
+            )
+
+        report_five_months_ago = {
+            "month": five_months_ago.month,
+            "year": five_months_ago.year,
+            "income": income_five_months_ago,
+            "expenditures": expenditure_five_months_ago,
+        }
+
+        reports = [report_five_months_ago]
+        for count in reversed(range(3, 5)):
+            date = self.now - relativedelta(months=count)
+            reports.append(
+                {"month": date.month, "year": date.year, "income": 0, "expenditures": 0}
+            )
+
+        income_current_month = income_now + income_first_day_of_current_month
+        expenditure_current_month = (
+            expenditure_now + expenditure_first_day_of_current_month
+        )
+        report_two_months_ago = {
+            "month": two_months_ago.month,
+            "year": two_months_ago.year,
+            "income": income_two_months_ago,
+            "expenditures": expenditure_two_months_ago,
+        }
+
+        report_one_month_ago = {
+            "month": one_month_ago.month,
+            "year": one_month_ago.year,
+            "income": income_one_month_ago,
+            "expenditures": expenditure_one_month_ago,
+        }
+
+        report_current_month = {
+            "month": self.now.month,
+            "year": self.now.year,
+            "income": income_current_month,
+            "expenditures": expenditure_current_month,
+        }
+
+        reports.extend(
+            [report_two_months_ago, report_one_month_ago, report_current_month]
+        )
+
+        expected_result = [
+            {
+                "pk": category.pk,
+                "name": category.name,
                 "currency": {
                     "name": self.account.currency.name,
                     "code": self.account.currency.code,

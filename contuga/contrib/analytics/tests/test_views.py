@@ -16,6 +16,7 @@ from .. import constants, utils
 
 class AnalyticsTestCase(TestCase, TestMixin):
     def setUp(self):
+        self.maxDiff = None
         self.user = self.create_user(email="john.doe@example.com", password="password")
         self.currency = self.create_currency()
         self.account = self.create_account()
@@ -353,7 +354,7 @@ class AnalyticsTestCase(TestCase, TestMixin):
 
         # Assert reports are correct
         expected_reports = utils.generate_reports(
-            user=self.account.owner, category=category
+            user=self.account.owner, grouping=constants.CATEGORIES, category=category
         )
         expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
 
@@ -552,7 +553,10 @@ class AnalyticsTestCase(TestCase, TestMixin):
 
         # Assert reports are correct
         expected_reports = utils.generate_reports(
-            user=self.account.owner, category=category, report_unit=constants.DAYS
+            user=self.account.owner,
+            grouping=constants.CATEGORIES,
+            report_unit=constants.DAYS,
+            category=category,
         )
         expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
 
