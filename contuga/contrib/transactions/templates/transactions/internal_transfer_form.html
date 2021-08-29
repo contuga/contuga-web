@@ -41,7 +41,13 @@
       var $to_account = $("#id_to_account");
       var $rateContainer = $("#rateContainer");
 
+      toggleRateContainer();
+
       $(".account-input").on("change", function() {
+        toggleRateContainer()
+      });
+
+      function toggleRateContainer() {
         if ($from_account.val() && $to_account.val()) {
           if (accounts[$from_account.val()] != accounts[$to_account.val()]) {
             $rateContainer.show();
@@ -49,7 +55,7 @@
             $rateContainer.hide();
           }
         }
-      });
+      }
     });
   </script>
 {% endblock %}
