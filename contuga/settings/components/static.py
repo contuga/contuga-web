@@ -53,6 +53,6 @@ PIPELINE = {
     },
     "COMPILERS": ("pipeline.compilers.sass.SASSCompiler",),
     "SASS_BINARY": "/usr/bin/env sassc",
-    # Yuglify breaks the background image of `.navbar-toggler-icon`
+    "JS_COMPRESSOR": "pipeline.compressors.uglifyjs.UglifyJSCompressor",
     "CSS_COMPRESSOR": "pipeline.compressors.cssmin.CSSMinCompressor",
 }
