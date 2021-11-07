@@ -1,6 +1,6 @@
 {% load i18n widget_tweaks %}
 
-<div class="collapse" id="filterFormContainer" data-parent="#actionGroup">
+<div class="collapse" id="filterFormContainer" data-bs-parent="#actionGroup">
   <form id="filterForm" method="GET">
     <div class="row">
       <div class="col-12 col-md-2">
@@ -21,7 +21,7 @@
       <div class="col-12 col-md-3">
         {% include 'contuga/forms/field.html' with field=filterset.form.updated_at|attr:'autocomplete:off' %}
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6"> 
         {% include 'contuga/forms/field.html' with field=filterset.form.description %}
       </div>
       <div class="col-12 col-md-3">
@@ -36,7 +36,7 @@
         {% include 'contuga/forms/field.html' with field=filterset.form.max_amount %}
       </div>
 
-      <div class="col-12 col-md-2 d-flex align-items-end mb-3">
+      <div class="col-12 col-md-2 d-flex align-items-end">
         <button type="submit" class="btn btn-primary">
           {% trans "Apply" %}
         </button>

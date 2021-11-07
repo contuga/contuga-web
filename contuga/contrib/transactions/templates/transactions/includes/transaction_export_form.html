@@ -1,13 +1,13 @@
 {% load i18n %}
 
-<div class="collapse" id="exportFormContainer" data-parent="#actionGroup">
+<div class="collapse" id="exportFormContainer" data-bs-parent="#actionGroup">
   <form method="POST">
     {% csrf_token %}
     <div class="row">
       <div class="col-12 col-md-2">
         {% include 'contuga/forms/field.html' with field=form.file_format %}
       </div>
-      <div class="col-12 col-md-2 d-flex align-items-end mb-3">
+      <div class="col-12 col-md-2 d-flex align-items-end">
         <button type="submit" class="btn btn-primary">
           {% trans "Export" %}
         </button>

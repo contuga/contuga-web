@@ -12,6 +12,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  font-family: $font-family-sans-serif;
 }
 
 header,
@@ -71,6 +72,10 @@ section {
   }
 }
 
+a {
+  text-decoration: none;
+}
+
 .navbar-toggler {
   &:focus,
   &:active {
@@ -115,6 +120,14 @@ section {
       font-size: 1.5rem;
     }
   }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  margin-bottom: 0.5rem;
 }
 
 .pagination {
