@@ -12,9 +12,10 @@
       {% endif %}
     ">
 
-
       {% if field.field.widget.input_type == "checkbox" %}
         {% include "contuga/forms/includes/checkbox.html" %}
+      {% elif field.field.widget.input_type == "select" %}
+        {% include "contuga/forms/includes/select.html" %}
       {% else %}
         {% include "contuga/forms/includes/input.html" %}
       {% endif %}
