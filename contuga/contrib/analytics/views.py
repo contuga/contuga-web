@@ -55,7 +55,7 @@ class AnalyticsView(mixins.LoginRequiredMixin, TemplateView):
             reports = utils.generate_reports(user=user)
 
         if reports:
-            context["reports"] = json.dumps(reports, cls=DjangoJSONEncoder)
+            context["reports"] = reports
 
         context["form"] = form
         context["page"] = Page.objects.filter(

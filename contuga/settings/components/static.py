@@ -30,7 +30,7 @@ PIPELINE = {
                 "scss/_variables.scss",
                 "bootstrap/scss/bootstrap.scss",
                 "font-awesome/scss/font-awesome.scss",
-                "daterangepicker/daterangepicker.css",
+                "flatpickr/dist/flatpickr.css",
                 "@yaireo/tagify/src/tagify.scss",
                 "scss/main.scss",
             ),
@@ -40,11 +40,11 @@ PIPELINE = {
     "JAVASCRIPT": {
         "main": {
             "source_filenames": (
-                "jquery/dist/jquery.js",
+                "alpinejs/dist/cdn.js",
                 "bootstrap/dist/js/bootstrap.bundle.js",
                 "chart.js/dist/Chart.bundle.js",
-                "daterangepicker/moment.min.js",
-                "daterangepicker/daterangepicker.js",
+                "flatpickr/dist/flatpickr.js",
+                "flatpickr/dist/l10n/bg.js",
                 "@yaireo/tagify/dist/tagify.min.js",
                 "js/main.js",
             ),

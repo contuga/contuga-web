@@ -35,102 +35,17 @@
 {% block js %}
   {{ block.super }}
   <script type="text/javascript">
-    jQuery(function($) {
-      const today = moment();
-      const dateRangePickerConfig = {
-        autoUpdateInput: false,
-        showDropdowns: true,
-        ranges: {
-          '{% trans "Today" %}': [today, today],
-          '{% trans "Yesterday" %}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          '{% trans "Last 7 Days" %}': [moment().subtract(6, 'days'), today],
-          '{% trans "Last 30 Days" %}': [moment().subtract(29, 'days'), today],
-          '{% trans "This Month" %}': [moment().startOf('month'), moment().endOf('month')],
-          '{% trans "Last Month" %}': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        linkedCalendars: false,
-        alwaysShowCalendars: true,
-        maxDate: today,
-        opens: "left",
-        locale: {
-          format: 'L',
-          applyLabel: '{% trans "Apply" %}',
-          cancelLabel: '{% trans "Clear" %}',
-          fromLabel: '{% trans "From" %}',
-          toLabel: '{% trans "To" %}',
-          customRangeLabel: '{% trans "Custom" %}',
-          daysOfWeek: [
-            '{% trans "Su" context "Day of the week" %}',
-            '{% trans "Mo" context "Day of the week" %}',
-            '{% trans "Tu" context "Day of the week" %}',
-            '{% trans "We" context "Day of the week" %}',
-            '{% trans "Th" context "Day of the week" %}',
-            '{% trans "Fr" context "Day of the week" %}',
-            '{% trans "Sa" context "Day of the week" %}'
-          ],
-          monthNames: [
-            '{% trans "January" %}',
-            '{% trans "February" %}',
-            '{% trans "March" %}',
-            '{% trans "April" %}',
-            '{% trans "May" %}',
-            '{% trans "June" %}',
-            '{% trans "July" %}',
-            '{% trans "August" %}',
-            '{% trans "September" %}',
-            '{% trans "October" %}',
-            '{% trans "November" %}',
-            '{% trans "December" %}'
-          ],
-          firstDay: 1
-        }
-      };
+  (function() {
+      Flatpickr.l10ns.greek.range separator = " - "
+      const flatpickrConfig = {
+        mode: "range",
+        locale: "bg",
+        dateFormat: "m/d/Y",
+      }
 
-      $('#id_created_at, #id_updated_at').on('apply.daterangepicker', function(event, picker) {
-        const startDate = picker.startDate.format(dateRangePickerConfig.locale.format);
-        const endDate = picker.endDate.format(dateRangePickerConfig.locale.format);
-        $(this).val(`${startDate} - ${endDate}`);
-      });
+      flatpickr("#id_created_at", flatpickrConfig);
+      flatpickr("#id_updated_at", flatpickrConfig);
 
-      $('#id_created_at, #id_updated_at').on('cancel.daterangepicker', function(event, picker) {
-        $(this).val('');
-      });
-
-      $('#id_created_at').daterangepicker(dateRangePickerConfig);
-      $('#id_updated_at').daterangepicker(dateRangePickerConfig);
-
-      $("#filterForm").on('submit', function(event){
-        $(this).find(":input").filter(function() {
-          return !this.value;
-        }).attr("disabled", "disabled");
-
-        return true;
-      });
-    });
-
-    jQuery(function($) {
-      const category_groups = {{ category_choices|safe }};
-      const $categoryField = $("#id_category");
-
-      $("#id_type").on("change", function() {
-        $categoryField.empty()
-        $categoryField.append(
-          $("<option></option>")
-            .text("{{ form.fields.category.empty_label }}")
-            .attr("value", "")
-            .attr("selected", "")
-        )
-
-        const categories = category_groups[$(this).val()];
-        for (category of categories) {
-          $categoryField.append(
-            $("<option></option>")
-              .text(category.name)
-              .attr("value", category.id)
-              .attr("selected", category.selected)
-          );
-        }
-      });
 
       const createFormTagsInput = document.querySelector('#createForm [name=tags]')
       const createFormTags = new Tagify(createFormTagsInput, { whitelist:[] })
@@ -166,6 +81,7 @@
             .catch(error => null);
         }
       }
-    });
+    })();
+
   </script>
 {% endblock %}
