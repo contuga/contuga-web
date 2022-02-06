@@ -3,7 +3,6 @@ RUN apt update && apt install -y python3 python3-pip sassc cssmin gettext
 RUN pip3 install uwsgi pipenv gunicorn
 RUN npm install -g uglify-js
 
-RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
 COPY Pipfile .

@@ -1,0 +1,290 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: contuga
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: contuga-secret
+  namespace: contuga
+type: Opaque
+data:
+  # Change before deploying
+  database_password: Y29udHVnYQ==
+  database_user: Y29udHVnYQ==
+  database_name: Y29udHVnYQ==
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: contuga-database-pvc
+  namespace: contuga
+  labels:
+    app: contuga
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: contuga-media-pvc
+  namespace: contuga
+  labels:
+    app: contuga
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  namespace: contuga
+spec:
+  selector:
+    matchLabels:
+      app: contuga
+      tier: app
+      track: stable
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: contuga
+        tier: app
+        track: stable
+    spec:
+      volumes:
+      - name: static-files
+        emptyDir: {}
+      - name: media-files
+        persistentVolumeClaim:
+          claimName: contuga-media-pvc
+      containers:
+        - name: contuga-web
+          image: localhost:32000/contuga-web:latest
+          imagePullPolicy: Always
+          env:
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: contuga-secret
+                  key: database_password
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: contuga-secret
+                  key: database_user
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: contuga-secret
+                  key: database_name
+            - name: DATABASE_HOST
+              value: "database-service"
+          ports:
+            - name: http
+              containerPort: 8000
+          volumeMounts:
+            - name: static-files
+              mountPath: /usr/src/app/static
+            - name: media-files
+              mountPath: /usr/src/app/media
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+        - name: contuga-static
+          image: localhost:32000/contuga-static
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: static-files
+              mountPath: /usr/share/nginx/html/static
+            - name: media-files
+              mountPath: /usr/share/nginx/html/media
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-deployment
+  namespace: contuga
+spec:
+  selector:
+    matchLabels:
+      app: contuga
+      tier: database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: contuga
+        tier: database
+    spec:
+      volumes:
+        - name: database-persistent-storage
+          persistentVolumeClaim:
+            claimName: contuga-database-pvc
+      containers:
+        - name: database
+          image: postgres:14-alpine
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: contuga-secret
+                  key: database_name
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: contuga-secret
+                  key: database_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: contuga-secret
+                  key: database_password
+          ports:
+            - containerPort: 5432
+              name: database
+          volumeMounts:
+            - name: database-persistent-storage
+              mountPath: /var/lib/postgresql/data/
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: contuga
+  labels:
+    app: contuga
+spec:
+  selector:
+    app: contuga
+    tier: app
+  ports:
+    - protocol: TCP
+      name: static
+      port: 80
+      targetPort: 80
+    - protocol: TCP
+      name: web
+      port: 8000
+      targetPort: 8000
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+  namespace: contuga
+  labels:
+    app: contuga
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: contuga
+    tier: database
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: contuga-staging-issuer
+  namespace: contuga
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: gatsinski@gmail.com
+    privateKeySecretRef:
+      name: contuga-staging-issuer-private-key
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: contuga-production-issuer
+  namespace: contuga
+spec:
+  acme:
+    email: gatsinski@gmail.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: contuga-production-issuer-private-key
+    solvers:
+      - http01:
+          ingress:
+            class: public
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: contuga-certificate
+  namespace: contuga
+spec:
+  secretName: contuga-certificate-secret
+  issuerRef:
+    name: contuga-staging-issuer
+  dnsNames:
+    - contuga.eu
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: contuga-ingress
+  namespace: contuga
+  annotations:
+    kubernetes.io/ingress.class: public
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  defaultBackend:
+    service:
+      name: app-service
+      port:
+        number: 80
+  rules:
+    - host: contuga.local
+      http:
+        paths:
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: app-service
+                port:
+                  number: 80

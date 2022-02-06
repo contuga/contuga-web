@@ -1,8 +1,5 @@
 #!/bin/sh
 
-echo "Removing existing static files"
-rm -rf static/
-
 echo "Collecting static files"
 python3 manage.py collectstatic --noinput
 

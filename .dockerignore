@@ -4,7 +4,6 @@ db.sqlite3
 *.pyc
 *.mo
 media/
-/static/
 node_modules/
 .coverage
 htmlcov
