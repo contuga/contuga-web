@@ -2,7 +2,7 @@
 {% load i18n %}
 
 <div class="collapse" id="createFormContainer" data-bs-parent="#actionGroup">
-  <form id="createForm" method="POST" action="{% url 'transactions:create' %}">
+  <form id="createForm" method="POST" action="{% url 'transactions:create' %}" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="row">
@@ -27,6 +27,9 @@
       </div>
       <div class="col-12 col-md-6">
         {% include 'contuga/forms/field.html' with field=form.description %}
+      </div>
+      <div class="col-12 col-md-6">
+        {% include 'contuga/forms/field.html' with field=form.receipt %}
       </div>
     </div>
     <button type="submit" class="btn btn-primary mt-2">

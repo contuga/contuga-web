@@ -87,5 +87,11 @@
         <td>{{ transaction.description }}</td>
       </tr>
     {% endif %}
+    {% if transaction.receipt %}
+    <tr>
+      <th scope="row">{% trans "Receipt" %}</th>
+      <td><a href="{{ transaction.receipt.url }}">{{ transaction.receipt.name }} ({{ transaction.receipt.size|filesizeformat }})</a></td>
+    </tr>
+  {% endif %}
   </tbody>
 </table>

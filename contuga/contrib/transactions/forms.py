@@ -18,7 +18,7 @@ class TransactionForm(forms.ModelForm):
 
     class Meta:
         model = models.Transaction
-        fields = ("type", "amount", "account", "category", "description")
+        fields = ("type", "amount", "account", "category", "description", "receipt")
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -58,6 +58,7 @@ class Transaction(TimestampModel):
         null=True,
     )
     description = models.CharField(_("Description"), max_length=1000, blank=True)
+    receipt = models.FileField(upload_to='receipts/', blank=True, null=True)
 
     objects = managers.TransactionManager()
 

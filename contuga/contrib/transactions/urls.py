@@ -18,4 +18,5 @@ urlpatterns = [
     path("new/", views.TransactionCreateView.as_view(), name="create"),
     path("<uuid:pk>/update/", views.TransactionUpdateView.as_view(), name="update"),
     path("<uuid:pk>/delete/", views.TransactionDeleteView.as_view(), name="delete"),
+    path('receipts/<path>', views.serve_protected_files, name="protected_files")
 ]

@@ -4,7 +4,7 @@ from django.contrib.auth import mixins
 from django.db import transaction
 from django.db.models import Count, F, Q, Sum
 from django.db.models.functions import Coalesce
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -18,6 +18,22 @@ from contuga.mixins import OnlyAuthoredByCurrentUserMixin, SettingsMixin
 
 from . import constants, filters, forms, models, resources, serializers
 from .mixins import BaseTransactionFormViewMixin, GroupedCategoriesMixin
+
+
+def serve_protected_files(request, path):
+    response = HttpResponse()
+
+
+    transaction = models.Transaction.objects.filter(receipt=f"receipts/{path}").first()
+
+    if not transaction or transaction.author != request.user:
+        return HttpResponseNotFound()
+
+    response["Content-Disposition"] = "attachment; filename={0}".format(path)
+    response["X-Accel-Redirect"] = "/protected/receipts/{0}".format(path)
+
+    return response
+
 
 
 class TransactionCreateView(
