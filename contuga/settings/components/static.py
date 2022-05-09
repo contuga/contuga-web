@@ -1,7 +1,7 @@
 import os
 
 PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = os.path.dirname(PROJECT_PATH)
+BASE_DIR = os.path.normpath(os.path.dirname(PROJECT_PATH))
 
 # Media files (file uploads)
 MEDIA_URL = "/media/"
@@ -11,7 +11,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "node_modules"),)
+STATICFILES_DIRS = (
+    ("bootstrap_scss", os.path.join(BASE_DIR, "node_modules/bootstrap/scss/")),
+    ("bootstrap_dist", os.path.join(BASE_DIR, "node_modules/bootstrap/dist/")),
+    ("font_awesome_scss", os.path.join(BASE_DIR, "node_modules/font-awesome/scss/")),
+    ("chartjs_dist", os.path.join(BASE_DIR, "node_modules/chart.js/dist/")),
+    ("daterangepicker", os.path.join(BASE_DIR, "node_modules/daterangepicker")),
+    ("tagify_src", os.path.join(BASE_DIR, "node_modules/@yaireo/tagify/src")),
+    ("tagify_dist", os.path.join(BASE_DIR, "node_modules/@yaireo/tagify/dist")),
+)
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -28,10 +36,10 @@ PIPELINE = {
         "main": {
             "source_filenames": (
                 "scss/_variables.scss",
-                "bootstrap/scss/bootstrap.scss",
-                "font-awesome/scss/font-awesome.scss",
+                "bootstrap_scss/bootstrap.scss",
+                "font_awesome_scss/font-awesome.scss",
                 "daterangepicker/daterangepicker.css",
-                "@yaireo/tagify/src/tagify.scss",
+                "tagify_src/tagify.scss",
                 "scss/main.scss",
             ),
             "output_filename": "css/main.css",
@@ -41,11 +49,11 @@ PIPELINE = {
         "main": {
             "source_filenames": (
                 "jquery/dist/jquery.js",
-                "bootstrap/dist/js/bootstrap.bundle.js",
-                "chart.js/dist/Chart.bundle.js",
+                "bootstrap_dist/bootstrap.bundle.js",
+                "chartjs_dist/Chart.bundle.js",
                 "daterangepicker/moment.min.js",
                 "daterangepicker/daterangepicker.js",
-                "@yaireo/tagify/dist/tagify.min.js",
+                "tagify_dist/tagify.min.js",
                 "js/main.js",
             ),
             "output_filename": "js/main.js",
