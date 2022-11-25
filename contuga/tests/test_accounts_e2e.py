@@ -1,8 +1,9 @@
 from decimal import Decimal
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.utils import formats
 from django.utils.translation import ugettext as _
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -11,7 +12,9 @@ from contuga.contrib.transactions import constants as transaction_constants
 from contuga.mixins import EndToEndTestMixin, TestMixin
 
 
-class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
+# StaticLiveServerTestCase doesn't work as expected
+# See https://github.com/jazzband/django-pipeline/issues/593
+class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -59,6 +62,7 @@ class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
     def test_accounts(self):
         self.selenium.get(self.live_server_url)
         self.login()
+
         self.navigate_to_accounts_list()
 
         accounts = self.user.accounts.order_by("name")
@@ -70,7 +74,13 @@ class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
         current_url = self.selenium.current_url
 
         link = self.selenium.find_element_by_link_text("View all accounts")
-        link.click()
+
+        # Clicking the link used to work with the plain HTML version.
+        # Now, when the styles are loaded, the link is not visible on load.
+        # Using the firefox driver, the link could not be scrolled into view
+        # and cannot be manually scrolled due to MoveTargetOutOfBoundsException
+        # The RETURN key appears to be workking fine so far.
+        link.send_keys(Keys.RETURN)
 
         WebDriverWait(self.selenium, 5).until(
             expected_conditions.url_changes(current_url)

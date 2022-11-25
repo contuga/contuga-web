@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.utils import formats
 from django.utils.translation import ugettext_lazy as _
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -11,7 +11,9 @@ from contuga.contrib.transactions import constants as transaction_constants
 from contuga.mixins import EndToEndTestMixin, TestMixin
 
 
-class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
+# StaticLiveServerTestCase doesn't work as expected
+# See https://github.com/jazzband/django-pipeline/issues/593
+class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
