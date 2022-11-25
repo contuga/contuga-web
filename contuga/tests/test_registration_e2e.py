@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.core import signing
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -11,7 +11,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from contuga.mixins import EndToEndTestMixin, TestMixin
 
 
-class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
+# StaticLiveServerTestCase doesn't work as expected
+# See https://github.com/jazzband/django-pipeline/issues/593
+class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
