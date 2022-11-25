@@ -1,10 +1,12 @@
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.staticfiles.testing import LiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 from contuga.mixins import EndToEndTestMixin, TestMixin
 
 
-class SeleniumTestCase(StaticLiveServerTestCase, TestMixin, EndToEndTestMixin):
+# StaticLiveServerTestCase doesn't work as expected
+# See https://github.com/jazzband/django-pipeline/issues/593
+class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

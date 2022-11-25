@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.8-browsers
+      - image: circleci/python:3.8-node-browsers
         environment:
           PIPENV_VENV_IN_PROJECT: true
           DJANGO_ENV: test
@@ -15,11 +15,11 @@ jobs:
 
       - restore_cache:
           keys:
-            - project-dependencies-{{ checksum "Pipfile.lock" }}
-            - project-dependencies-
+            - python-dependencies-{{ checksum "Pipfile.lock" }}
+            - python-dependencies-
 
       - run:
-          name: install dependencies
+          name: install Python dependencies
           command: |
             sudo pip install pipenv
             pipenv sync --dev
@@ -27,11 +27,31 @@ jobs:
       - save_cache:
           paths:
             - ~/repo/.venv
-          key: project-dependencies-{{ checksum "Pipfile.lock" }}
+          key: python-dependencies-{{ checksum "Pipfile.lock" }}
+
+      - restore_cache:
+          keys:
+            - node-dependencies-{{ checksum "package-lock.json" }}
+            - node-dependencies-
+
+      - run:
+          name: install Node dependencies
+          command: |
+            npm set cache .npm
+            npm ci
+
+      - save_cache:
+          paths:
+            - .npm
+          key: node-dependencies-{{ checksum "package-lock.json" }}
 
       - run:
           name: Run tests
           command: |
+            sudo apt install sassc -y
+            sudo npm i -g uglify-js
+            sudo apt install cssmin -y
+            pipenv run python manage.py collectstatic --noinput
             pipenv run coverage run manage.py test
             pipenv run coverage report
             pipenv run coverage html
