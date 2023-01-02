@@ -8,9 +8,10 @@ Simple web-based expense manager application.
 
 The following requirements need to be satisfied to setup the project.
 
-1. [**Python 3.8**](https://www.python.org/) - While the project may work with any Python version above 3.5 it is actively developed using 3.8 and it is the officially supported version. Use any other Python version at your own risk.
-1. [**Pipenv**](https://github.com/pypa/pipenv) - Used for installing backend dependencies.
-1. [**NPM**](https://www.npmjs.com/) - Used for installing frontend dependencies.
+1. [**Python**](https://www.python.org/) - While the project may work with any Python version above 3.5 it is actively developed using 3.10 and it is the officially supported version. Use any other Python version at your own risk.
+1. [**Pipenv**](https://github.com/pypa/pipenv) - Used for installing backend dependencies. The latest version is the one usually used for development but the tool is stable and most versions should work flawlessly.
+1. [**NodeJS**](https://nodejs.org/) - The project is currently using the latest LTS version.
+1. [**NPM**](https://www.npmjs.com/) - Used for installing frontend dependencies. Use the one that usually comes with the latest LTS version of Node but a newer one should also work.
 1. [**SassC**](https://github.com/sass/sassc) - The project uses SassC libsass driver for compiling Sass code to plain CSS. Check the official repository to find out how to get SassC installed on your system. For Debian-based Linux distributions, you can just install it - `sudo apt install sassc`.
 
 ### Installation steps
