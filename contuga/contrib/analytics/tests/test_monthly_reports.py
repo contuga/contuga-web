@@ -813,7 +813,7 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
         self.assertListEqual(result, expected_result)
 
     def test_reports_for_multiple_months_and_specific_category_with_data_six_months_ago(
-        self
+        self,
     ):
         category = self.create_category()
 

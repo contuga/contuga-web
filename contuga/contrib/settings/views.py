@@ -38,20 +38,27 @@ class SettingsUpdateView(
         form = super().get_form()
 
         default_incomes_category_field = form.fields["default_incomes_category"]
-        default_incomes_category_field.queryset = default_incomes_category_field.queryset.filter(
-            author=self.request.user,
-            transaction_type__in=[category_constants.ALL, category_constants.INCOME],
+        default_incomes_category_field.queryset = (
+            default_incomes_category_field.queryset.filter(
+                author=self.request.user,
+                transaction_type__in=[
+                    category_constants.ALL,
+                    category_constants.INCOME,
+                ],
+            )
         )
 
         default_expenditures_category_field = form.fields[
             "default_expenditures_category"
         ]
-        default_expenditures_category_field.queryset = default_expenditures_category_field.queryset.filter(
-            author=self.request.user,
-            transaction_type__in=[
-                category_constants.ALL,
-                category_constants.EXPENDITURE,
-            ],
+        default_expenditures_category_field.queryset = (
+            default_expenditures_category_field.queryset.filter(
+                author=self.request.user,
+                transaction_type__in=[
+                    category_constants.ALL,
+                    category_constants.EXPENDITURE,
+                ],
+            )
         )
 
         default_account_field = form.fields["default_account"]
