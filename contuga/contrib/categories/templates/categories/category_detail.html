@@ -42,6 +42,7 @@
                   <tr>
                     <th scope="col">{% trans "Amount" %}</th>
                     <th scope="col">{% trans "Account" %}</th>
+                    <th scope="col">{% trans "Tags" %}</th>
                     <th scope="col">{% trans "Created at" %}</th>
                     {% if filterset.form.updated_at.value %}
                       <th scope="col">{% trans "Updated at" %}</th>
@@ -70,6 +71,15 @@
                       <a href="{{ transaction.account.get_absolute_url }}">
                         {{ transaction.account.name }}
                       </a>
+                    </td>
+                    <td>
+                      {% for tag in transaction.tags.all %}
+                        <span class="badge bg-info mb-1">
+                          <a href="{{ tag.get_absolute_url }}" class="text-light">
+                            {{ tag.name }}
+                          </a>
+                        </span>
+                      {% endfor %}
                     </td>
                     <td>
                       {{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}

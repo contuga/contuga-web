@@ -43,6 +43,7 @@ class CategoryDetailView(
                 "transactions__account",
                 "transactions__account__currency",
             )
+            .prefetch_related("transactions__tags")
         )
 
 
