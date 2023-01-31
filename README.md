@@ -31,6 +31,8 @@ If you need admin access you can create a user by executing `python manage.py cr
 
 The project can also be started from a Docker container either by running it manually or using the existing docker-compose manifest. The latter is preconfigured to use PostgreSQL database and nGINX as HTTP server. If you choose not to use docker-compose, you will have to configure these services manually.
 
+If you want to use the debug toolbar, you should add the gateway IP of the container to `INTERNAL_IPS`. To find the IP, use `docker inspect <identifier>`.
+
 #### Using docker
 
 Use the following steps to prepare and run the dev image:
