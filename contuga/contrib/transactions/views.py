@@ -72,6 +72,7 @@ class TransactionListView(
             .select_related(
                 "income_counterpart", "category", "account", "account__currency"
             )
+            .prefetch_related("tags")
         )
 
     def get_paginate_by(self, queryset):
