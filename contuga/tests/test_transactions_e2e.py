@@ -81,6 +81,7 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
                 self.verify_amount(columns, transaction)
                 self.verify_account(columns, transaction)
                 self.verify_category(columns, transaction)
+                self.verify_tags(columns, transaction)
                 self.verify_created_at(columns, transaction)
                 self.verify_description(columns, transaction)
 
@@ -134,8 +135,15 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
 
         self.assertEqual(category, expected_category)
 
+    def verify_tags(self, columns, transaction):
+        transaction_tags = transaction.tags.all()
+
+        for index, element in enumerate(columns[3].find_elements_by_tag_name("span")):
+            with self.subTest(tag_name=element.text):
+                self.assertEqual(element.text, transaction_tags[index].name)
+
     def verify_created_at(self, columns, transaction):
-        created_at = columns[3].text
+        created_at = columns[4].text
         expected_created_at = formats.date_format(
             transaction.created_at.astimezone(), "SHORT_DATETIME_FORMAT"
         )
@@ -143,7 +151,7 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         self.assertEqual(created_at, expected_created_at)
 
     def verify_description(self, columns, transaction):
-        description = columns[4].text
+        description = columns[5].text
         expected_description = transaction.description
 
         self.assertEqual(description, expected_description)
