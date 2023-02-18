@@ -9,7 +9,8 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
 from contuga.contrib.transactions import constants as transaction_constants
-from contuga.mixins import EndToEndTestMixin, TestMixin
+from contuga.mixins import TestMixin
+from contuga.tests.mixins.e2e_test_mixin import EndToEndTestMixin
 
 
 # StaticLiveServerTestCase doesn't work as expected
