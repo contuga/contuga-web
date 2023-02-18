@@ -1,19 +1,37 @@
 from decimal import Decimal
 
 from django.contrib.staticfiles.testing import LiveServerTestCase
-from django.utils import formats
-from django.utils.translation import ugettext_lazy as _
 from selenium.webdriver.firefox.webdriver import WebDriver
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support.ui import Select
 
+from contuga.contrib.categories import constants as category_constants
+from contuga.contrib.categories.models import Category
+from contuga.contrib.tags.models import Tag
 from contuga.contrib.transactions import constants as transaction_constants
-from contuga.mixins import EndToEndTestMixin, TestMixin
+from contuga.contrib.transactions.models import Transaction
+from contuga.mixins import TestMixin
+from contuga.tests.mixins.e2e_test_mixin import EndToEndTestMixin
+from contuga.tests.mixins.transaction_delete_page_mixin import \
+    TransactionDeletePageMixin
+from contuga.tests.mixins.transaction_detail_page_mixin import \
+    TransactionDetailPageMixin
+from contuga.tests.mixins.transaction_form_page_mixin import \
+    TransactionFormPageMixin
+from contuga.tests.mixins.transaction_list_page_mixin import \
+    TransactionListPageMixin
 
 
 # StaticLiveServerTestCase doesn't work as expected
 # See https://github.com/jazzband/django-pipeline/issues/593
-class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
+class SeleniumTestCase(
+    LiveServerTestCase,
+    TestMixin,
+    EndToEndTestMixin,
+    TransactionFormPageMixin,
+    TransactionListPageMixin,
+    TransactionDetailPageMixin,
+    TransactionDeletePageMixin,
+):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -36,14 +54,14 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         self.tags = [self.create_tag(), self.create_tag("Second tag")]
 
         second_currency = self.create_currency(name="Euro", code="EUR")
-        second_account = self.create_account(
+        self.second_account = self.create_account(
             name="Second account", currency=second_currency
         )
-        second_category = self.create_category(name="Second category")
+        self.second_category = self.create_category(name="Second category")
 
         self.create_transaction(amount=Decimal(0.53))
-        self.create_transaction(amount=Decimal(73), category=second_category)
-        self.create_transaction(amount=Decimal(20.34), account=second_account)
+        self.create_transaction(amount=Decimal(73), category=self.second_category)
+        self.create_transaction(amount=Decimal(20.34), account=self.second_account)
 
         self.create_transaction(
             type=transaction_constants.INCOME, amount=Decimal(900.40)
@@ -51,15 +69,15 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         self.create_transaction(
             type=transaction_constants.INCOME,
             amount=Decimal(1300),
-            category=second_category,
+            category=self.second_category,
         )
         self.create_transaction(
             type=transaction_constants.INCOME,
             amount=Decimal(2500),
-            account=second_account,
+            account=self.second_account,
         )
 
-    def test_transactions(self):
+    def test_transaction_list_and_detail(self):
         self.selenium.get(self.live_server_url)
         self.login()
 
@@ -68,181 +86,371 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         self.verify_transaction_list(transactions)
         self.verify_transaction_detail_pages(transactions)
 
-    def verify_transaction_list(self, transactions):
-        table = self.selenium.find_element_by_id("transactions")
-        tbody = table.find_element_by_tag_name("tbody")
-        rows = tbody.find_elements_by_tag_name("tr")
+    def test_transaction_create(self):
+        self.selenium.get(self.live_server_url)
+        self.login()
 
-        for index, transaction in enumerate(transactions):
-            with self.subTest(row_index=index):
-                row = rows[index]
-                columns = row.find_elements_by_tag_name("td")
+        old_transaction_count = Transaction.objects.count()
 
-                self.verify_amount(columns, transaction)
-                self.verify_account(columns, transaction)
-                self.verify_category(columns, transaction)
-                self.verify_tags(columns, transaction)
-                self.verify_created_at(columns, transaction)
-                self.verify_description(columns, transaction)
+        self.navigate_to_transaction_create_page()
+        self.fill_transaction_form(
+            type="Income",
+            amount="3.14",
+            account_name=self.account.name,
+            category_name=self.category.name,
+            tags=["First tag", "Second tag"],
+            description="Transaction description",
+        )
+        self.submit_transaction_form()
 
-    def verify_amount(self, columns, transaction):
-        element = columns[0]
-        self.verify_amount_value(element, transaction)
-        self.verify_amount_icon_classes(element, transaction)
-        self.verify_amount_link_href(element, transaction)
-        self.verify_amount_link_classes(element, transaction)
+        new_transaction_count = Transaction.objects.count()
 
-    def verify_amount_value(self, element, transaction):
-        amount = element.text
-        localized_amount = formats.localize(transaction.amount, use_l10n=True)
-        expected_amount = f"{localized_amount} {transaction.currency.representation}"
+        self.assertEqual(new_transaction_count, old_transaction_count + 1)
 
-        self.assertEqual(amount, expected_amount)
+        transaction = Transaction.objects.order_by("created_at").last()
 
-    def verify_amount_icon_classes(self, parent, transaction):
-        icon = parent.find_element_by_tag_name("i")
+        self.assertEqual(transaction.type, transaction_constants.INCOME)
+        self.assertEqual(transaction.amount, Decimal("3.14"))
+        self.assertEqual(transaction.account, self.account)
+        self.assertEqual(transaction.category, self.category)
+        self.assertEqual(transaction.description, "Transaction description")
 
-        classes = icon.get_attribute("class")
-        expected_classes = transaction.type_icon_class
+        self.verify_transaction_detail_page(transaction, should_navigate=False)
 
-        self.assertEqual(classes, expected_classes)
-
-    def verify_amount_link_href(self, parent, transaction):
-        link = parent.find_element_by_tag_name("a")
-
-        href = link.get_attribute("href")
-        expected_href = f"{self.live_server_url}{transaction.get_absolute_url()}"
-
-        self.assertEqual(href, expected_href)
-
-    def verify_amount_link_classes(self, parent, transaction):
-        link = parent.find_element_by_tag_name("a")
-
-        classes = link.get_attribute("class").strip()
-        expected_classes = "text-success" if transaction.is_income else "text-danger"
-
-        self.assertEqual(classes, expected_classes)
-
-    def verify_account(self, columns, transaction):
-        account = columns[1].text
-        expected_account = transaction.account.name
-
-        self.assertEqual(account, expected_account)
-
-    def verify_category(self, columns, transaction):
-        category = columns[2].text
-        expected_category = transaction.category.name
-
-        self.assertEqual(category, expected_category)
-
-    def verify_tags(self, columns, transaction):
-        transaction_tags = transaction.tags.all()
-
-        for index, element in enumerate(columns[3].find_elements_by_tag_name("span")):
-            with self.subTest(tag_name=element.text):
-                self.assertEqual(element.text, transaction_tags[index].name)
-
-    def verify_created_at(self, columns, transaction):
-        created_at = columns[4].text
-        expected_created_at = formats.date_format(
-            transaction.created_at.astimezone(), "SHORT_DATETIME_FORMAT"
+    def test_transaction_create_category_type_change(self):
+        income_category = self.create_category(
+            name="Income category", transaction_type=category_constants.INCOME
+        )
+        expenditure_category = self.create_category(
+            name="Expenditure category", transaction_type=category_constants.EXPENDITURE
         )
 
-        self.assertEqual(created_at, expected_created_at)
+        empty_label = "---------"  # TODO: Move out
 
-    def verify_description(self, columns, transaction):
-        description = columns[5].text
-        expected_description = transaction.description
+        expected_income_category_options = [
+            (str(category.pk), category.name)
+            for category in Category.objects.exclude(
+                transaction_type=category_constants.EXPENDITURE
+            ).filter(author=self.user)
+        ]
+        expected_income_category_options.insert(0, ("", empty_label))
 
-        self.assertEqual(description, expected_description)
+        expected_expenditure_category_options = [
+            (str(category.pk), category.name)
+            for category in Category.objects.exclude(
+                transaction_type=category_constants.INCOME
+            ).filter(author=self.user)
+        ]
+        expected_expenditure_category_options.insert(0, ("", empty_label))
 
-    def verify_transaction_detail_pages(self, transactions):
-        for index, transaction in enumerate(transactions):
-            with self.subTest(row_index=index):
-                self.navigate_to_transaction_detail_page(transaction)
-                self.verify_detail_page_h1(transaction)
-                self.verify_detail_page_amount(transaction)
-                self.verify_detail_page_type(transaction)
-                self.verify_detail_page_account(transaction)
-                self.verify_detail_page_currency(transaction)
-                self.verify_detail_page_category(transaction)
-                self.verify_detail_page_tags(transaction)
-                self.verify_detail_page_created_at(transaction)
-                self.verify_detail_page_updated_at(transaction)
-                self.go_back()
+        self.selenium.get(self.live_server_url)
+        self.login()
 
-    def navigate_to_transaction_detail_page(self, transaction):
-        current_url = self.selenium.current_url
+        self.navigate_to_transaction_create_page()
 
-        table = self.selenium.find_element_by_id("transactions")
-        tbody = table.find_element_by_tag_name("tbody")
-        link = tbody.find_element_by_xpath(
-            f"//a[@href='{transaction.get_absolute_url()}']"
-        )
-        link.click()
+        form = self.selenium.find_element_by_xpath("//main/div/div/form")
+        type_input = Select(form.find_element_by_name("type"))
+        category_input = Select(form.find_element_by_name("category"))
 
-        WebDriverWait(self.selenium, 5).until(
-            expected_conditions.url_changes(current_url)
+        # Verify that the transaction type is EXPENDITURE by default
+        self.verify_transaction_type_input(
+            input=type_input, type=transaction_constants.EXPENDITURE
         )
 
-    def verify_detail_page_h1(self, transaction):
-        h1_element = self.selenium.find_element_by_tag_name("h1")
-        text = h1_element.text
-        expected_text = _("Transaction details")
+        # Verify that no category is selected
+        self.verify_no_category_is_selected(input=category_input)
 
-        self.assertEqual(text, expected_text)
-
-    def verify_detail_page_amount(self, transaction):
-        expected_label = _("Amount")
-        expected_value = formats.localize(transaction.amount, use_l10n=True)
-        self.verify_detail_page_row(0, expected_label, expected_value)
-
-    def verify_detail_page_type(self, transaction):
-        expected_label = _("Type")
-        expected_value = transaction.get_type_display()
-        self.verify_detail_page_row(1, expected_label, expected_value)
-
-    def verify_detail_page_account(self, transaction):
-        expected_label = _("Account")
-        expected_value = transaction.account.name
-        self.verify_detail_page_row(2, expected_label, expected_value)
-
-    def verify_detail_page_currency(self, transaction):
-        expected_label = _("Currency")
-        expected_value = transaction.currency.name
-        self.verify_detail_page_row(3, expected_label, expected_value)
-
-    def verify_detail_page_category(self, transaction):
-        expected_label = _("Category")
-        expected_value = transaction.category.name
-        self.verify_detail_page_row(4, expected_label, expected_value)
-
-    def verify_detail_page_tags(self, transaction):
-        expected_label = _("Tags")
-        expected_value = " ".join(transaction.tags.values_list("name", flat=True))
-        self.verify_detail_page_row(5, expected_label, expected_value)
-
-    def verify_detail_page_created_at(self, transaction):
-        expected_label = _("Created at")
-        expected_value = formats.date_format(
-            transaction.created_at.astimezone(), "SHORT_DATETIME_FORMAT"
+        # Verify that only categories with transction_type EXPENDITURE or ALL are available as options
+        self.verify_category_options(
+            input=category_input, expected_options=expected_expenditure_category_options
         )
-        self.verify_detail_page_row(6, expected_label, expected_value)
 
-    def verify_detail_page_updated_at(self, transaction):
-        expected_label = _("Updated at")
-        expected_value = formats.date_format(
-            transaction.updated_at.astimezone(), "SHORT_DATETIME_FORMAT"
+        # Select the expenditure category
+        category_input.select_by_visible_text(expenditure_category.name)
+
+        # Verify that the expenditure category is selected
+        self.verify_category_input(input=category_input, category=expenditure_category)
+
+        # Change the transaction type to INCOME
+        type_input.select_by_visible_text("Income")
+
+        # Verify that no category is selected
+        self.verify_no_category_is_selected(input=category_input)
+
+        # Verify that only categories with transction_type INCOME or ALL are available as options
+        self.verify_category_options(
+            input=category_input, expected_options=expected_income_category_options
         )
-        self.verify_detail_page_row(7, expected_label, expected_value)
 
-    def verify_detail_page_row(self, index, expected_label, expected_value):
-        table = self.selenium.find_element_by_tag_name("table")
-        rows = table.find_elements_by_tag_name("tr")
-        row = rows[index]
+        # Select the income category
+        category_input.select_by_visible_text(income_category.name)
 
-        label = row.find_element_by_tag_name("th").text
-        self.assertEqual(label, expected_label)
+        # Verify that the income category is selected
+        self.verify_category_input(input=category_input, category=income_category)
 
-        value = row.find_element_by_tag_name("td").text
-        self.assertEqual(value, expected_value)
+        # Change the transaction type to EXPENDITURE
+        type_input.select_by_visible_text("Expenditure")
+
+        # Verify that no category is selected
+        self.verify_no_category_is_selected(input=category_input)
+
+        # Verify that only categories with transction_type EXPENDITURE or ALL are available as options
+        self.verify_category_options(
+            input=category_input, expected_options=expected_expenditure_category_options
+        )
+
+    def test_transaction_update(self):
+        transaction = self.create_transaction(
+            type=transaction_constants.EXPENDITURE,
+            amount=Decimal("41.30"),
+            account=self.account,
+            category=self.category,
+            description="Transaction description",
+        )
+
+        old_transaction_count = Transaction.objects.count()
+        old_tags_count = Tag.objects.count()
+
+        self.selenium.get(self.live_server_url)
+        self.login()
+
+        self.navigate_to_transaction_update_page(transaction)
+        self.fill_transaction_form(
+            type="Income",
+            amount="3.14",
+            account_name=self.second_account.name,
+            category_name=self.second_category.name,
+            tags=["First new tag", "Second new tag"],
+            description="Updated transaction description",
+            should_clear_inputs=True,
+            should_clear_tags=True,
+        )
+
+        self.submit_transaction_form()
+
+        new_transaction_count = Transaction.objects.count()
+        new_tags_count = Tag.objects.count()
+
+        self.assertEqual(new_transaction_count, old_transaction_count)
+        self.assertEqual(new_tags_count, old_tags_count + 2)
+
+        updated_transaction = Transaction.objects.get(pk=transaction.pk)
+
+        self.assertEqual(updated_transaction.type, transaction_constants.INCOME)
+        self.assertEqual(updated_transaction.amount, Decimal("3.14"))
+        self.assertEqual(updated_transaction.account, self.second_account)
+        self.assertEqual(updated_transaction.category, self.second_category)
+        self.assertEqual(transaction.tags.count(), 2)
+        self.assertEqual(transaction.tags.first().name, "First new tag")
+        self.assertEqual(transaction.tags.last().name, "Second new tag")
+        self.assertEqual(
+            updated_transaction.description, "Updated transaction description"
+        )
+
+        self.verify_transaction_detail_page(updated_transaction, should_navigate=False)
+
+    def test_transaction_update_without_clearing_tags(self):
+        initial_tag = self.create_tag(name="Initial tag")
+        transaction = self.create_transaction(
+            type=transaction_constants.EXPENDITURE,
+            amount=Decimal("41.30"),
+            account=self.account,
+            category=self.category,
+            tags=[initial_tag],
+            description="Transaction description",
+        )
+
+        old_transaction_count = Transaction.objects.count()
+        old_tags_count = Tag.objects.count()
+
+        self.selenium.get(self.live_server_url)
+        self.login()
+
+        self.navigate_to_transaction_update_page(transaction)
+        self.fill_transaction_form(
+            type="Income",
+            amount="3.14",
+            account_name=self.second_account.name,
+            category_name=self.second_category.name,
+            tags=["First new tag", "Second new tag"],
+            description="Updated transaction description",
+            should_clear_inputs=True,
+            should_clear_tags=False,
+        )
+
+        self.submit_transaction_form()
+
+        new_transaction_count = Transaction.objects.count()
+        new_tags_count = Tag.objects.count()
+
+        self.assertEqual(new_transaction_count, old_transaction_count)
+        self.assertEqual(new_tags_count, old_tags_count + 2)
+
+        updated_transaction = Transaction.objects.get(pk=transaction.pk)
+
+        self.assertEqual(updated_transaction.type, transaction_constants.INCOME)
+        self.assertEqual(updated_transaction.amount, Decimal("3.14"))
+        self.assertEqual(updated_transaction.account, self.second_account)
+        self.assertEqual(updated_transaction.category, self.second_category)
+        self.assertEqual(transaction.tags.count(), 3)
+
+        tags = transaction.tags.order_by("created_at").all()
+
+        self.assertEqual(tags[0].name, "Initial tag")
+        self.assertEqual(tags[1].name, "First new tag")
+        self.assertEqual(tags[2].name, "Second new tag")
+        self.assertEqual(
+            updated_transaction.description, "Updated transaction description"
+        )
+
+        self.verify_transaction_detail_page(updated_transaction, should_navigate=False)
+
+    def test_transaction_update_income_category(self):
+        category = self.create_category(
+            name="Income category", transaction_type=category_constants.INCOME
+        )
+
+        transaction = self.create_transaction(
+            type=transaction_constants.INCOME,
+            amount=Decimal("41.30"),
+            account=self.account,
+            category=category,
+            description="Transaction description",
+        )
+
+        self.selenium.get(self.live_server_url)
+        self.login()
+
+        self.navigate_to_transaction_update_page(transaction)
+        form = self.selenium.find_element_by_xpath("//main/div/div/form")
+
+        category_input = Select(form.find_element_by_name("category"))
+
+        self.verify_category_input(input=category_input, category=category)
+
+    def test_transaction_update_expenditure_category(self):
+        category = self.create_category(
+            name="Income category", transaction_type=category_constants.EXPENDITURE
+        )
+
+        transaction = self.create_transaction(
+            type=transaction_constants.EXPENDITURE,
+            amount=Decimal("41.30"),
+            account=self.account,
+            category=category,
+            description="Transaction description",
+        )
+
+        self.selenium.get(self.live_server_url)
+        self.login()
+
+        self.navigate_to_transaction_update_page(transaction)
+        form = self.selenium.find_element_by_xpath("//main/div/div/form")
+
+        category_input = Select(form.find_element_by_name("category"))
+
+        self.verify_category_input(input=category_input, category=category)
+
+    def test_transaction_update_category_type_change(self):
+        income_category = self.create_category(
+            name="Income category", transaction_type=category_constants.INCOME
+        )
+        expenditure_category = self.create_category(
+            name="Expenditure category", transaction_type=category_constants.EXPENDITURE
+        )
+
+        empty_label = "---------"
+
+        expected_income_category_options = [
+            (str(category.pk), category.name)
+            for category in Category.objects.exclude(
+                transaction_type=category_constants.EXPENDITURE
+            ).filter(author=self.user)
+        ]
+        expected_income_category_options.insert(0, ("", empty_label))
+
+        expected_expenditure_category_options = [
+            (str(category.pk), category.name)
+            for category in Category.objects.exclude(
+                transaction_type=category_constants.INCOME
+            ).filter(author=self.user)
+        ]
+        expected_expenditure_category_options.insert(0, ("", empty_label))
+
+        transaction = self.create_transaction(
+            type=transaction_constants.INCOME,
+            amount=Decimal("41.30"),
+            account=self.account,
+            category=income_category,
+            description="Transaction description",
+        )
+
+        self.selenium.get(self.live_server_url)
+        self.login()
+
+        self.navigate_to_transaction_update_page(transaction)
+
+        form = self.selenium.find_element_by_xpath("//main/div/div/form")
+        type_input = Select(form.find_element_by_name("type"))
+        category_input = Select(form.find_element_by_name("category"))
+
+        # Verify that the income category is selected
+        self.verify_category_input(input=category_input, category=income_category)
+
+        # Verify that only categories with transction_type INCOME or ALL are available as options
+        self.verify_category_options(
+            input=category_input, expected_options=expected_income_category_options
+        )
+
+        # Change the transaction type to EXPENDITURE
+        type_input.select_by_visible_text("Expenditure")
+
+        # Verify that no category is selected
+        self.verify_no_category_is_selected(input=category_input)
+
+        # Verify that only categories with transction_type EXPENDITURE or ALL are available as options
+        self.verify_category_options(
+            input=category_input, expected_options=expected_expenditure_category_options
+        )
+
+        # Select the expenditure category
+        category_input.select_by_visible_text(expenditure_category.name)
+
+        # Verify that the expenditure category is selected
+        self.verify_category_input(input=category_input, category=expenditure_category)
+
+        # Change the transaction type to INCOME
+        type_input.select_by_visible_text("Income")
+
+        # Verify that no category is selected
+        self.verify_no_category_is_selected(input=category_input)
+
+        # Verify that only categories with transction_type INCOME or ALL are available as options
+        self.verify_category_options(
+            input=category_input, expected_options=expected_income_category_options
+        )
+
+    def test_transaction_delete(self):
+        transaction = self.create_transaction(
+            type=transaction_constants.EXPENDITURE,
+            amount=Decimal("41.30"),
+            account=self.account,
+            category=self.category,
+            description="Transaction description",
+        )
+
+        old_transaction_count = Transaction.objects.count()
+
+        self.selenium.get(self.live_server_url)
+        self.login()
+
+        self.navigate_to_transaction_delete_page(transaction)
+        self.verify_transaction_delete_page(transaction, should_navigate=False)
+        self.submit_transaction_form(button_text="Confirm")
+
+        new_transaction_count = Transaction.objects.count()
+
+        self.assertEqual(new_transaction_count, old_transaction_count - 1)
+
+        with self.assertRaises(Transaction.DoesNotExist):
+            Transaction.objects.get(pk=transaction.pk)

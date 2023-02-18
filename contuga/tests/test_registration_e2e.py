@@ -8,7 +8,8 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-from contuga.mixins import EndToEndTestMixin, TestMixin
+from contuga.mixins import TestMixin
+from contuga.tests.mixins.e2e_test_mixin import EndToEndTestMixin
 
 
 # StaticLiveServerTestCase doesn't work as expected

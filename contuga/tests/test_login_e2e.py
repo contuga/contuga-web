@@ -1,7 +1,8 @@
 from django.contrib.staticfiles.testing import LiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 
-from contuga.mixins import EndToEndTestMixin, TestMixin
+from contuga.mixins import TestMixin
+from contuga.tests.mixins.e2e_test_mixin import EndToEndTestMixin
 
 
 # StaticLiveServerTestCase doesn't work as expected
