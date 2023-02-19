@@ -41,7 +41,7 @@ python_version = "3.10"
 manage = "python manage.py"
 server = "python manage.py runserver"
 migrate = "python manage.py migrate"
-test = "python manage.py test"
+test = "env DJANGO_ENV=test python manage.py test"
 shell = "python manage.py shell_plus --print-sql"
 
 [pipenv]
