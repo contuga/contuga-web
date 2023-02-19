@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [("accounts", "0001_initial"), ("currencies", "0001_initial")]

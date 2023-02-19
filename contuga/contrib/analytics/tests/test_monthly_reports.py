@@ -364,7 +364,6 @@ class MonthlyReportsTestCase(TestCase, TestMixin):
         self.assertListEqual(result, expected_result)
 
     def test_reports_for_multiple_months_with_start_date(self):
-
         income_current_month = self.create_income(amount=Decimal("310.15")).amount
 
         expenditure_current_month = self.create_expenditure(
