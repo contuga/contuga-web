@@ -1,6 +1,6 @@
 import os
 
-from .components.base import BASE_DIR, ROLLBAR
+from .components.base import BASE_DIR
 
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
@@ -9,8 +9,6 @@ STATICFILES_STORAGE = "pipeline.storage.NonPackagingPipelineStorage"
 SECRET_KEY = "SECRET_KEY"
 RECAPTCHA_PRIVATE_KEY = "RECAPTCHA_PRIVATE_KEY"
 RECAPTCHA_PUBLIC_KEY = "RECAPTCHA_PUBLIC_KEY"
-
-ROLLBAR["environment"] = "development"
 
 DATABASES = {
     "default": {
