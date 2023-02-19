@@ -33,7 +33,6 @@ python-dateutil = "==2.8.*"
 django-parler = "==2.2.*"
 django-debug-toolbar = "==3.2.*"
 psycopg2 = "==2.8.*"
-rollbar = "*"
 
 [requires]
 python_version = "3.10"
