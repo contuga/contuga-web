@@ -1,16 +1,17 @@
 from django.utils import formats
+from selenium.webdriver.common.by import By
 
 
 class TransactionListPageMixin:
     def verify_transaction_list(self, transactions):
-        table = self.selenium.find_element_by_id("transactions")
-        tbody = table.find_element_by_tag_name("tbody")
-        rows = tbody.find_elements_by_tag_name("tr")
+        table = self.selenium.find_element(By.ID, "transactions")
+        tbody = table.find_element(By.TAG_NAME, "tbody")
+        rows = tbody.find_elements(By.TAG_NAME, "tr")
 
         for index, transaction in enumerate(transactions):
             with self.subTest(row_index=index):
                 row = rows[index]
-                columns = row.find_elements_by_tag_name("td")
+                columns = row.find_elements(By.TAG_NAME, "td")
 
                 self.verify_amount(columns, transaction)
                 self.verify_account(columns, transaction)
@@ -34,7 +35,7 @@ class TransactionListPageMixin:
         self.assertEqual(amount, expected_amount)
 
     def verify_amount_icon_classes(self, parent, transaction):
-        icon = parent.find_element_by_tag_name("i")
+        icon = parent.find_element(By.TAG_NAME, "i")
 
         classes = icon.get_attribute("class")
         expected_classes = transaction.type_icon_class
@@ -42,7 +43,7 @@ class TransactionListPageMixin:
         self.assertEqual(classes, expected_classes)
 
     def verify_amount_link_href(self, parent, transaction):
-        link = parent.find_element_by_tag_name("a")
+        link = parent.find_element(By.TAG_NAME, "a")
 
         href = link.get_attribute("href")
         expected_href = f"{self.live_server_url}{transaction.get_absolute_url()}"
@@ -50,7 +51,7 @@ class TransactionListPageMixin:
         self.assertEqual(href, expected_href)
 
     def verify_amount_link_classes(self, parent, transaction):
-        link = parent.find_element_by_tag_name("a")
+        link = parent.find_element(By.TAG_NAME, "a")
 
         classes = link.get_attribute("class").strip()
         expected_classes = "text-success" if transaction.is_income else "text-danger"
@@ -72,7 +73,7 @@ class TransactionListPageMixin:
     def verify_tags(self, columns, transaction):
         transaction_tags = transaction.tags.all()
 
-        for index, element in enumerate(columns[3].find_elements_by_tag_name("span")):
+        for index, element in enumerate(columns[3].find_elements(By.TAG_NAME, "span")):
             with self.subTest(tag_name=element.text):
                 self.assertEqual(element.text, transaction_tags[index].name)
 

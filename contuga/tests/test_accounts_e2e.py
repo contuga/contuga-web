@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.utils import formats
 from django.utils.translation import ugettext as _
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
@@ -74,7 +75,7 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
     def navigate_to_accounts_list(self):
         current_url = self.selenium.current_url
 
-        link = self.selenium.find_element_by_link_text("View all accounts")
+        link = self.selenium.find_element(By.LINK_TEXT, "View all accounts")
 
         # Clicking the link used to work with the plain HTML version.
         # Now, when the styles are loaded, the link is not visible on load.
@@ -88,14 +89,14 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         )
 
     def verify_account_list(self, accounts):
-        table = self.selenium.find_element_by_id("accounts")
-        tbody = table.find_element_by_tag_name("tbody")
-        rows = tbody.find_elements_by_tag_name("tr")
+        table = self.selenium.find_element(By.ID, "accounts")
+        tbody = table.find_element(By.TAG_NAME, "tbody")
+        rows = tbody.find_elements(By.TAG_NAME, "tr")
 
         for index, account in enumerate(accounts):
             with self.subTest(row_index=index):
                 row = rows[index]
-                columns = row.find_elements_by_tag_name("td")
+                columns = row.find_elements(By.TAG_NAME, "td")
 
                 self.verify_name(columns, account)
                 self.verify_currency(columns, account)
@@ -156,9 +157,11 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
     def navigate_to_account_detail_page(self, account):
         current_url = self.selenium.current_url
 
-        table = self.selenium.find_element_by_id("accounts")
-        tbody = table.find_element_by_tag_name("tbody")
-        link = tbody.find_element_by_xpath(f"//a[@href='{account.get_absolute_url()}']")
+        table = self.selenium.find_element(By.ID, "accounts")
+        tbody = table.find_element(By.TAG_NAME, "tbody")
+        link = tbody.find_element(
+            By.XPATH, f"//a[@href='{account.get_absolute_url()}']"
+        )
         link.click()
 
         WebDriverWait(self.selenium, 5).until(
@@ -166,7 +169,7 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         )
 
     def verify_detail_page_h1(self, account):
-        h1_element = self.selenium.find_element_by_tag_name("h1")
+        h1_element = self.selenium.find_element(By.TAG_NAME, "h1")
         text = h1_element.text
         expected_text = _("Account details")
 
@@ -219,12 +222,12 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         self.verify_detail_page_row(6, expected_label, expected_value)
 
     def verify_detail_page_row(self, index, expected_label, expected_value):
-        table = self.selenium.find_element_by_tag_name("table")
-        rows = table.find_elements_by_tag_name("tr")
+        table = self.selenium.find_element(By.TAG_NAME, "table")
+        rows = table.find_elements(By.TAG_NAME, "tr")
         row = rows[index]
 
-        label = row.find_element_by_tag_name("th").text
+        label = row.find_element(By.TAG_NAME, "th").text
         self.assertEqual(label, expected_label)
 
-        value = row.find_element_by_tag_name("td").text
+        value = row.find_element(By.TAG_NAME, "td").text
         self.assertEqual(value, expected_value)

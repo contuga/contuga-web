@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -22,11 +23,11 @@ class TransactionDeletePageMixin:
     def navigate_to_transaction_delete_page(self, transaction):
         current_url = self.selenium.current_url
 
-        table = self.selenium.find_element_by_id("transactions")
-        tbody = table.find_element_by_tag_name("tbody")
+        table = self.selenium.find_element(By.ID, "transactions")
+        tbody = table.find_element(By.TAG_NAME, "tbody")
         update_url = reverse("transactions:delete", kwargs={"pk": transaction.pk})
 
-        link = tbody.find_element_by_xpath(f"//a[@href='{update_url}']")
+        link = tbody.find_element(By.XPATH, f"//a[@href='{update_url}']")
         link.click()
 
         WebDriverWait(self.selenium, 5).until(
@@ -58,7 +59,7 @@ class TransactionDeletePageMixin:
         self.verify_detail_page_updated_at(transaction)
 
     def verify_delete_page_confirmation_question(self, transaction):
-        element = self.selenium.find_element_by_tag_name("p")
+        element = self.selenium.find_element(By.TAG_NAME, "p")
         text = element.text
         expected_text = _("Are you sure you want to delete this transaction?")
 
