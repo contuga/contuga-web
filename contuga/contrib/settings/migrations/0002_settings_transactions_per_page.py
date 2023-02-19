@@ -7,7 +7,6 @@ from .. import constants
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("settings", "0001_initial")]
 
     operations = [

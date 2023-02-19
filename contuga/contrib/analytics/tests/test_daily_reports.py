@@ -265,7 +265,6 @@ class DailyReportsTestCase(TestCase, TestMixin):
         self.assertListEqual(result, expected_result)
 
     def test_reports_for_multiple_months(self):
-
         income_today = self.create_income(amount=Decimal("310.15")).amount
 
         expenditure_today = self.create_expenditure(amount=Decimal("100.10")).amount
@@ -354,7 +353,6 @@ class DailyReportsTestCase(TestCase, TestMixin):
         self.assertListEqual(result, expected_result)
 
     def test_reports_for_multiple_days_with_start_date(self):
-
         income_today = self.create_income(amount=Decimal("310.15")).amount
 
         expenditure_today = self.create_expenditure(amount=Decimal("100.10")).amount
