@@ -4,6 +4,7 @@ from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.core import signing
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -43,7 +44,7 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
     def navigate_to_registration_form(self):
         current_url = self.selenium.current_url
 
-        link = self.selenium.find_element_by_link_text("Register")
+        link = self.selenium.find_element(By.LINK_TEXT, "Register")
         link.click()
 
         WebDriverWait(self.selenium, 5).until(
@@ -51,20 +52,20 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         )
 
     def fill_registration_form(self):
-        email_input = self.selenium.find_element_by_name("email")
+        email_input = self.selenium.find_element(By.NAME, "email")
         email_input.send_keys("john.doe@example.com")
 
-        password_input = self.selenium.find_element_by_name("password1")
+        password_input = self.selenium.find_element(By.NAME, "password1")
         password_input.send_keys("Secret123+")
 
-        password2_input = self.selenium.find_element_by_name("password2")
+        password2_input = self.selenium.find_element(By.NAME, "password2")
         password2_input.send_keys("Secret123+")
 
     def submit_registration_form(self):
         current_url = self.selenium.current_url
 
-        button = self.selenium.find_element_by_xpath(
-            '//button[contains(text(), "Register")]'
+        button = self.selenium.find_element(
+            By.XPATH, '//button[contains(text(), "Register")]'
         )
         button.click()
 
@@ -76,8 +77,8 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         text = _(
             "Your registration is successful. An activation link has been sent to your email."
         )
-        element = self.selenium.find_element_by_xpath(
-            f"//*[contains(text(), '{text}')]"
+        element = self.selenium.find_element(
+            By.XPATH, f"//*[contains(text(), '{text}')]"
         )
 
         self.assertTrue(element.is_displayed())
@@ -105,16 +106,16 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
 
     def verify_activation_failed_page(self):
         text = _("The account you attempted to activate is invalid.")
-        element = self.selenium.find_element_by_xpath(
-            f"//*[contains(text(), '{text}')]"
+        element = self.selenium.find_element(
+            By.XPATH, f"//*[contains(text(), '{text}')]"
         )
 
         self.assertTrue(element.is_displayed())
 
     def verify_activation_complete_page(self):
         text = _("Your activation was successful")
-        element = self.selenium.find_element_by_xpath(
-            f"//*[contains(text(), '{text}')]"
+        element = self.selenium.find_element(
+            By.XPATH, f"//*[contains(text(), '{text}')]"
         )
 
         self.assertTrue(element.is_displayed())
