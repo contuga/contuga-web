@@ -1,4 +1,3 @@
-# Python CircleCI 2.0 configuration file
 version: 2
 jobs:
   build:
@@ -7,46 +6,37 @@ jobs:
         environment:
           PIPENV_VENV_IN_PROJECT: true
           DJANGO_ENV: test
-
     working_directory: ~/repo
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - python-dependencies-{{ checksum "Pipfile.lock" }}
             - python-dependencies-
-
       - run:
-          name: install Python dependencies
+          name: Installing Python dependencies
           command: |
             sudo pip install pipenv
             pipenv sync --dev
-
       - save_cache:
           paths:
             - ~/repo/.venv
           key: python-dependencies-{{ checksum "Pipfile.lock" }}
-
       - restore_cache:
           keys:
             - node-dependencies-{{ checksum "package-lock.json" }}
             - node-dependencies-
-
       - run:
-          name: install Node dependencies
+          name: Installing Node dependencies
           command: |
             npm set cache .npm
             npm ci
-
       - save_cache:
           paths:
             - .npm
           key: node-dependencies-{{ checksum "package-lock.json" }}
-
       - run:
-          name: Run tests
+          name: Running tests
           command: |
             sudo apt install sassc -y
             sudo npm i -g uglify-js
@@ -55,18 +45,16 @@ jobs:
             pipenv run coverage run manage.py test
             pipenv run coverage report
             pipenv run coverage html
-
       - run:
-          name: Run black
+          name: Running black
           command: |
             pipenv run black . --check
-
       - run:
-          name: Run flake8
+          name: Running flake8
           command: |
             pipenv run flake8 . --statistic --exclude .venv
       - run:
-          name: Run isort
+          name: Running isort
           command: |
             pipenv run isort **/*.py --check-only --verbose
       - store_artifacts:
