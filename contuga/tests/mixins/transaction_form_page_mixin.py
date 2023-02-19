@@ -1,4 +1,5 @@
 from django.urls import reverse
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
@@ -10,11 +11,11 @@ class TransactionFormPageMixin:
     def navigate_to_transaction_update_page(self, transaction):
         current_url = self.selenium.current_url
 
-        table = self.selenium.find_element_by_id("transactions")
-        tbody = table.find_element_by_tag_name("tbody")
+        table = self.selenium.find_element(By.ID, "transactions")
+        tbody = table.find_element(By.TAG_NAME, "tbody")
         update_url = reverse("transactions:update", kwargs={"pk": transaction.pk})
 
-        link = tbody.find_element_by_xpath(f"//a[@href='{update_url}']")
+        link = tbody.find_element(By.XPATH, f"//a[@href='{update_url}']")
         link.click()
 
         WebDriverWait(self.selenium, 5).until(
@@ -24,12 +25,12 @@ class TransactionFormPageMixin:
     def navigate_to_transaction_create_page(self):
         current_url = self.selenium.current_url
 
-        navigation = self.selenium.find_element_by_tag_name("nav")
-        transaction_section = navigation.find_element_by_link_text("Transactions")
+        navigation = self.selenium.find_element(By.TAG_NAME, "nav")
+        transaction_section = navigation.find_element(By.LINK_TEXT, "Transactions")
         transaction_section.click()
 
-        transaction_create_page_link = (
-            transaction_section.parent.find_element_by_link_text("Add new")
+        transaction_create_page_link = transaction_section.parent.find_element(
+            By.LINK_TEXT, "Add new"
         )
         transaction_create_page_link.click()
 
@@ -48,40 +49,40 @@ class TransactionFormPageMixin:
         should_clear_inputs=False,
         should_clear_tags=False,
     ):
-        form = self.selenium.find_element_by_xpath("//main/div/div/form")
+        form = self.selenium.find_element(By.XPATH, "//main/div/div/form")
 
-        type_input = Select(form.find_element_by_name("type"))
+        type_input = Select(form.find_element(By.NAME, "type"))
         type_input.select_by_visible_text(type)
 
-        amount_input = form.find_element_by_name("amount")
+        amount_input = form.find_element(By.NAME, "amount")
 
         if should_clear_inputs:
             amount_input.clear()
 
         amount_input.send_keys(amount)
 
-        account_input = Select(form.find_element_by_name("account"))
+        account_input = Select(form.find_element(By.NAME, "account"))
         account_input.select_by_visible_text(account_name)
 
-        category_input = Select(form.find_element_by_name("category"))
+        category_input = Select(form.find_element(By.NAME, "category"))
         category_input.select_by_visible_text(category_name)
 
         if should_clear_tags:
-            existing_tag_elements = form.find_elements_by_tag_name("tag")
+            existing_tag_elements = form.find_elements(By.TAG_NAME, "tag")
 
             for existing_tag_element in existing_tag_elements:
-                existing_tag_element.find_element_by_tag_name("x").click()
+                existing_tag_element.find_element(By.TAG_NAME, "x").click()
 
-        tags_input = form.find_element_by_class_name("tagify__input")
-        tags_label = self.selenium.find_element_by_xpath(
-            '//label[contains(text(), "Tags")]'
+        tags_input = form.find_element(By.CLASS_NAME, "tagify__input")
+        tags_label = self.selenium.find_element(
+            By.XPATH, '//label[contains(text(), "Tags")]'
         )
 
         for tag in tags:
             tags_input.send_keys(tag)
             tags_label.click()
 
-        description_input = form.find_element_by_name("description")
+        description_input = form.find_element(By.NAME, "description")
 
         if should_clear_inputs:
             description_input.clear()
@@ -91,8 +92,8 @@ class TransactionFormPageMixin:
     def submit_transaction_form(self, button_text="Save"):
         current_url = self.selenium.current_url
 
-        button = self.selenium.find_element_by_xpath(
-            f"//button[contains(text(), '{button_text}')]"
+        button = self.selenium.find_element(
+            By.XPATH, f"//button[contains(text(), '{button_text}')]"
         )
         button.click()
 

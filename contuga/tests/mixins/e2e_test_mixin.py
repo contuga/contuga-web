@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -14,7 +15,7 @@ class EndToEndTestMixin:
     def navigate_to_login_form(self):
         current_url = self.selenium.current_url
 
-        link = self.selenium.find_element_by_link_text("Login")
+        link = self.selenium.find_element(By.LINK_TEXT, "Login")
         link.click()
 
         WebDriverWait(self.selenium, 5).until(
@@ -23,17 +24,17 @@ class EndToEndTestMixin:
 
     def fill_login_form(self, email, password):
         # The username is an email
-        email_input = self.selenium.find_element_by_name("username")
+        email_input = self.selenium.find_element(By.NAME, "username")
         email_input.send_keys(email)
 
-        password_input = self.selenium.find_element_by_name("password")
+        password_input = self.selenium.find_element(By.NAME, "password")
         password_input.send_keys(password)
 
     def submit_login_form(self):
         current_url = self.selenium.current_url
 
-        button = self.selenium.find_element_by_xpath(
-            '//button[contains(text(), "Login")]'
+        button = self.selenium.find_element(
+            By.XPATH, '//button[contains(text(), "Login")]'
         )
         button.click()
 

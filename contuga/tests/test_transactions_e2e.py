@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.contrib.staticfiles.testing import LiveServerTestCase
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support.ui import Select
 
@@ -148,9 +149,9 @@ class SeleniumTestCase(
 
         self.navigate_to_transaction_create_page()
 
-        form = self.selenium.find_element_by_xpath("//main/div/div/form")
-        type_input = Select(form.find_element_by_name("type"))
-        category_input = Select(form.find_element_by_name("category"))
+        form = self.selenium.find_element(By.XPATH, "//main/div/div/form")
+        type_input = Select(form.find_element(By.NAME, "type"))
+        category_input = Select(form.find_element(By.NAME, "category"))
 
         # Verify that the transaction type is EXPENDITURE by default
         self.verify_transaction_type_input(
@@ -322,9 +323,9 @@ class SeleniumTestCase(
         self.login()
 
         self.navigate_to_transaction_update_page(transaction)
-        form = self.selenium.find_element_by_xpath("//main/div/div/form")
+        form = self.selenium.find_element(By.XPATH, "//main/div/div/form")
 
-        category_input = Select(form.find_element_by_name("category"))
+        category_input = Select(form.find_element(By.NAME, "category"))
 
         self.verify_category_input(input=category_input, category=category)
 
@@ -345,9 +346,9 @@ class SeleniumTestCase(
         self.login()
 
         self.navigate_to_transaction_update_page(transaction)
-        form = self.selenium.find_element_by_xpath("//main/div/div/form")
+        form = self.selenium.find_element(By.XPATH, "//main/div/div/form")
 
-        category_input = Select(form.find_element_by_name("category"))
+        category_input = Select(form.find_element(By.NAME, "category"))
 
         self.verify_category_input(input=category_input, category=category)
 
@@ -390,9 +391,9 @@ class SeleniumTestCase(
 
         self.navigate_to_transaction_update_page(transaction)
 
-        form = self.selenium.find_element_by_xpath("//main/div/div/form")
-        type_input = Select(form.find_element_by_name("type"))
-        category_input = Select(form.find_element_by_name("category"))
+        form = self.selenium.find_element(By.XPATH, "//main/div/div/form")
+        type_input = Select(form.find_element(By.NAME, "type"))
+        category_input = Select(form.find_element(By.NAME, "category"))
 
         # Verify that the income category is selected
         self.verify_category_input(input=category_input, category=income_category)

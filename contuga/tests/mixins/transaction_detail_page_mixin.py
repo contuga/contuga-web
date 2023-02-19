@@ -1,5 +1,6 @@
 from django.utils import formats
 from django.utils.translation import ugettext_lazy as _
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -23,10 +24,10 @@ class TransactionDetailPageMixin:
     def navigate_to_transaction_detail_page(self, transaction):
         current_url = self.selenium.current_url
 
-        table = self.selenium.find_element_by_id("transactions")
-        tbody = table.find_element_by_tag_name("tbody")
-        link = tbody.find_element_by_xpath(
-            f"//a[@href='{transaction.get_absolute_url()}']"
+        table = self.selenium.find_element(By.ID, "transactions")
+        tbody = table.find_element(By.TAG_NAME, "tbody")
+        link = tbody.find_element(
+            By.XPATH, f"//a[@href='{transaction.get_absolute_url()}']"
         )
         link.click()
 
@@ -35,7 +36,7 @@ class TransactionDetailPageMixin:
         )
 
     def verify_detail_page_h1(self, transaction):
-        h1_element = self.selenium.find_element_by_tag_name("h1")
+        h1_element = self.selenium.find_element(By.TAG_NAME, "h1")
         text = h1_element.text
         expected_text = _("Transaction details")
 
@@ -86,14 +87,14 @@ class TransactionDetailPageMixin:
         self.verify_detail_page_row(7, expected_label, expected_value)
 
     def verify_detail_page_row(self, index, expected_label, expected_value):
-        table = self.selenium.find_element_by_tag_name("table")
-        rows = table.find_elements_by_tag_name("tr")
+        table = self.selenium.find_element(By.TAG_NAME, "table")
+        rows = table.find_elements(By.TAG_NAME, "tr")
         row = rows[index]
 
-        label = row.find_element_by_tag_name("th").text
+        label = row.find_element(By.TAG_NAME, "th").text
         self.assertEqual(label, expected_label)
 
-        value = row.find_element_by_tag_name("td").text
+        value = row.find_element(By.TAG_NAME, "td").text
         self.assertEqual(value, expected_value)
 
     def verify_transaction_detail_pages(self, transactions):

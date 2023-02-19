@@ -1,4 +1,5 @@
 from django.contrib.staticfiles.testing import LiveServerTestCase
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 from contuga.mixins import TestMixin
@@ -31,6 +32,6 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         self.verify_login_is_complete()
 
     def verify_login_is_complete(self):
-        link = self.selenium.find_element_by_link_text(self.user.email)
+        link = self.selenium.find_element(By.LINK_TEXT, self.user.email)
 
         self.assertTrue(link.is_displayed())

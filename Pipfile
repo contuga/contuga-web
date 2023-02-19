@@ -12,7 +12,7 @@ wily = "*"
 bandit = "*"
 coverage = "*"
 isort = "*"
-selenium = "==3.141.*"
+selenium = "==4.*"
 
 [packages]
 django = "==3.1.*"
