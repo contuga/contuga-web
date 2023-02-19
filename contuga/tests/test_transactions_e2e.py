@@ -11,14 +11,14 @@ from contuga.contrib.transactions import constants as transaction_constants
 from contuga.contrib.transactions.models import Transaction
 from contuga.mixins import TestMixin
 from contuga.tests.mixins.e2e_test_mixin import EndToEndTestMixin
-from contuga.tests.mixins.transaction_delete_page_mixin import \
-    TransactionDeletePageMixin
-from contuga.tests.mixins.transaction_detail_page_mixin import \
-    TransactionDetailPageMixin
-from contuga.tests.mixins.transaction_form_page_mixin import \
-    TransactionFormPageMixin
-from contuga.tests.mixins.transaction_list_page_mixin import \
-    TransactionListPageMixin
+from contuga.tests.mixins.transaction_delete_page_mixin import (
+    TransactionDeletePageMixin,
+)
+from contuga.tests.mixins.transaction_detail_page_mixin import (
+    TransactionDetailPageMixin,
+)
+from contuga.tests.mixins.transaction_form_page_mixin import TransactionFormPageMixin
+from contuga.tests.mixins.transaction_list_page_mixin import TransactionListPageMixin
 
 
 # StaticLiveServerTestCase doesn't work as expected

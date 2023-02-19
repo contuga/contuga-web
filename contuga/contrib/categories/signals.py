@@ -10,7 +10,6 @@ UserModel = get_user_model()
 
 @receiver(post_save, sender=UserModel, dispatch_uid="create_user_categories")
 def create_user_categories(sender, instance, created, **kwargs):
-
     if created:
         for category in settings.DEFAULT_CATEGORIES:
             Category.objects.create(name=category, author=instance)
