@@ -11,7 +11,7 @@ pre-commit = "*"
 wily = "*"
 bandit = "*"
 coverage = "*"
-isort = "==4.3.*"
+isort = "*"
 selenium = "==3.141.*"
 
 [packages]
