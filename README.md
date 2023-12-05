@@ -19,13 +19,13 @@ The following requirements need to be satisfied to setup the project.
 1. Navigate to the project's root directory.
 1. Run `npm install` to install the frontend dependencies.
 1. Execute `pipenv install` to install the backend dependencies.
-1. Use `pipenv shell` to activate the virtual environment.
-1. Type `./manage.py migrate` on Linux/Mac or `python manage.py migrate` on Windows to apply all database migrations. Currently, the default database is SQLite. Edit the settings.py file if you want to use MySQL/MariaDB or PostgreSQL. Read the official Django [documentation](https://docs.djangoproject.com/en/2.2/ref/databases/) to learn more.
+1. Type `pipenv run migrate` to apply all database migrations. Currently, the default database is SQLite. Edit the settings.py file if you want to use MySQL/MariaDB or PostgreSQL. Read the official Django [documentation](https://docs.djangoproject.com/en/4.2/ref/databases/) to learn more.
 
 ### Development
 
-Start the development server using `./manage.py runserver` on Linux/Mac or `python manage.py runserver` on Windows and navigate to http://localhost:8000 in your browser.
-If you need admin access you can create a user by executing `python manage.py createsuperuser`.
+Start the development server using `pipenv run server` and navigate to http://localhost:8000 in your browser.
+If you need admin access you can create a privileged user by executing `pipenv run manage createsuperuser`.
+If you need to execute something else within the project's environment, you can enter the environment using `pipenv shell`.
 
 ### Running using Docker
 
