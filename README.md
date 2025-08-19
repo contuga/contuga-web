@@ -70,3 +70,32 @@ Use the following steps to start the app in prod mode:
 1. Configure the database connection in the settings.
 1. Run `docker compose up` to start the services.
 1. Access the app at http://localhost.
+
+### Using PostgreSQL database in development:
+
+By default for development the project will use the `SQLite` database engine. If you prefer to use PostgreSQL, add the following in `contuga/settings/environments/local.py` or directly in `contuga/settings/environments/development.py`:
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'database_name',
+        'USER': 'database_user',
+        'PASSWORD': 'database_user_password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
+```
+
+Replace `database_name`, `database_user` and `database_user_password` with the correct database name, user and password. Change the host and port if necessary.
+
+If you don't have a database yet, here are instructions how to set one up:
+
+1. Make sure that your database service is up and running. If you are on Debian-based Linux distro, the easiest way to check that is by typing `service postgresql status`. If the database is not running, start it with `service postgresql start`.
+1. Enter the command-line interface to PostgreSQL by typing `psql`. Based on your setup, you may need to switch to the *postgres* user first via `sudo su - postgres`.
+1. Create a new database: `CREATE DATABASE database_name;`
+1. Create a new database user: `CREATE USER database_user WITH PASSWORD database_user_password;`
+1. Grant privileges or transfer ownership:
+  - To grand all privileges on the database: `GRANT ALL PRIVILEGES ON DATBASE database_name TO database_user;`
+  - To transfer full ownershop on the database: `ALTER DATABASE database_name OWNER TO database_user;`
