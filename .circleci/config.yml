@@ -1,14 +1,20 @@
-version: 2
+version: 2.1
+
+orbs:
+  node: circleci/node@5.2.0
+
 jobs:
   build:
     docker:
-      - image: circleci/python:3.10-node-browsers
+      - image: cimg/python:3.10-browsers
         environment:
           PIPENV_VENV_IN_PROJECT: true
           DJANGO_ENV: test
     working_directory: ~/repo
     steps:
       - checkout
+      - node/install:
+          node-version: "18.12.1"
       - restore_cache:
           keys:
             - python-dependencies-{{ checksum "Pipfile.lock" }}
@@ -16,7 +22,7 @@ jobs:
       - run:
           name: Installing Python dependencies
           command: |
-            sudo pip install pipenv
+            pip install pipenv
             pipenv sync --dev
       - save_cache:
           paths:
@@ -38,9 +44,8 @@ jobs:
       - run:
           name: Running tests
           command: |
-            sudo apt install sassc -y
-            sudo npm i -g uglify-js
-            sudo apt install cssmin -y
+            sudo apt update && sudo apt install -y sassc cssmin
+            npm install -g uglify-js
             pipenv run python manage.py collectstatic --noinput
             pipenv run coverage run manage.py test
             pipenv run coverage report
@@ -59,3 +64,8 @@ jobs:
             pipenv run isort **/*.py --check-only --verbose
       - store_artifacts:
           path: htmlcov
+
+workflows:
+  build-and-test:
+    jobs:
+      - build
