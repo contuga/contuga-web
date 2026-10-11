@@ -239,3 +239,146 @@ class AccountDetailTestCase(APITestCase, TestMixin):
         # Assert account is not deleted
         new_account_count = Account.objects.count()
         self.assertEqual(new_account_count, old_account_count)
+
+    def test_put(self):
+        url = reverse("account-detail", args=[self.account.pk])
+
+        data = {
+            "name": "New account name",
+            "description": "New account description",
+            "is_active": False,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        account = Account.objects.get(pk=self.account.pk)
+
+        # Assert account is updated
+        self.assertNotEqual(account.updated_at, self.account.updated_at)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(url),
+            "name": data["name"],
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[self.account.currency.pk])
+            ),
+            "owner": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "description": data["description"],
+            "is_active": data["is_active"],
+            "balance": f"{self.account.balance:.2f}",
+            "updated_at": account.updated_at.astimezone().isoformat(),
+            "created_at": self.account.created_at.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_cannot_put_accounts_of_other_users(self):
+        account = self.create_user_and_account()
+
+        url = reverse("account-detail", args=[account.pk])
+
+        data = {
+            "name": "New account name",
+            "description": "New account description",
+            "is_active": False,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 404)
+
+        # Assert account is not updated
+        retrieved_account = Account.objects.get(pk=account.pk)
+        self.assertEqual(retrieved_account.updated_at, account.updated_at)
+
+        # Assert correct data is returned
+        expected_response = {"detail": _("Not found.")}
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_owner_field_is_ignored_on_put(self):
+        url = reverse("account-detail", args=[self.account.pk])
+
+        user = self.create_user(email="richard.roe@example.com", password="password")
+
+        data = {
+            "owner": reverse("user-detail", args=[user.pk]),
+            "name": "New account name",
+            "description": "New account description",
+            "is_active": False,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        account = Account.objects.get(pk=self.account.pk)
+
+        # Assert account owner is not updated
+        self.assertEqual(account.owner, self.account.owner)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(url),
+            "name": data["name"],
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[self.account.currency.pk])
+            ),
+            "owner": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "description": data["description"],
+            "is_active": data["is_active"],
+            "balance": f"{self.account.balance:.2f}",
+            "updated_at": account.updated_at.astimezone().isoformat(),
+            "created_at": self.account.created_at.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_currency_field_is_ignored_on_put(self):
+        url = reverse("account-detail", args=[self.account.pk])
+
+        data = {
+            "currency": reverse("currency-detail", args=[self.currency.pk]),
+            "name": "New account name",
+            "description": "New account description",
+            "is_active": False,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        account = Account.objects.get(pk=self.account.pk)
+
+        # Assert account currency is not updated
+        self.assertEqual(account.currency, self.account.currency)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(url),
+            "name": data["name"],
+            "currency": response.wsgi_request.build_absolute_uri(
+                reverse("currency-detail", args=[self.account.currency.pk])
+            ),
+            "owner": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "description": data["description"],
+            "is_active": data["is_active"],
+            "balance": f"{self.account.balance:.2f}",
+            "updated_at": account.updated_at.astimezone().isoformat(),
+            "created_at": self.account.created_at.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)

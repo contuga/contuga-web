@@ -174,3 +174,92 @@ class CurrencyDetailTestCase(APITestCase, TestMixin):
         # Assert currency is deleted
         new_currency_count = Currency.objects.count()
         self.assertEqual(new_currency_count, old_currency_count)
+
+    def test_put(self):
+        url = reverse("currency-detail", args=[self.currency.pk])
+
+        data = {"name": "New currency name", "code": "BGN", "nominal": 1}
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        currency = Currency.objects.get(pk=self.currency.pk)
+
+        # Assert currency is updated
+        self.assertNotEqual(currency.updated_at, self.currency.updated_at)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(url),
+            "name": data["name"],
+            "author": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "code": data["code"],
+            "nominal": data["nominal"],
+            "updated_at": currency.updated_at.astimezone().isoformat(),
+            "created_at": self.currency.created_at.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_cannot_put_currencies_of_other_users(self):
+        currency = self.create_user_and_currency()
+
+        url = reverse("currency-detail", args=[currency.pk])
+
+        data = {"name": "New currency name", "code": "BGN", "nominal": 1}
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 404)
+
+        retrieved_currency = Currency.objects.get(pk=currency.pk)
+
+        # Assert currency is not updated
+        self.assertEqual(retrieved_currency.updated_at, currency.updated_at)
+
+        # Assert correct data is returned
+        expected_response = {"detail": _("Not found.")}
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_author_field_is_ignored_on_put(self):
+        url = reverse("currency-detail", args=[self.currency.pk])
+
+        user = self.create_user(email="richard.roe@example.com", password="password")
+
+        data = {
+            "author": reverse("user-detail", args=[user.pk]),
+            "name": "New currency name",
+            "code": "BGN",
+            "nominal": 1,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        currency = Currency.objects.get(pk=self.currency.pk)
+
+        # Assert currency author is not updated
+        self.assertEqual(currency.author, self.currency.author)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(url),
+            "name": data["name"],
+            "author": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "code": data["code"],
+            "nominal": data["nominal"],
+            "updated_at": currency.updated_at.astimezone().isoformat(),
+            "created_at": self.currency.created_at.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)

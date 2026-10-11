@@ -203,3 +203,96 @@ class SettingsDetailTestCase(APITestCase, TestMixin):
         # Assert settings is not deleted
         new_settings_count = Settings.objects.count()
         self.assertEqual(new_settings_count, old_settings_count)
+
+    def test_put(self):
+        url = reverse("settings-detail", args=[self.settings.pk])
+
+        incomes_category = self.create_category(transaction_type=INCOME)
+        expenditures_category = self.create_category(transaction_type=EXPENDITURE)
+        currency = self.create_currency()
+        account = self.create_account(currency=currency)
+
+        transactions_per_page = self.settings.transactions_per_page + 10
+
+        data = {
+            "default_incomes_category": reverse(
+                "category-detail", args=[incomes_category.pk]
+            ),
+            "default_expenditures_category": reverse(
+                "category-detail", args=[expenditures_category.pk]
+            ),
+            "default_account": reverse("account-detail", args=[account.pk]),
+            "transactions_per_page": transactions_per_page,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        settings = Settings.objects.get(pk=self.settings.pk)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(
+                reverse("settings-detail", args=[settings.pk])
+            ),
+            "user": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "default_incomes_category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[incomes_category.pk])
+            ),
+            "default_expenditures_category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[expenditures_category.pk])
+            ),
+            "default_account": response.wsgi_request.build_absolute_uri(
+                reverse("account-detail", args=[account.pk])
+            ),
+            "transactions_per_page": transactions_per_page,
+        }
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_cannot_put_settings_of_other_users(self):
+        user = self.create_user(email="richard.roe@example.com", password="password")
+
+        url = reverse("settings-detail", args=[user.settings.pk])
+
+        incomes_category = self.create_category(transaction_type=INCOME)
+        expenditures_category = self.create_category(transaction_type=EXPENDITURE)
+        currency = self.create_currency()
+        account = self.create_account(owner=user, currency=currency)
+
+        data = {
+            "default_incomes_category": reverse(
+                "category-detail", args=[incomes_category.pk]
+            ),
+            "default_expenditures_category": reverse(
+                "category-detail", args=[expenditures_category.pk]
+            ),
+            "default_account": reverse("account-detail", args=[account.pk]),
+            "transactions_per_page": constants.DEFAULT_TRANSACTIONS_PER_PAGE + 10,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 404)
+
+        # Assert settings are not updated
+        settings = Settings.objects.get(pk=user.pk)
+
+        self.assertEqual(
+            user.settings.default_incomes_category, settings.default_incomes_category
+        )
+        self.assertEqual(
+            user.settings.default_expenditures_category,
+            settings.default_expenditures_category,
+        )
+        self.assertEqual(user.settings.default_account, settings.default_account)
+
+        # Assert correct data is returned
+        expected_response = {"detail": _("Not found.")}
+
+        self.assertDictEqual(response.json(), expected_response)

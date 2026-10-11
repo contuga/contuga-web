@@ -309,3 +309,203 @@ class TransactionDetailTestCase(APITestCase, TestMixin):
         # Assert transaction is not deleted
         new_transaction_count = Transaction.objects.count()
         self.assertEqual(new_transaction_count, old_transaction_count)
+
+    def test_put(self):
+        url = reverse("transaction-detail", args=[self.transaction.pk])
+
+        category = self.create_category(
+            name="New category name", description="New category description"
+        )
+        account = self.create_account(
+            name="New account name", description="New account description"
+        )
+
+        data = {
+            "type": constants.INCOME,
+            "amount": "300.30",
+            "category": reverse("category-detail", args=[category.pk]),
+            "account": reverse("account-detail", args=[account.pk]),
+            "description": "New transaction description",
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        transaction = Transaction.objects.get(pk=self.transaction.pk)
+
+        # Assert transaction is updated
+        self.assertNotEqual(transaction.updated_at, self.transaction.updated_at)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(url),
+            "type": data["type"],
+            "amount": data["amount"],
+            "author": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[category.pk])
+            ),
+            "tags": [
+                response.wsgi_request.build_absolute_uri(
+                    reverse("tag-detail", args=[tag.pk])
+                )
+                for tag in self.tags
+            ],
+            "account": response.wsgi_request.build_absolute_uri(
+                reverse("account-detail", args=[account.pk])
+            ),
+            "description": data["description"],
+            "expenditure_counterpart": None,
+            "updated_at": transaction.updated_at.astimezone().isoformat(),
+            "created_at": self.transaction.created_at.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_cannot_put_transactions_of_other_users(self):
+        transaction = self.create_independent_transaction()
+
+        url = reverse("transaction-detail", args=[transaction.pk])
+
+        category = self.create_category(
+            name="New category name", description="New category description"
+        )
+        account = self.create_account(
+            name="New account name", description="New account description"
+        )
+
+        data = {
+            "type": constants.EXPENDITURE,
+            "amount": "300.30",
+            "category": reverse("category-detail", args=[category.pk]),
+            "account": reverse("account-detail", args=[account.pk]),
+            "description": "New transaction description",
+            "tags": [],
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 404)
+
+        retrieved_transaction = Transaction.objects.get(pk=transaction.pk)
+
+        # Assert transaction is not updated
+        self.assertEqual(retrieved_transaction.updated_at, transaction.updated_at)
+
+        # Assert correct data is returned
+        expected_response = {"detail": _("Not found.")}
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_author_field_is_ignored_on_put(self):
+        url = reverse("transaction-detail", args=[self.transaction.pk])
+
+        user = self.create_user(email="richard.roe@example.com", password="password")
+
+        data = {
+            "author": reverse("user-detail", args=[user.pk]),
+            "type": constants.INCOME,
+            "amount": "300.30",
+            "category": reverse("category-detail", args=[self.transaction.category.pk]),
+            "account": reverse("account-detail", args=[self.transaction.account.pk]),
+            "description": "New transaction description",
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        transaction = Transaction.objects.get(pk=self.transaction.pk)
+
+        # Assert transaction author is not updated
+        self.assertEqual(transaction.author, self.transaction.author)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(url),
+            "type": data["type"],
+            "amount": data["amount"],
+            "author": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "category": response.wsgi_request.build_absolute_uri(
+                reverse("category-detail", args=[self.transaction.category.pk])
+            ),
+            "tags": [
+                response.wsgi_request.build_absolute_uri(
+                    reverse("tag-detail", args=[tag.pk])
+                )
+                for tag in self.tags
+            ],
+            "account": response.wsgi_request.build_absolute_uri(
+                reverse("account-detail", args=[self.transaction.account.pk])
+            ),
+            "description": data["description"],
+            "expenditure_counterpart": None,
+            "updated_at": transaction.updated_at.astimezone().isoformat(),
+            "created_at": self.transaction.created_at.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_put_to_income_with_wrong_category(self):
+        category = self.create_category(transaction_type=constants.EXPENDITURE)
+        transaction = self.create_transaction(category=category)
+
+        url = reverse("transaction-detail", args=[transaction.pk])
+
+        data = {
+            "type": constants.INCOME,
+            "amount": transaction.amount,
+            "category": reverse("category-detail", args=[category.pk]),
+            "account": reverse("account-detail", args=[self.account.pk]),
+            "description": transaction.description,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 400)
+
+        transaction = Transaction.objects.get(pk=self.transaction.pk)
+
+        # Assert transaction is not updated
+        self.assertEqual(transaction.updated_at, self.transaction.updated_at)
+
+        # Assert correct data is returned
+        expected_message = _("Invalid hyperlink - Object does not exist.")
+        self.assertEqual(response.json(), {"category": [expected_message]})
+
+    def test_put_to_expenditure_with_wrong_category(self):
+        category = self.create_category(transaction_type=constants.INCOME)
+        transaction = self.create_transaction(category=category)
+
+        url = reverse("transaction-detail", args=[transaction.pk])
+
+        data = {
+            "type": constants.EXPENDITURE,
+            "amount": transaction.amount,
+            "category": reverse("category-detail", args=[category.pk]),
+            "account": reverse("account-detail", args=[self.account.pk]),
+            "description": transaction.description,
+        }
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 400)
+
+        transaction = Transaction.objects.get(pk=self.transaction.pk)
+
+        # Assert transaction is not updated
+        self.assertEqual(transaction.updated_at, self.transaction.updated_at)
+
+        # Assert correct data is returned
+        expected_message = _("Invalid hyperlink - Object does not exist.")
+        self.assertEqual(response.json(), {"category": [expected_message]})

@@ -157,3 +157,50 @@ class UserDetailTestCase(APITestCase, TestMixin):
         # Assert user is not deleted
         new_user_count = User.objects.count()
         self.assertEqual(new_user_count, old_user_count)
+
+    def test_put(self):
+        url = reverse("user-detail", args=[self.user.pk])
+
+        data = {"current_password": "password", "new_password": "new_password"}
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 200)
+
+        # Assert user is updated
+        user = User.objects.get(pk=self.user.pk)
+        self.assertNotEqual(user.password, self.user.password)
+
+        # Assert correct data is returned
+        expected_response = {
+            "url": response.wsgi_request.build_absolute_uri(
+                reverse("user-detail", args=[self.user.pk])
+            ),
+            "email": self.user.email,
+            "last_login": self.user.last_login.astimezone().isoformat(),
+            "date_joined": self.user.date_joined.astimezone().isoformat(),
+        }
+
+        self.assertDictEqual(response.json(), expected_response)
+
+    def test_cannot_put_other_users(self):
+        user = self.create_user(email="richard.roe@example.com", password="password")
+
+        url = reverse("user-detail", args=[user.pk])
+
+        data = {"current_password": "password", "new_password": "new_password"}
+
+        response = self.client.put(url, data=data, format="json")
+
+        # Assert status code is correct
+        self.assertEqual(response.status_code, 404)
+
+        # Assert user is not updated
+        retrieved_user = User.objects.get(pk=user.pk)
+        self.assertEqual(retrieved_user.password, user.password)
+
+        # Assert correct data is returned
+        expected_response = {"detail": _("Not found.")}
+
+        self.assertDictEqual(response.json(), expected_response)
