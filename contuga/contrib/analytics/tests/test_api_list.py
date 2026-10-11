@@ -524,3 +524,50 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             ],
         }
         self.assertDictEqual(response.json(), expected_response)
+
+    def test_unauthenticated_request(self):
+        client = APIClient()
+        url = reverse("analytics-list")
+        response = client.get(url, format="json")
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_cannot_see_other_users_reports(self):
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
+
+        other_user = self.create_user(
+            email="richard.roe@example.com", password="password"
+        )
+        other_currency = self.create_currency(name="Euro", code="EUR")
+        other_account = self.create_account(
+            name="Other account", owner=other_user, currency=other_currency
+        )
+        self.create_income(
+            amount=Decimal("999"), account=other_account, author=other_user
+        )
+
+        url = reverse("analytics-list")
+        response = self.client.get(url, format="json")
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_reports = utils.generate_reports(user=self.user)
+
+        self.assertEqual(response.json()["count"], len(expected_reports))
+        for item in response.json()["results"]:
+            self.assertNotEqual(item["pk"], str(other_account.pk))
+
+    def test_get_empty_reports(self):
+        url = reverse("analytics-list")
+        response = self.client.get(url, format="json")
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_response = {
+            "count": 0,
+            "next": None,
+            "previous": None,
+            "results": [],
+        }
+        self.assertDictEqual(response.json(), expected_response)
