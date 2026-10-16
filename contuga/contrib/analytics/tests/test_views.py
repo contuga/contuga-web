@@ -293,6 +293,38 @@ class AnalyticsTestCase(TestCase, TestMixin):
             form.errors, {"end_date": [_("The end date cannot be in the future.")]}
         )
 
+    def test_get_monthly_reports_with_start_date_after_end_date(self):
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
+
+        today = timezone.now().astimezone().date()
+        start_date = today
+        end_date = today - timedelta(days=1)
+
+        response = self.client.get(
+            reverse("analytics:list"),
+            {
+                "report_unit": constants.MONTHS,
+                "start_date": start_date.strftime("%m/%d/%Y"),
+                "end_date": end_date.strftime("%m/%d/%Y"),
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_reports = utils.generate_reports(user=self.account.owner)
+        expected_json = json.dumps(expected_reports, cls=DjangoJSONEncoder)
+
+        self.assertEqual(response.context["reports"], expected_json)
+        self.assertContains(response=response, text=expected_json)
+
+        form = response.context.get("form")
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors, {"start_date": [_("The start date cannot be after the end date.")]}
+        )
+
     def test_get_monthly_reports_with_start_and_end_date(self):
         self.create_income(amount=Decimal("310"))
         self.create_expenditure(amount=Decimal("100"))

@@ -22,6 +22,13 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
         token, created = Token.objects.get_or_create(user=self.user)
         self.client = APIClient(HTTP_AUTHORIZATION="Token " + token.key)
 
+    def test_get_monthly_reports_requires_authentication(self):
+        client = APIClient()
+
+        response = client.get(reverse("analytics-list"), format="json")
+
+        self.assertEqual(response.status_code, 403)
+
     def test_get_monthly_reports(self):
         self.create_income(amount=Decimal("310"))
 
@@ -571,3 +578,90 @@ class AnalyticsAPITestCase(APITestCase, TestMixin):
             "results": [],
         }
         self.assertDictEqual(response.json(), expected_response)
+
+    def test_get_monthly_reports_with_invalid_unit(self):
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
+
+        url = reverse("analytics-list")
+        response = self.client.get(url, {"report_unit": "invalid"}, format="json")
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_reports = utils.generate_reports(user=self.account.owner)
+        self.assertEqual(response.json()["count"], len(expected_reports))
+
+    def test_get_monthly_reports_with_invalid_start_date(self):
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
+
+        url = reverse("analytics-list")
+        response = self.client.get(url, {"start_date": "invalid"}, format="json")
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_reports = utils.generate_reports(user=self.account.owner)
+        self.assertEqual(response.json()["count"], len(expected_reports))
+
+    def test_get_monthly_reports_with_start_date_before_2019(self):
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
+
+        url = reverse("analytics-list")
+        response = self.client.get(url, {"start_date": "12/31/2018"}, format="json")
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_reports = utils.generate_reports(user=self.account.owner)
+        self.assertEqual(response.json()["count"], len(expected_reports))
+
+    def test_get_monthly_reports_with_end_date_before_2019(self):
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
+
+        url = reverse("analytics-list")
+        response = self.client.get(url, {"end_date": "12/31/2018"}, format="json")
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_reports = utils.generate_reports(user=self.account.owner)
+        self.assertEqual(response.json()["count"], len(expected_reports))
+
+    def test_get_monthly_reports_with_end_date_in_the_future(self):
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
+
+        tomorrow = timezone.now().astimezone() + timedelta(days=1)
+        url = reverse("analytics-list")
+        response = self.client.get(
+            url, {"end_date": tomorrow.strftime("%m/%d/%Y")}, format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_reports = utils.generate_reports(user=self.account.owner)
+        self.assertEqual(response.json()["count"], len(expected_reports))
+
+    def test_get_monthly_reports_with_start_date_after_end_date(self):
+        self.create_income(amount=Decimal("310"))
+        self.create_expenditure(amount=Decimal("100"))
+
+        today = timezone.now().astimezone().date()
+        start_date = today
+        end_date = today - timedelta(days=1)
+
+        url = reverse("analytics-list")
+        response = self.client.get(
+            url,
+            {
+                "report_unit": constants.MONTHS,
+                "start_date": start_date.strftime("%m/%d/%Y"),
+                "end_date": end_date.strftime("%m/%d/%Y"),
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_reports = utils.generate_reports(user=self.account.owner)
+        self.assertEqual(response.json()["count"], len(expected_reports))

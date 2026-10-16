@@ -29,8 +29,8 @@ def get_date_limits(start_date, end_date, report_unit, conf):
     # TODO: Let users specify their timezone and use it below
     tzinfo = pytz.timezone(settings.TIME_ZONE)
 
-    start_date = datetime.combine(date=start_date, time=time.min, tzinfo=tzinfo)
-    end_date = datetime.combine(date=end_date, time=time.max, tzinfo=tzinfo)
+    start_date = tzinfo.localize(datetime.combine(date=start_date, time=time.min))
+    end_date = tzinfo.localize(datetime.combine(date=end_date, time=time.max))
 
     return start_date, end_date
 
