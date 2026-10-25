@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: cimg/python:3.10-browsers
         environment:
-          PIPENV_VENV_IN_PROJECT: true
+          POETRY_VIRTUALENVS_IN_PROJECT: true
           DJANGO_ENV: test
     working_directory: ~/repo
     steps:
@@ -17,17 +17,17 @@ jobs:
           node-version: "18.12.1"
       - restore_cache:
           keys:
-            - python-dependencies-{{ checksum "Pipfile.lock" }}
+            - python-dependencies-{{ checksum "poetry.lock" }}
             - python-dependencies-
       - run:
           name: Installing Python dependencies
           command: |
-            pip install pipenv
-            pipenv sync --dev
+            pip install poetry
+            poetry install --with dev --no-interaction --no-ansi
       - save_cache:
           paths:
             - ~/repo/.venv
-          key: python-dependencies-{{ checksum "Pipfile.lock" }}
+          key: python-dependencies-{{ checksum "poetry.lock" }}
       - restore_cache:
           keys:
             - node-dependencies-{{ checksum "package-lock.json" }}
@@ -46,22 +46,22 @@ jobs:
           command: |
             sudo apt update && sudo apt install -y sassc cssmin
             npm install -g uglify-js
-            pipenv run python manage.py collectstatic --noinput
-            pipenv run coverage run manage.py test
-            pipenv run coverage report
-            pipenv run coverage html
+            poetry run python manage.py collectstatic --noinput
+            poetry run coverage run manage.py test
+            poetry run coverage report
+            poetry run coverage html
       - run:
           name: Running black
           command: |
-            pipenv run black . --check
+            poetry run black . --check
       - run:
           name: Running flake8
           command: |
-            pipenv run flake8 . --statistic --exclude .venv
+            poetry run flake8 . --statistic --exclude .venv
       - run:
           name: Running isort
           command: |
-            pipenv run isort **/*.py --check-only --verbose
+            poetry run isort **/*.py --check-only --verbose
       - store_artifacts:
           path: htmlcov
 

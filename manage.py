@@ -4,6 +4,10 @@ import sys
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "contuga.settings")
+
+    if "DJANGO_ENV" not in os.environ and len(sys.argv) > 1 and sys.argv[1] == "test":
+        os.environ["DJANGO_ENV"] = "test"
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
