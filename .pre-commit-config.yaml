@@ -31,7 +31,7 @@ repos:
         additional_dependencies: [bandit]
       - id: tests
         name: run tests
-        entry: pipenv run test
+        entry: DJANGO_ENV=test poetry run python manage.py test
         language: system
         pass_filenames: false
   - repo: https://github.com/pre-commit/mirrors-prettier

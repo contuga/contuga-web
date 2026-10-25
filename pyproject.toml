@@ -1,2 +1,47 @@
+[project]
+name = "contuga-web"
+version = "0.1.0"
+description = "Simple web-based expense manager application."
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "django==3.1.*",
+    "django-pipeline==2.0.*",
+    "django-sekizai==2.0.*",
+    "django-widget-tweaks==1.4.*",
+    "django-registration==3.1.*",
+    "django-extensions",
+    "django-anymail[mailjet]==8.*",
+    "django-recaptcha==2.0.*",
+    "django-split-settings==1.0.*",
+    "django-filter==2.4.*",
+    "django-import-export==2.4.*",
+    "djangorestframework==3.12.*",
+    "markdown==3.3.*",
+    "coreapi==2.3.*",
+    "python-dateutil==2.8.*",
+    "django-parler==2.2.*",
+    "django-debug-toolbar==3.2.*",
+    "psycopg2==2.8.*",
+]
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "<6.0.0"
+ipdb = "*"
+black = "*"
+pre-commit = "*"
+wily = "*"
+bandit = "*"
+coverage = "*"
+isort = "*"
+selenium = "4.*"
+
 [tool.isort]
 profile = "black"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,7 +1,7 @@
 FROM python:3.10
 
 RUN apt update && apt install -y sassc cssmin gettext
-RUN pip3 install uwsgi pipenv gunicorn
+RUN pip3 install uwsgi gunicorn poetry
 
 ENV NODE_VERSION=18.12.1
 ENV NVM_VERSION=0.39.1
@@ -16,10 +16,10 @@ RUN npm install -g uglify-js
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
-COPY Pipfile .
-COPY Pipfile.lock .
+COPY pyproject.toml .
+COPY poetry.lock .
 
-RUN pipenv install --system
+RUN poetry config virtualenvs.create false && poetry install --only main --no-root --no-interaction --no-ansi
 
 COPY package.json .
 COPY package-lock.json .
