@@ -9,7 +9,7 @@ Simple web-based expense manager application.
 The following requirements need to be satisfied to setup the project.
 
 1. [**Python**](https://www.python.org/) - While the project may work with any Python version above 3.5 it is actively developed using 3.10 and it is the officially supported version. Use any other Python version at your own risk.
-1. [**Pipenv**](https://github.com/pypa/pipenv) - Used for installing backend dependencies. The latest version is the one usually used for development but the tool is stable and most versions should work flawlessly.
+1. [**Poetry**](https://python-poetry.org/) - Used for installing and managing backend dependencies.
 1. [**NodeJS**](https://nodejs.org/) - The project is currently using the latest LTS version.
 1. [**NPM**](https://www.npmjs.com/) - Used for installing frontend dependencies. Use the one that usually comes with the latest LTS version of Node but a newer one should also work.
 1. [**SassC**](https://github.com/sass/sassc) - The project uses SassC libsass driver for compiling Sass code to plain CSS. Check the official repository to find out how to get SassC installed on your system. For Debian-based Linux distributions, you can just install it - `sudo apt install sassc`.
@@ -18,14 +18,14 @@ The following requirements need to be satisfied to setup the project.
 
 1. Navigate to the project's root directory.
 1. Run `npm install` to install the frontend dependencies.
-1. Execute `pipenv install` to install the backend dependencies.
-1. Type `pipenv run migrate` to apply all database migrations. Currently, the default database is SQLite. Edit the settings.py file if you want to use MySQL/MariaDB or PostgreSQL. Read the official Django [documentation](https://docs.djangoproject.com/en/4.2/ref/databases/) to learn more.
+1. Execute `poetry install --with dev` to install the backend dependencies.
+1. Type `poetry run ./manage.py migrate` to apply all database migrations. Currently, the default database is SQLite. Edit the settings.py file if you want to use MySQL/MariaDB or PostgreSQL. Read the official Django [documentation](https://docs.djangoproject.com/en/4.2/ref/databases/) to learn more.
 
 ### Development
 
-Start the development server using `pipenv run server` and navigate to http://localhost:8000 in your browser.
-If you need admin access you can create a privileged user by executing `pipenv run manage createsuperuser`.
-If you need to execute something else within the project's environment, you can enter the environment using `pipenv shell`.
+Start the development server using `poetry run python manage.py runserver` and navigate to http://localhost:8000 in your browser.
+If you need admin access you can create a privileged user by executing `poetry run python manage.py createsuperuser`.
+If you need to execute something else within the project's environment, prefix the command with `poetry run`.
 
 ### Running using Docker
 

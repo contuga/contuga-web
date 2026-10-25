@@ -3,13 +3,13 @@ SHELL := /bin/bash
 pull_changes:
 	git pull
 install_dependencies:
-	npm install && pipenv sync
+	npm install && poetry install --with dev
 migrate:
-	pipenv run ./manage.py migrate
+	poetry run ./manage.py migrate
 collectstatic:
-	pipenv run ./manage.py collectstatic --no-input
+	poetry run ./manage.py collectstatic --no-input
 compilemessages:
-	pipenv run ./manage.py compilemessages
+	poetry run ./manage.py compilemessages
 reload:
 	touch contuga/wsgi.py
 update:	pull_changes install_dependencies migrate collectstatic compilemessages reload
