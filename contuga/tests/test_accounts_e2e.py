@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.utils import formats
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver

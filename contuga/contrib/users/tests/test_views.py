@@ -4,7 +4,7 @@ from django.core import mail, signing
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from contuga.mixins import TestMixin
 

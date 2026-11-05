@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q, Sum
 from django.db.models.functions import Coalesce
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from contuga.models import TimestampModel
 

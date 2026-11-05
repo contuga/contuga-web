@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from contuga.contrib.categories import constants
 from contuga.contrib.categories.models import Category

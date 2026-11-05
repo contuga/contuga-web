@@ -1,5 +1,5 @@
 from django.utils import formats
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait

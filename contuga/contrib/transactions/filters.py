@@ -2,7 +2,7 @@ from datetime import datetime, time
 
 import pytz
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_filters import filters, filterset
 
 from contuga.contrib.accounts import models as account_models

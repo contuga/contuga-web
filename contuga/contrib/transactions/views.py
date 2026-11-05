@@ -115,6 +115,13 @@ class TransactionListView(
             .order_by("currency")
         )
 
+        # Django 5 requires DecimalField and IntegerField mixing to be explicitly typed
+        # when aggregating annotated values. The previous expression used the raw
+        # subtraction of two aggregates without a declared output field, which triggered
+        # the mixed-type error on the transaction list page after the dependency update.
+        for entry in currency_statistics:
+            entry["balance"] = entry["income"] - entry["expenditure"]
+
         return {
             "transaction_count": paginator.count,
             "currency_count": len(currency_statistics),

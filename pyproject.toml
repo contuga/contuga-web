@@ -3,41 +3,43 @@ name = "contuga-web"
 version = "0.1.0"
 description = "Simple web-based expense manager application."
 readme = "README.md"
-requires-python = ">=3.10,<3.11"
+requires-python = ">=3.10,<3.14"
 dependencies = [
-    "django==3.1.*",
-    "django-pipeline==2.0.*",
-    "django-sekizai==2.0.*",
-    "django-widget-tweaks==1.4.*",
-    "django-registration==3.1.*",
-    "django-extensions",
-    "django-anymail[mailjet]==8.*",
-    "django-recaptcha==2.0.*",
-    "django-split-settings==1.0.*",
-    "django-filter==2.4.*",
-    "django-import-export==2.4.*",
-    "djangorestframework==3.12.*",
-    "markdown==3.3.*",
-    "coreapi==2.3.*",
-    "python-dateutil==2.8.*",
-    "django-parler==2.2.*",
-    "django-debug-toolbar==3.2.*",
-    "psycopg2==2.8.*",
+    "django>=5.2,<5.3",
+    "django-pipeline>=4.1.0,<5",
+    "django-sekizai>=4.1.0,<5",
+    "django-widget-tweaks>=1.5.1,<2",
+    "django-registration>=5.2.1,<6",
+    "django-extensions>=4.1.0,<5",
+    "django-anymail[mailjet]>=15.2,<16",
+    "django-recaptcha>=4.1.0,<5",
+    "django-split-settings>=1.3.2,<2",
+    "django-filter>=24.3,<25",
+    "django-import-export>=4.4.3,<5",
+    "djangorestframework>=3.15.2,<3.17",
+    "markdown>=3.8,<4",
+    "coreapi>=2.3.3,<3",
+    "python-dateutil>=2.8,<3",
+    "django-parler>=2.4,<3",
+    "django-debug-toolbar>=8.0,<9",
+    "psycopg2>=2.9,<3",
+    "setuptools>=75.0.0,<81",
+    "pytz (>=2026.5,<2027.0)",
 ]
 
 [tool.poetry]
 package-mode = false
 
 [tool.poetry.group.dev.dependencies]
-flake8 = "<6.0.0"
-ipdb = "*"
-black = "*"
-pre-commit = "*"
-wily = "*"
-bandit = "*"
-coverage = "*"
-isort = "*"
-selenium = "4.*"
+flake8 = ">=7,<8"
+ipdb = ">=0.13,<1"
+black = ">=25,<26"
+pre-commit = ">=4,<5"
+wily = ">=1.25,<2"
+bandit = ">=1.8,<2"
+coverage = ">=7,<8"
+isort = ">=6,<7"
+selenium = ">=4.32,<5"
 
 [tool.isort]
 profile = "black"

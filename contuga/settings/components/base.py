@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "django_filters",
     "anymail",
-    "captcha",
+    "django_recaptcha",
     "import_export",
     "rest_framework",
     "rest_framework.authtoken",

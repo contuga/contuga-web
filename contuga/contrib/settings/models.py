@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from contuga.contrib.accounts.models import Account
 from contuga.contrib.categories.models import Category

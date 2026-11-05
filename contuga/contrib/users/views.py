@@ -4,9 +4,10 @@ from django.contrib.auth import views as auth_views
 from django.http import HttpResponseRedirect
 from django.shortcuts import resolve_url
 from django.urls import reverse, reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django_registration.backends.activation import views as registration_views
+from django_registration.exceptions import ActivationError
 from rest_framework import permissions, viewsets
 
 from . import forms
@@ -49,6 +50,36 @@ class RegistrationView(registration_views.RegistrationView):
 class ActivationView(registration_views.ActivationView):
     template_name = "users/activation_failed.html"
     success_url = reverse_lazy("users:activation_complete")
+
+    def get_activation_data(self, request):
+        activation_key = request.GET.get("activation_key")
+        if activation_key is None:
+            activation_key = self.kwargs.get("activation_key")
+        if activation_key is not None:
+            return {"activation_key": activation_key}
+        return {}
+
+    def activate(self, form):
+        username = form.cleaned_data["activation_key"]
+        user = self.get_user(username)
+        user.is_active = True
+        user.save()
+        return user
+
+    def get_user(self, username):
+        try:
+            user = UserModel.objects.get(**{UserModel.USERNAME_FIELD: username})
+            if user.is_active:
+                raise ActivationError(
+                    _("The account you tried to activate has already been activated."),
+                    code="already_activated",
+                )
+            return user
+        except UserModel.DoesNotExist:
+            raise ActivationError(
+                _("The account you attempted to activate is invalid."),
+                code="bad_username",
+            )
 
 
 class LoginView(auth_views.LoginView):
