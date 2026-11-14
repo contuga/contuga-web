@@ -21,7 +21,7 @@ class CategoryViewTests(TestCase, TestMixin):
         self.assertEqual(response.status_code, 200)
 
         # Assert queryset is correct
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             response.context["category_list"],
             Category.objects.all(),
             transform=lambda x: x,

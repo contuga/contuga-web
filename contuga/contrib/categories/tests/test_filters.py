@@ -26,7 +26,7 @@ class CategoryFilterTests(TestCase, TestMixin):
     def test_transaction_type_filter(self):
         data = {"transaction_type": INCOME}
         filter = CategoryFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs,
             self.user.categories.filter(transaction_type=INCOME),
             transform=lambda x: x,
@@ -34,7 +34,7 @@ class CategoryFilterTests(TestCase, TestMixin):
 
         data = {"transaction_type": EXPENDITURE}
         filter = CategoryFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs,
             self.user.categories.filter(transaction_type=EXPENDITURE),
             transform=lambda x: x,
@@ -42,7 +42,7 @@ class CategoryFilterTests(TestCase, TestMixin):
 
         data = {"transaction_type": ALL}
         filter = CategoryFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs,
             self.user.categories.filter(transaction_type=ALL),
             transform=lambda x: x,
@@ -50,6 +50,6 @@ class CategoryFilterTests(TestCase, TestMixin):
 
         data = {"transaction_type": ""}
         filter = CategoryFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs, self.user.categories.all(), transform=lambda x: x
         )

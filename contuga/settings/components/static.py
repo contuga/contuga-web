@@ -35,7 +35,14 @@ STATICFILES_FINDERS = (
     "pipeline.finders.PipelineFinder",
 )
 
-STATICFILES_STORAGE = "pipeline.storage.PipelineManifestStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "pipeline.storage.PipelineManifestStorage",
+    },
+}
 
 # Django Pipeline
 # https://django-pipeline.readthedocs.io/en/stable/

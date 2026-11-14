@@ -34,7 +34,7 @@ class TransactionViewTests(TestCase, TestMixin):
         self.assertEqual(response.status_code, 200)
 
         # Assert queryset is correct
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             response.context["transaction_list"],
             Transaction.objects.all(),
             transform=lambda x: x,

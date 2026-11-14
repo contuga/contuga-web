@@ -47,7 +47,7 @@ class UserDetailTestCase(APITestCase, TestMixin):
         self.assertEqual(response.status_code, 404)
 
         # Assert correct data is returned
-        expected_response = {"detail": _("Not found.")}
+        expected_response = {"detail": "No User matches the given query."}
 
         self.assertDictEqual(response.json(), expected_response)
 
@@ -94,7 +94,7 @@ class UserDetailTestCase(APITestCase, TestMixin):
         self.assertEqual(retrieved_user.password, user.password)
 
         # Assert correct data is returned
-        expected_response = {"detail": _("Not found.")}
+        expected_response = {"detail": "No User matches the given query."}
 
         self.assertDictEqual(response.json(), expected_response)
 
@@ -201,6 +201,6 @@ class UserDetailTestCase(APITestCase, TestMixin):
         self.assertEqual(retrieved_user.password, user.password)
 
         # Assert correct data is returned
-        expected_response = {"detail": _("Not found.")}
+        expected_response = {"detail": "No User matches the given query."}
 
         self.assertDictEqual(response.json(), expected_response)

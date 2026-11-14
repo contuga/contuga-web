@@ -19,7 +19,7 @@ class CurrencyViewTests(TestCase, TestMixin):
         self.assertEqual(response.status_code, 200)
 
         # Assert queryset is correct
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             response.context["currency_list"],
             Currency.objects.all(),
             transform=lambda x: x,

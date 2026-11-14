@@ -73,7 +73,7 @@ class TransactionViewTests(TestCase, TestMixin):
 
         form = response.context.get("form")
         queryset = form.fields["account"].queryset
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             expected_account_queryset, queryset, transform=lambda x: x
         )
 
@@ -91,7 +91,7 @@ class TransactionViewTests(TestCase, TestMixin):
 
         form = response.context.get("form")
         queryset = form.fields["category"].queryset
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             expected_category_queryset, queryset, transform=lambda x: x
         )
 

@@ -20,8 +20,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views import generic
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken import views as authtoken_views
-from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 
 from contuga.contrib.accounts.views import AccountViewSet
@@ -57,7 +57,12 @@ urlpatterns = i18n_patterns(
     path("settings/", include(("contuga.contrib.settings.urls", "settings"))),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
-    path("api/docs/", include_docs_urls(title="Contuga Web API", public=False)),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
     path("api/auth/", include("rest_framework.urls")),
     path("api/token/", authtoken_views.obtain_auth_token),
     path(

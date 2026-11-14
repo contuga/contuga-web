@@ -36,10 +36,10 @@ class InternalTransferViewTests(TestCase, TestMixin):
         from_account = form.fields["from_account"]
         to_account = form.fields["to_account"]
 
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             expected_account_queryset, from_account.queryset, transform=lambda x: x
         )
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             expected_account_queryset, to_account.queryset, transform=lambda x: x
         )
 

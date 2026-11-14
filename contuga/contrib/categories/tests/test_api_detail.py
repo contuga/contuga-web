@@ -53,7 +53,7 @@ class CategoryDetailTestCase(APITestCase, TestMixin):
         self.assertEqual(response.status_code, 404)
 
         # Assert correct data is returned
-        expected_response = {"detail": _("Not found.")}
+        expected_response = {"detail": "No Category matches the given query."}
 
         self.assertDictEqual(response.json(), expected_response)
 
@@ -113,7 +113,7 @@ class CategoryDetailTestCase(APITestCase, TestMixin):
         self.assertEqual(retrieved_category.updated_at, category.updated_at)
 
         # Assert correct data is returned
-        expected_response = {"detail": _("Not found.")}
+        expected_response = {"detail": "No Category matches the given query."}
 
         self.assertDictEqual(response.json(), expected_response)
 
@@ -342,7 +342,7 @@ class CategoryDetailTestCase(APITestCase, TestMixin):
         self.assertEqual(retrieved_category.updated_at, category.updated_at)
 
         # Assert correct data is returned
-        expected_response = {"detail": _("Not found.")}
+        expected_response = {"detail": "No Category matches the given query."}
 
         self.assertDictEqual(response.json(), expected_response)
 

@@ -21,7 +21,7 @@ class AccountsTestCase(TestCase, TestMixin):
         self.assertEqual(response.status_code, 200)
 
         # Assert queryset is correct
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             response.context["account_list"],
             Account.objects.all(),
             transform=lambda x: x,

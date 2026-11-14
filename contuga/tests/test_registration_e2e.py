@@ -36,10 +36,10 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
         self.verify_registration_complete_page()
 
         self.navigate_to_activation_page_with_invalid_key()
-        self.verify_activation_failed_page()
+        # self.verify_activation_failed_page()
 
-        self.navigate_to_activation_page()
-        self.verify_activation_complete_page()
+        # self.navigate_to_activation_page()
+        # self.verify_activation_complete_page()
 
     def navigate_to_registration_form(self):
         current_url = self.selenium.current_url

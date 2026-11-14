@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "import_export",
     "rest_framework",
     "rest_framework.authtoken",
+    "drf_spectacular",
     "parler",
     "debug_toolbar",
     # Django Apps
@@ -142,9 +143,16 @@ DEFAULT_CATEGORIES = [
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Contuga Web API",
+    "DESCRIPTION": "Simple web-based expense manager application API.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }

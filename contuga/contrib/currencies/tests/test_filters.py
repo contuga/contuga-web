@@ -18,7 +18,7 @@ class CurrencyFilterTests(TestCase, TestMixin):
     def test_code_filter(self):
         data = {"code": self.currency.code}
         filter = CurrencyFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs,
             self.user.currencies.filter(code=self.currency.code),
             transform=lambda x: x,
@@ -26,7 +26,7 @@ class CurrencyFilterTests(TestCase, TestMixin):
 
         data = {"code": self.second_currency.code}
         filter = CurrencyFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs,
             self.user.currencies.filter(code=self.second_currency.code),
             transform=lambda x: x,
@@ -34,14 +34,14 @@ class CurrencyFilterTests(TestCase, TestMixin):
 
         data = {"code": ""}
         filter = CurrencyFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs, self.user.currencies.all(), transform=lambda x: x
         )
 
     def test_nominal_filter(self):
         data = {"nominal": self.currency.nominal}
         filter = CurrencyFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs,
             self.user.currencies.filter(nominal=self.currency.nominal),
             transform=lambda x: x,
@@ -49,7 +49,7 @@ class CurrencyFilterTests(TestCase, TestMixin):
 
         data = {"nominal": self.second_currency.nominal}
         filter = CurrencyFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs,
             self.user.currencies.filter(nominal=self.second_currency.nominal),
             transform=lambda x: x,
@@ -57,6 +57,6 @@ class CurrencyFilterTests(TestCase, TestMixin):
 
         data = {"nominal": ""}
         filter = CurrencyFilterSet(data=data, request=self.request)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.qs, self.user.currencies.all(), transform=lambda x: x
         )

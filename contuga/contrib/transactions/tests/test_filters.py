@@ -37,7 +37,7 @@ class TransactionFilterTests(TestCase, TestMixin):
     def test_only_categories_of_current_user_are_shown(self):
         filter = TransactionFilterSet(request=self.request)
 
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.form.fields["category"].queryset,
             self.data_john["user"].categories.all(),
             transform=lambda x: x,
@@ -46,7 +46,7 @@ class TransactionFilterTests(TestCase, TestMixin):
     def test_only_accounts_of_current_user_are_shown(self):
         filter = TransactionFilterSet(request=self.request)
 
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             filter.form.fields["account"].queryset,
             self.data_john["user"].accounts.all(),
             transform=lambda x: x,
