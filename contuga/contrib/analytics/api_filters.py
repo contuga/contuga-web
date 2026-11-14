@@ -1,14 +1,26 @@
-import coreapi
 from rest_framework.filters import BaseFilterBackend
 
 
 class ReportsFilterBackend(BaseFilterBackend):
-    def get_schema_fields(self, view):
+    def get_schema_operation_parameters(self, view):
         return [
-            coreapi.Field(
-                name="report_unit", location="query", required=False, type="string"
-            ),
-            coreapi.Field(
-                name="start_date", location="query", required=False, type="string"
-            ),
+            {
+                "name": "report_unit",
+                "required": False,
+                "in": "query",
+                "description": "",
+                "schema": {
+                    "type": "string",
+                },
+            },
+            {
+                "name": "start_date",
+                "required": False,
+                "in": "query",
+                "description": "",
+                "schema": {
+                    "type": "string",
+                },
+            },
         ]
+

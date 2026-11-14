@@ -18,7 +18,6 @@ dependencies = [
     "django-import-export==2.4.*",
     "djangorestframework==3.12.*",
     "markdown==3.3.*",
-    "coreapi==2.3.*",
     "python-dateutil==2.8.*",
     "django-parler==2.2.*",
     "django-debug-toolbar==3.2.*",
