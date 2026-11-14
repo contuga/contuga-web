@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "django_filters",
     "anymail",
-    "captcha",
+    "django_recaptcha",
     "import_export",
     "rest_framework",
     "rest_framework.authtoken",
@@ -127,6 +127,8 @@ LOGOUT_REDIRECT_URL = "/"
 
 TIME_ZONE = "Europe/Sofia"
 USE_TZ = True
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 DEFAULT_CATEGORIES = [
     _("Food and drinks"),

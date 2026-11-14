@@ -1,5 +1,5 @@
 from django.utils import formats
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -44,7 +44,7 @@ class TransactionDetailPageMixin:
 
     def verify_detail_page_amount(self, transaction):
         expected_label = _("Amount")
-        expected_value = formats.localize(transaction.amount, use_l10n=True)
+        expected_value = formats.localize(transaction.amount)
         self.verify_detail_page_row(0, expected_label, expected_value)
 
     def verify_detail_page_type(self, transaction):

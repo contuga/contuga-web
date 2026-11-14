@@ -1,8 +1,9 @@
+from decimal import Decimal
 import json
 
 from django.contrib.auth import mixins
 from django.db import transaction
-from django.db.models import Count, F, Q, Sum
+from django.db.models import Count, DecimalField, F, Q, Sum, Value
 from django.db.models.functions import Coalesce
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
@@ -105,10 +106,26 @@ class TransactionListView(
             queryset.values("account__currency")
             .annotate(
                 currency=F("account__currency__name"),
-                income=Coalesce(Sum("amount", filter=Q(type="income")), 0),
-                expenditure=Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
-                balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
-                - Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
+                income=Coalesce(
+                    Sum("amount", filter=Q(type="income")),
+                    Value(Decimal("0.00")),
+                    output_field=DecimalField(),
+                ),
+                expenditure=Coalesce(
+                    Sum("amount", filter=Q(type="expenditure")),
+                    Value(Decimal("0.00")),
+                    output_field=DecimalField(),
+                ),
+                balance=Coalesce(
+                    Sum("amount", filter=Q(type="income")),
+                    Value(Decimal("0.00")),
+                    output_field=DecimalField(),
+                )
+                - Coalesce(
+                    Sum("amount", filter=Q(type="expenditure")),
+                    Value(Decimal("0.00")),
+                    output_field=DecimalField(),
+                ),
                 count=Count("pk"),
             )
             .values("currency", "income", "expenditure", "balance", "count")

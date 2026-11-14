@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.templatetags.static import static
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 

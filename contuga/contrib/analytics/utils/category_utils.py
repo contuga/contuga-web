@@ -1,5 +1,7 @@
+from decimal import Decimal
+
 import pytz
-from django.db.models import Q, Sum
+from django.db.models import DecimalField, Q, Sum, Value
 from django.db.models.functions import Coalesce
 
 from .. import constants
@@ -26,8 +28,16 @@ def get_categories_data(transactions, start_date, end_date, category, truncClass
             created_at__lte=end_date.astimezone(pytz.UTC),
         )
         .annotate(
-            income=Coalesce(Sum("amount", filter=Q(type="income")), 0),
-            expenditures=Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
+            income=Coalesce(
+                Sum("amount", filter=Q(type="income")),
+                Value(Decimal("0.00")),
+                output_field=DecimalField(),
+            ),
+            expenditures=Coalesce(
+                Sum("amount", filter=Q(type="expenditure")),
+                Value(Decimal("0.00")),
+                output_field=DecimalField(),
+            ),
         )
         # order_by() is used to remove the default ordering from Group By
         # https://docs.djangoproject.com/en/2.2/topics/db/aggregation/#interaction-with-default-ordering-or-order-by

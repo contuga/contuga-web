@@ -1,6 +1,6 @@
-FROM python:3.10
+FROM python:3.12-slim
 
-RUN apt update && apt install -y sassc cssmin gettext
+RUN apt update && apt install -y curl sassc cssmin gettext libpq-dev gcc
 RUN pip3 install uwsgi gunicorn poetry
 
 ENV NODE_VERSION=18.12.1

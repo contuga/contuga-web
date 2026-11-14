@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/python:3.10-browsers
+      - image: cimg/python:3.12-browsers
         environment:
           POETRY_VIRTUALENVS_IN_PROJECT: true
           DJANGO_ENV: test

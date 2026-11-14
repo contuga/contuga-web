@@ -29,7 +29,7 @@ class TransactionListPageMixin:
 
     def verify_amount_value(self, element, transaction):
         amount = element.text
-        localized_amount = formats.localize(transaction.amount, use_l10n=True)
+        localized_amount = formats.localize(transaction.amount)
         expected_amount = f"{localized_amount} {transaction.currency.representation}"
 
         self.assertEqual(amount, expected_amount)
