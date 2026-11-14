@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.utils import formats
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -122,7 +122,7 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
 
     def verify_balance_value(self, element, account):
         balance = element.text
-        expected_balance = formats.localize(account.balance, use_l10n=True)
+        expected_balance = formats.localize(account.balance)
 
         self.assertEqual(balance, expected_balance)
 
@@ -189,7 +189,7 @@ class SeleniumTestCase(LiveServerTestCase, TestMixin, EndToEndTestMixin):
 
     def verify_detail_page_balance(self, account):
         expected_label = _("Balance")
-        expected_value = formats.localize(account.balance, use_l10n=True)
+        expected_value = formats.localize(account.balance)
 
         self.verify_detail_page_row(2, expected_label, expected_value)
 

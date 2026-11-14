@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from django.http import HttpResponseRedirect
 from django.shortcuts import resolve_url
 from django.urls import reverse, reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django_registration.backends.activation import views as registration_views
 from rest_framework import permissions, viewsets

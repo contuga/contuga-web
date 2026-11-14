@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.core import signing
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions

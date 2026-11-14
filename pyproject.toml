@@ -3,26 +3,26 @@ name = "contuga-web"
 version = "0.1.0"
 description = "Simple web-based expense manager application."
 readme = "README.md"
-requires-python = ">=3.10,<3.11"
+requires-python = ">=3.12,<3.13"
 dependencies = [
-    "django==3.1.*",
-    "django-pipeline==2.0.*",
-    "django-sekizai==2.0.*",
-    "django-widget-tweaks==1.4.*",
-    "django-registration==3.1.*",
+    "django==4.2.*",
+    "django-pipeline==3.0.*",
+    "django-sekizai==4.1.*",
+    "django-widget-tweaks==1.5.*",
+    "django-registration==3.4.*",
     "django-extensions",
-    "django-anymail[mailjet]==8.*",
-    "django-recaptcha==2.0.*",
-    "django-split-settings==1.0.*",
-    "django-filter==2.4.*",
-    "django-import-export==2.4.*",
-    "djangorestframework==3.12.*",
-    "markdown==3.3.*",
+    "django-anymail[mailjet]>=10.*",
+    "django-recaptcha>=3.0.*",
+    "django-split-settings>=1.2.*",
+    "django-filter==23.*",
+    "django-import-export>=3.3.*",
+    "djangorestframework==3.14.*",
+    "markdown>=3.4.*",
     "python-dateutil==2.8.*",
-    "django-parler==2.2.*",
-    "django-debug-toolbar==3.2.*",
-    "psycopg2==2.8.*",
-    "setuptools (<=80.10.2)",
+    "django-parler>=2.3.*",
+    "django-debug-toolbar>=4.0.*",
+    "psycopg2-binary>=2.9.*",
+    "setuptools",
 ]
 
 [tool.poetry]

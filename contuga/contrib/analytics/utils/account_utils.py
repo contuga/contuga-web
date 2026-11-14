@@ -1,5 +1,7 @@
+from decimal import Decimal
+
 import pytz
-from django.db.models import DecimalField, OuterRef, Q, Subquery, Sum
+from django.db.models import DecimalField, OuterRef, Q, Subquery, Sum, Value
 from django.db.models.functions import Coalesce
 
 from .. import constants
@@ -17,8 +19,16 @@ def get_accounts_data(transactions, start_date, end_date, truncClass):
             .annotate(created_on=truncClass("created_at", tzinfo=start_date.tzinfo))
             .values("account__pk")
             .annotate(
-                balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
-                - Coalesce(Sum("amount", filter=Q(type="expenditure")), 0)
+                balance=Coalesce(
+                    Sum("amount", filter=Q(type="income")),
+                    Value(Decimal("0.00")),
+                    output_field=DecimalField(),
+                )
+                - Coalesce(
+                    Sum("amount", filter=Q(type="expenditure")),
+                    Value(Decimal("0.00")),
+                    output_field=DecimalField(),
+                )
             )
             .values("balance")
             .order_by()
@@ -45,8 +55,16 @@ def get_accounts_data(transactions, start_date, end_date, truncClass):
 
     return (
         queryset.values(*values).annotate(
-            income=Coalesce(Sum("amount", filter=Q(type="income")), 0),
-            expenditures=Coalesce(Sum("amount", filter=Q(type="expenditure")), 0),
+            income=Coalesce(
+                Sum("amount", filter=Q(type="income")),
+                Value(Decimal("0.00")),
+                output_field=DecimalField(),
+            ),
+            expenditures=Coalesce(
+                Sum("amount", filter=Q(type="expenditure")),
+                Value(Decimal("0.00")),
+                output_field=DecimalField(),
+            ),
         )
         # order_by() is used to remove the default ordering from Group By
         # https://docs.djangoproject.com/en/2.2/topics/db/aggregation/#interaction-with-default-ordering-or-order-by

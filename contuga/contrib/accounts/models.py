@@ -1,11 +1,13 @@
 import uuid
 
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Q, Sum
+from django.db.models import DecimalField, Q, Sum, Value
 from django.db.models.functions import Coalesce
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from contuga.models import TimestampModel
 
@@ -64,6 +66,14 @@ class Account(TimestampModel):
             queryset = self.transactions
 
         return queryset.aggregate(
-            balance=Coalesce(Sum("amount", filter=Q(type="income")), 0)
-            - Coalesce(Sum("amount", filter=Q(type="expenditure")), 0)
+            balance=Coalesce(
+                Sum("amount", filter=Q(type="income")),
+                Value(Decimal("0.00")),
+                output_field=DecimalField(),
+            )
+            - Coalesce(
+                Sum("amount", filter=Q(type="expenditure")),
+                Value(Decimal("0.00")),
+                output_field=DecimalField(),
+            )
         )["balance"]
